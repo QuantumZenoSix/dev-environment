@@ -182,6 +182,7 @@ Fedora, maybe one day.
 | Key    | Description |
 | --- |--|  
 | `up`  | Pull down latest nix home manager changes and apply them (`git pull` + `home-manager switch`) |  
+| `nix_remove_home_manager`  | Removes nix home-manager and it's managed files .|  
 
 More keybinds in my workflow: [keybinds](./key_bindings.md)
 
