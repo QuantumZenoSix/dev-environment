@@ -257,6 +257,7 @@ setup_nix(){
     [[ -f ~/.bashrc.backup ]] && rm ~/.bashrc.backup
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
     [[ -f ~/.zshrc.backup ]] && rm ~/.zshrc.backup
+    [[ -f /tmp/started_home_manager ]] && rm /tmp/started_home_manager
 
     # Create a ~/.zshrc which only starts home-manager - loading a new shell will trigger it
     cat >  ~/.zshrc<< 'EOF'
