@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+PBX_LOADED=1
+
+
+# Execute files
+alias c4="cd ../control-io/www"                         # cd into c4 repo
+alias rl="tail -f /home/control-io/www/log/templog"     # Tail templog
+alias rl2="tail -f /home/control-io/www/log/templog2"   # Tail templog 2
+alias git_add="git add -A && git reset Estimator"   # Git add - without Estimator
+alias perly="$(which perl) /home/control-io/www/DevSandbox/Sandbox/_templates/perly.pl"
+alias perlyprod="$(which perl) /home/control-io/www/DevSandbox/Sandbox/_templates/perlyprod.pl"
+alias prod_scratch="$(which perl) /home/control-io/www/DevSandbox/Sandbox/_templates/prod_scratch.pl"
+alias basher="$(which bash) /home/control-io/www/DevSandbox/Sandbox/_templates/basher.sh"
+
+restart_hive(){
+    ssh hive01 'sudo systemctl restart apache2 && echo "hive-01 restarted!"'
+    ssh hive02 'sudo systemctl restart apache2 && echo "hive-02 restarted!"'
+    ssh hive03 'sudo systemctl restart apache2 && echo "hive-03 restarted!"'
+}
+
+clear_wgets(){
+    sudo find "${1}" -iname 'wget-log*' -exec rm -f '{}' ';'
+    echo "Cleaned Up all wget-log files in ${1}"
+}
+
+download_veeam_report(){
+    ssh queenbee "cd /home/control-io/metabase-tools/ && perl beyonce-show-veeam-lics.pl reportforveeam > $1-Veeam-Lics-Report.csv"
+    scp queenbee:/home/control-io/metabase-tools/$1-Veeam-Lics-Report.csv /mnt/c/Users/BobbyValenzuela/Downloads/
+}
+
+perlygrep(){
+    grep -HErniA 5 ${1} --include=\*.pl /home/control-io/
+}
+# Example: perlygrep 'VeeamObjectsLink' | sed -E 's/^.*\t+//g' | vim - -c 'set filetype=perl' +'colorscheme desert'
+
+
+
+
+
+

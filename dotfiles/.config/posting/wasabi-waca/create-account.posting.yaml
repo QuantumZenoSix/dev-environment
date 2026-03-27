@@ -1,0 +1,18 @@
+name: Create Account
+description: Create a wasabi subaccount
+method: PUT
+url: $URL/v1/accounts
+body:
+  content: |-
+    {
+      "AcctName": "user@email.com",
+      "IsTrial": false,
+      "Password": "superpass",
+      "EnableFTP": true
+    }
+  content_type: application/json
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY
+- name: content-type
+  value: application/json

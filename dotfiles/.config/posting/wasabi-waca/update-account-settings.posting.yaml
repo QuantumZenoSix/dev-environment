@@ -1,0 +1,19 @@
+name: Update Account Settings
+description: Update settings by accountid
+method: POST
+url: $URL/v1/accounts/012345
+body:
+  content: |-
+    {
+    "AcctName": "tester@api.io",
+    "IsTrial": true,
+    "Password": "Password123",
+    "EnableFTP": true,
+    "ResetAccessKeys":true
+    }
+  content_type: application/json
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY
+- name: content-type
+  value: application/json

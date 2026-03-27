@@ -1,0 +1,6 @@
+name: Get Account Utilization
+description: Get utilization by accountid
+url: $URL/v1/accounts/012345/utilizations
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY

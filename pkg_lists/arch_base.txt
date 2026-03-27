@@ -1,0 +1,139 @@
+# Essentials
+# (already installed) base-devel           # build-essential: GCC/make/etc for system builds/AUR 
+# (already installed) git 
+# (already installed) go 
+# (already installed) rustup
+
+NOTE: system-level/essentials tools (drivers, graphics, audio, compiler dependencies, os tools, etc)...
+base-devel
+binutils
+font-manager
+bzip2  			# p7zip-full: 7zip compression 
+clang 
+cmake 
+coreutils  		# coreutils: GNU utils, base 
+curl  			# curl: Network downloader, system scripts rely on it 
+gawk  			# gawk: AWK, base 
+gcc  			# gcc: Compiler, base-devel 
+glibc  			# libc6: Core C lib 
+lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
+libxcb            # libxcb1-dev: XCB render, shape, etc
+llvm  
+make  			# make: Builder, base-devel 
+nasm 
+ninja 
+openssl           # libssl-dev: Crypto
+p7zip  			# p7zip-full: 7zip compression 
+perl 
+pkgconf  		# pkg-config: Build helper
+sed    			# sed: Text processor, base 
+tar    			# tar: Archiver, base system 
+unzip  			# unzip: Zip handler, base 
+wget  			# wget: Downloader, core for scripts 
+which 
+xclip  			# xclip: Clipboard, X11 integration 
+xsel  			# xsel: Clipboard, X11 
+sudo
+openssh
+
+
+NOTE: Installing programming languages and tools...
+# System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
+tree  			
+less  			# tar: Archiver, base system 
+direnv 
+bash  			# bash: Shell, base 
+gettext  		# gettext: Localization, system 
+jq
+lua 
+nvm 
+python-pipx 
+python 
+ufw  			# gawk: AWK, base 
+nodejs-lts-jod
+treesitter-cli
+npm
+
+
+NOTE: Installing workflow and cli tools..."
+bc  		    # bc: Calculator, base 
+tmux
+entr
+fzf 
+python-pygments 
+ripgrep 
+neovim 
+vim   			# vim-gtk3: GUI vim with GTK/X11 
+zsh 
+bat
+
+
+
+NOTE: Installing  system/misc tools...
+# Terminal/system extras: System integration like fonts/GUI/audio mounts.
+powerline-fonts	# fonts-powerline: Fonts for terminals 
+sshfs  			# sshfs: FUSE mount, system fs 
+sshpass  		# sshpass: SSH passwords, utils 
+
+NOTE: Installing misc. tools...
+docker            # docker.io: Containers, system service 
+docker-compose    # docker-compose-plugin: Docker compose 
+entr              # entr ─ super useful file watcher (needed for tmux autoreload)
+fastfetch         # fastfetch: System info
+fd                # → fd
+glow              # Markdown reader
+htop              # htop: Process viewer 
+pandoc  
+unixodbc          # unixodbc-dev: ODBC 
+yt-dlp            # YouTube downloader
+
+
+NOTE: Installing media/sound-related pkgs...
+# Sound-related: Audio libs/hardware accel integration.
+alsa-lib # libasound2-dev: ALSA 
+ffmpeg    # ffmpeg: Multimedia 
+dbus              # libdbus-1-dev: Bus 
+imagemagick
+libass            # libass9: Subtitles 
+libbluray         # libbluray2: Blu-ray 
+libcaca           # libcaca0: Graphics 
+libcdio           # libcdio-cdda2/libcdio-paranoia2/libcdio19: CDIO        
+ncurses           # libncursesw5-dev: Curses wide 
+playerctl         # playerctl: Media control 
+poppler           # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
+rubberband        # librubberband2: Audio stretch 
+
+
+
+
+NOTE-AUR: Processing AUR pkgs from this point on
+#tmux-plugin-manager 
+zimg                      # libzimg2: Image scaling 
+mlocate                   # locate: File indexer, system db 
+jless                     # json viewer
+lazysql           # almost always AUR
+eget              # usually AUR
+ggh               # SSH session manager – AUR
+uv
+csvlens
+dust
+yazi
+lazygit
+informant       # Read arch news before updating
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

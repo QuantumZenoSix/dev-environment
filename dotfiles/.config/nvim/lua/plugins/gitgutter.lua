@@ -1,0 +1,32 @@
+return {}
+-- -- ONLY ACTIVATE FOR LARGE FILES IF GIT SIGNS DOESN'T WORK
+-- return {
+--   "airblade/vim-gitgutter",
+--   -- Load the plugin immediately (adjust event if you want lazy loading)
+--   event = "BufReadPost",
+--   config = function()
+--     -- Enable vim-gitgutter by default
+--     vim.g.gitgutter_enabled = 1
+--     -- Update signs in real-time
+--     vim.g.gitgutter_realtime = 1
+--     -- Set updatetime to 100ms for faster updates
+--     vim.opt.updatetime = 100
+--     -- Set max signs to 100,000
+--     vim.g.gitgutter_max_signs = 100000
+--     -- Define gitgutter icons
+--     vim.g.gitgutter_sign_added = "+"
+--     vim.g.gitgutter_sign_modified = "~"
+--     vim.g.gitgutter_sign_removed = "-"
+--     vim.g.gitgutter_sign_removed_first_line = "^"
+--     vim.g.gitgutter_sign_removed_above_and_below = "_"
+--     vim.g.gitgutter_sign_modified_removed = "~-"
+--
+-- vim.keymap.set('n', '<leader>gn', '<Plug>(GitGutterNextHunk)', { desc = 'GitGutter: Next hunk' })
+-- vim.keymap.set('n', '<leader>gp', '<Plug>(GitGutterPrevHunk)', { desc = 'GitGutter: Previous hunk' })
+-- vim.keymap.set('n', '<leader>ga', '<Plug>(GitGutterStageHunk)', { desc = 'GitGutter: Stage hunk' })
+-- vim.keymap.set('n', '<leader>gu', '<Plug>(GitGutterUndoHunk)', { desc = 'GitGutter: Undo hunk' })
+-- vim.keymap.set('n', '<leader>gv', '<Plug>(GitGutterPreviewHunk)', { desc = 'GitGutter: Preview hunk' })
+--
+--   end,
+-- }
+--

@@ -1,0 +1,20 @@
+return {}
+-- return {
+--   "folke/noice.nvim",
+--   event = "VeryLazy",
+--   opts = {
+--     -- add any options here
+--     presets = {
+--             bottom_search = true,
+--             command_palette = true,        -- Command line in a palette style
+--             long_message_to_split = true,  -- Long messages go to a split
+--             inc_rename = true,             -- Enable incremental rename integration
+--         }
+--   },
+--   dependencies = {
+--     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+--     "MunifTanjim/nui.nvim",
+--     "nathom/filetype.nvim", -- Optional but recommended for better filetype detection
+--     }
+-- }
+-- -- return {}

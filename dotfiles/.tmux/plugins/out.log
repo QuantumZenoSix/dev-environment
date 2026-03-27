@@ -1,0 +1,1659 @@
+h1: >## **Multi-line comments**<
+h2: >## **Multi-line comments**<
+
+[;1m[0m[;1m[0m  [;1m## [0m[;1mMulti-line comments[0m                                                      
+                                                                              
+  Many people use multi-line comments for documenting their shell scripts.    
+  Check how this is done in the next script called comment.sh.                
+                                                                              
+  #!/bin/bash                                                                 
+  🠶 '                                                                         
+                                                                              
+                                                                              
+                                                                              
+  This script calculates                                                      
+                                                                              
+  the square of 5.                                                            
+                                                                              
+  '                                                                           
+                                                                              
+  ((area=5*5))                                                                
+                                                                              
+  echo $area                                                                  
+                                                                              
+  Notice how multi-line comments are placed                                   
+  inside [;1m:’[0m and [;1m‘[0m characters.                                                 
+                                                                              
+  You can also use a here document.                                           
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mCommon Special[0m[;1m characters[0m                                                
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mList operators (chaining[0m[;1m commands)[0m                                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mRedirection Special[0m[;1m Characters[0m                                          
+  Character                                                                   
+  Usage                                                                       
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  #>                                                                          
+  Redirect output descriptor (Default # = 1,                                  
+  stdout)                                                                     
+                                                                              
+                                                                              
+  <                                                                           
+  Redirect input descriptor                                                   
+                                                                              
+                                                                              
+  >>                                                                          
+  Append output                                                               
+                                                                              
+                                                                              
+  >&                                                                          
+  Redirect stdout and stderr                                                  
+  (equivalent to .. > .. 2>&1)                                                
+[;1m[0m[;1m[0m  [;1m### [0m[;1mCompound Commands Special[0m[;1m Characters[0m                                    
+  Character                                                                   
+  Usage                                                                       
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  |                                                                           
+  Piping                                                                      
+                                                                              
+                                                                              
+  ()                                                                          
+  Execute in a separate shell                                                 
+                                                                              
+                                                                              
+  &&                                                                          
+  AND list                                                                    
+                                                                              
+                                                                              
+  ||                                                                          
+  OR list                                                                     
+                                                                              
+                                                                              
+  ;                                                                           
+  Separate commands                                                           
+[;1m[0m[;1m[0m  [;1m### [0m[;1mExpansion Special[0m[;1m Characters[0m                                            
+  Character                                                                   
+  Usage                                                                       
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  {}                                                                          
+  Lists                                                                       
+                                                                              
+                                                                              
+  ~                                                                           
+  Usually means $HOME                                                         
+                                                                              
+                                                                              
+  $                                                                           
+  Parameter substitution                                                      
+                                                                              
+                                                                              
+  ‘                                                                           
+  Back tick; used in expression evaluation (also $()                          
+  syntax)                                                                     
+                                                                              
+                                                                              
+  $(( ))                                                                      
+  Arithmetic substitution                                                     
+                                                                              
+                                                                              
+  []                                                                          
+  Wildcard expressions, and conditionals                                      
+[;1m[0m[;1m[0m  [;1m### [0m[;1mEscapes Special[0m[;1m Characters[0m                                              
+  Character                                                                   
+  Usage                                                                       
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  \                                                                           
+  End of line, escape sequence                                                
+                                                                              
+                                                                              
+  ’ ’                                                                         
+  Take exactly as is                                                          
+                                                                              
+                                                                              
+  " "                                                                         
+  Take as is, but do parameter expansion                                      
+[;1m[0m[;1m[0m  [;1m### [0m[;1mOther Special[0m[;1m Characters[0m                                                
+  Character                                                                   
+  Usage                                                                       
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  &                                                                           
+  Redirection and putting task in background                                  
+                                                                              
+                                                                              
+  #                                                                           
+  Used for comments                                                           
+                                                                              
+                                                                              
+  *?                                                                          
+  Used in wildcard expansion                                                  
+                                                                              
+                                                                              
+  !                                                                           
+  Used in history expansion                                                   
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mEnvironment and[0m[;;1m Scripting[0m[;;1m [0m                                                 
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mParameters[0m                                                               
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mEnvironment[0m[;1m Variables[0m                                                    
+                                                                              
+                                                                              
+[;m[0m[;m[0m  [;m $$ [0m - this variable tells you the PID of the current process               
+                                                                              
+                                                                              
+  You can also run this inside a bash script to get the PID of the current    
+  run of the script.                                                          
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mPositional[0m[;1m Parameters[0m                                                 
+                                                                              
+  • $1 – the first argument supplied to the script                            
+  • $2 – the secondargument supplied to the script                            
+  • $3 … etc etc                                                              
+                                                                              
+                                                                              
+  Arguments can be passed into the script by separating them on the same      
+  line after calling the script                                               
+                                                                              
+  Example: ./script.sh argone argtwo                                          
+                                                                              
+[;1m[0m[;1m[0m  [;1mLoop through all script arguments[0m                                           
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mDefault/Missing[0m[;1m arguments[0m                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mDefault values for script arguments:[0m                                        
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mThrowing an error if no arg passed[0m                                          
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mHard-code (overwrite) arguments passed in[0m                                   
+                                                                              
+                                                                              
+  ^ first arg becomes “CompTIA”, second “Dion” and third “Training”           
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mSpecial[0m[;1m Parameters[0m                                                    
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m$@[0m - basically acts like a list/array (can be iterated over)                
+                                                                              
+[;1m[0m[;1m[0m  [;1m$*[0m - is one string containing every arg as a single string                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mStandard[0m[;1m Variables[0m                                                     
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mWorking with[0m[;1m Parameters[0m                                                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mParameter[0m[;1m expansion[0m                                                    
+                                                                              
+                                                                              
+                                                                              
+  Link to list of more parameter expansion tricks                             
+                                                                              
+                                                                              
+  Setting default value                                                       
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mBrace[0m[;1m Expansion[0m                                                        
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mVariables and data[0m[;1m types[0m                                               
+                                                                              
+  All values are treated as strings by default.                               
+                                                                              
+  Use the declare to specify certain data types (“I” for integer, “r” for     
+  real/floating point numbers).                                               
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mSub-shell[0m[;1m execution[0m                                                    
+                                                                              
+  Execute a command in a sub-shell, and exits the subshell without            
+  returning any output.                                                       
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mCommand[0m[;1m substitution[0m                                                   
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mCommand substitution vs Sub-shell[0m[;1m execution[0m                           
+                                                                              
+                                                                              
+  ^ Commands placed in parens are executed in a subshell. Adding a sigil      
+  in front actions command substitution where the $() is replaced with the    
+  output of the command that was ran.                                         
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mCommand substitution vs Variable[0m[;1m substitution[0m                         
+                                                                              
+  $(joe) – means “Run the command ‘joe’ and place the output in               
+  place of $(joe)                                                             
+                                                                              
+  “${joe}” – means “Plug in the value of the joe variable in place            
+  of ${joe}”                                                                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mArithmetic[0m[;1m expansion[0m                                                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mProcess[0m[;1m substitution[0m                                                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mTilde[0m[;1m expansion[0m                                                        
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mHandling command line options/ARGS [0m[;1m(getopts)[0m                             
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  If you added the option [;1m-A,[0m “variable” will print out “A” otherwise         
+  a question mark.                                                            
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mImporting other scripts [0m[;1m(sourcing)[0m                                       
+                                                                              
+  The source command adds functions found in the file argument to the         
+  current shell. The source command is requently used for software            
+  installs to ensure that the environment is set up properly prior to         
+  execution of the install scripts.                                           
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mImport all files in a folder[0m                                                
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mDebugging[0m                                                                
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mDebug[0m[;1m flags/options[0m                                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1mDebugging[0m: after shebang line add "set - n" (or what have you) -            
+  that will allow you to run your script without executing it, only           
+  checking for any errors.                                                    
+                                                                              
+  There are a number of options that can be used for debugging purposes:      
+                                                                              
+  • [;1mset -n (bash -n)[0m just checks for syntax                                   
+  • [;1mset -x (bash -x)[0m echos all commands after running them                    
+  • [;1mset -v (bash -v)[0m echos all commands before running them                   
+  • [;1mset -u (bash -u)[0m causes the shell to treat using unset variables          
+  as an error                                                                 
+  • [;1mset -e (bash -e)[0m causes the script to exit immediately upon any           
+  non-zero exit status (on any failures).                                     
+                                                                              
+  where the [;1mset[0m command is used inside the script (with a [;1m+[0m sign              
+  behavior is reversed) and the second form, giving an option to [;1mbash[0m,        
+  is invoked when running the script from the command line.                   
+                                                                              
+[;1m[0m[;1m[0m  [;1m-x[0m                                                                          
+                                                                              
+                                                                              
+  You can also specify the above, not directly in your script but when        
+  calling the script with the bash command...                                 
+                                                                              
+  bash -x myscript.sj                                                         
+                                                                              
+  This isn't as portable though.                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mCommon[0m[;1m errors[0m                                                          
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mShellcheck[0m                                                             
+                                                                              
+[;1m[0m[;1m[0m  [;1mwww.shellcheck.net[0m [;4mhttp://www.shellcheck.net[0m                                
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mSession[0m[;1m portability[0m                                                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mTemporary files [0m[;1m(mktemp)[0m                                                 
+                                                                              
+  A utility to create temp files based on a template you provide.             
+                                                                              
+[;1m[0m[;1m[0m  [;1mFormat[0m: mktemp <dir>/<filenamebased>XXX                                     
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m## [0m[;1mExec command: force redirect of script[0m[;1m output[0m                            
+                                                                              
+  Replaces the bash with the command to be executed                           
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mHow bash processes command[0m[;;1m lines[0m[;;1m [0m                                          
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStep 1:[0m[;1m Tokenisation[0m                                                    
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStep 2: Command[0m[;1m Identification[0m                                          
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStep 3:[0m[;1m Expansions[0m                                                      
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  For more information, see: GNU Bash Manual - Word Splitting                 
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  For more information, see: GNU Bash Manual - Pattern Matching               
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStep 4: Quote[0m[;1m Removal[0m                                                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStep 5:[0m[;1m Redirection[0m                                                     
+                                                                              
+                                                                              
+  For more information, see: GNU Bash Manual – Redirections                   
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mHandling User[0m[;;1m Input[0m[;;1m [0m                                                       
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mGUI Forms with[0m[;1m Zenity[0m                                                   
+                                                                              
+[;4m[0m[;4m[0m  [;4mhttps://www.howtoforge.com/how-to-display-gui-dialogs-in-bash-script-using- [0m
+[0m  [;4mzenity/[0m                                                                     
+                                                                              
+  tut:                                                                        
+[;4m[0m[;4m[0m  [;4mhttps://ostechnix.com/zenity-create-gui-dialog-boxes-in-bash-scripts/[0m       
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mRead[0m[;1m Command[0m                                                            
+                                                                              
+                                                                              
+                                                                              
+  Input saved int REPLY by default:                                           
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mCustom variables[0m                                                            
+                                                                              
+  read -p "Enter some names..." NAMES                                         
+                                                                              
+  Where NAMES is the variable that holds the input.                           
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mAdding Prompt:[0m                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mAdding Timeout (-t < seconds >):[0m                                            
+                                                                              
+  Determines how long to wait before moving into next command.                
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mHiding entered input:[0m                                                       
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mSpecify expected input length:[0m                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mMultiple Lines of[0m[;1m STDIN[0m                                                 
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mFrom a[0m[;1m file[0m                                                            
+                                                                              
+  Setting the delimeter to an empty string is a great way to read until       
+  the end of a file.                                                          
+                                                                              
+  Syntax:                                                                     
+                                                                              
+                                                                              
+  Full example:                                                               
+                                                                              
+[;3m[0m[;3m[0m  [;3mNote: “-t 0” is a way of checking if STDIN is empty[0m                         
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mUser input (using read[0m[;1m -r)[0m                                             
+                                                                              
+[;3m[0m[;3m[0m  [;3mDoesn’t really work when pasting large chucks of text…[0m                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mUser input (checking for carriage[0m[;1m return)[0m                              
+                                                                              
+[;3m[0m[;3m[0m  [;3mDoesn’t really work when pasting large chucks of text…[0m                      
+                                                                              
+                                                                              
+  Note: $’n’ means carriage return.                                           
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mSelect[0m[;1m Command[0m                                                          
+                                                                              
+                                                                              
+                                                                              
+  Give user list of options to select from                                    
+                                                                              
+                                                                              
+                                                                              
+[;3m[0m[;3m[0m  [;3mFormatted:[0m                                                                  
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mAdding prompt string:[0m                                                       
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mPrint options vertically:[0m                                                   
+                                                                              
+  Add COLUMNS=1 before the select statement                                   
+                                                                              
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mFormatting[0m[;;1m Output[0m[;;1m [0m                                                         
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mCreating[0m[;1m headers[0m                                                        
+                                                                              
+  - get terminal columns/rows                                                 
+                                                                              
+  tput lines                                                                  
+                                                                              
+  tput cols                                                                   
+                                                                              
+  - printf "%100s" " " | tr " " "-"                                           
+                                                                              
+  - replace 100 with value from tput cols                                     
+                                                                              
+  - printf "%${COLUMNS}s" " "                                                 
+                                                                              
+  For all in one command…                                                     
+                                                                              
+  printf "%$(tput cols)s" " " | tr " " "="                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mHere[0m[;1m statement[0m                                                          
+                                                                              
+  Using variables                                                             
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mEcho without[0m[;1m newlines[0m                                                   
+                                                                              
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mData[0m[;;1m types[0m[;;1m [0m                                                                
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mArrays[0m                                                                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mCommon[0m[;1m operations[0m                                                      
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mCreate an array [0m[;1m(space-separated)[0m                                      
+                                                                              
+                                                                              
+  You can also specify specific indexes upon array creation                   
+                                                                              
+  Myarray=([2]=“Jim” [5]=”Dwight” [9]=Andy)                                   
+                                                                              
+                                                                              
+  ^ Also note that Microsoft word using different ascii value for quotes –    
+  so they’re interpreted literally.                                           
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mReferencing/Output array[0m[;1m value[0m                                         
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mParameter[0m[;1m expansion[0m                                                    
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mWORKING WITH INDEXED[0m[;1m ARRAYS[0m                                            
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mEXPANDING AN[0m[;1m ARRAY[0m                                                     
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mMODIFYING AN[0m[;1m ARRAY[0m                                                     
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mTHE READARRAY[0m[;1m COMMAND[0m                                                  
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mCREATING AN ARRAY FROM THE OUTPUT OF A[0m[;1m COMMAND[0m                         
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mAdd into[0m[;1m array[0m                                                         
+                                                                              
+                                                                              
+                                                                              
+  Oor…                                                                        
+                                                                              
+                                                                              
+  foo=(a b c)                                                                 
+                                                                              
+  echo ${foo[@]}                                                              
+                                                                              
+  foo+=(d e f)                                                                
+                                                                              
+  echo ${foo[@]}                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mBuild array from user input [0m[;1m(readarray)[0m                                
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  Always use the ‘-t’ switch to remove trailing newline/whitespace            
+  characters:                                                                 
+                                                                              
+  You can also use [;1mread -r[0m                                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1mUsing process substitution[0m                                                  
+                                                                              
+  This allows us to accept results of a command and add then into an          
+  array:                                                                      
+                                                                              
+                                                                              
+  Looping through:                                                            
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mRemoving/replacing array[0m[;1m items[0m                                         
+                                                                              
+  Unset to remove element from array (or array itself)                        
+                                                                              
+                                                                              
+  Remove an item and add a different one in place                             
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mRe-create[0m[;1m array[0m                                                        
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mNested/Multidimensional[0m[;1m arrays[0m                                         
+                                                                              
+                                                                              
+  Check out bash man page. declare -n means “This variable is special – it    
+  should serve as a pointer (name reference) to another variable. This        
+  other variable may be an array for example. If it is an array, treat        
+  this variable ( my pointer) as you would the array itself”.                 
+                                                                              
+  Note how this fails                                                         
+                                                                              
+                                                                              
+  Yet how this succeeds                                                       
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mLoop over[0m[;1m array[0m                                                        
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mBy referencing full array (for..in[0m[;1m loop)[0m                              
+                                                                              
+  Spreads array to list every item (space-separated)                          
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mBy printing array[0m[;1m indexes[0m                                             
+                                                                              
+  Use the BANG to print indexes                                               
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mBy iterating through each[0m[;1m item[0m                                        
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mBy referencing array[0m[;1m length[0m                                           
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mDictionaries (Associative[0m[;1m arrays)[0m                                       
+                                                                              
+  Regular arrays cannot be treated as associative arrays. Associative         
+  arrays must be declared as such upon creation. Almost as if it’s its own    
+  data type. Normal arrays are implicitly or explicitly declared using        
+  declare -a. But associative arrays use a capital “A”.                       
+                                                                              
+  declare -A mynewarray                                                       
+                                                                              
+  Indexes will be strings.                                                    
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStrings[0m                                                                 
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mString[0m[;1m Operators/conditions[0m                                            
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mTransform[0m[;1m strings[0m                                                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mReplace multiple whitespaces with a single whitespace[0m                       
+                                                                              
+  tr -s [:space:]                                                             
+                                                                              
+  ^ so powerful when redirectin using cut command to work on a single         
+  space.                                                                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mGetting length of[0m[;1m string[0m                                               
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mSetting[0m[;1m case[0m                                                           
+                                                                              
+  Capitalize and Uppercase (respectively)                                     
+                                                                              
+                                                                              
+                                                                              
+  Lowercase – same as caps but using comma instead of caret.                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mString length, slicing (substrings), and[0m[;1m substitution[0m                  
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mSubstitution[0m                                                                
+                                                                              
+                                                                              
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  Str="Learn Bash Commands from UbuntuPit"                                    
+                                                                              
+  subStr=${Str:0:20}                                                          
+                                                                              
+  echo $subStr                                                                
+                                                                              
+  This script should print out “[;3mLearn Bash Commands[0m” as its output. The       
+  parameter expansion takes the form [;1m${VAR_[0m[;1mNAME:S:L[0m}. Here, S denotes         
+  starting position, and L indicates the length.                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mFind[0m[;1m substring[0m                                                         
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mString[0m[;1m concatenation[0m                                                   
+                                                                              
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  string1="Ubuntu"                                                            
+                                                                              
+  string2="Pit"                                                               
+                                                                              
+  string=$string1$string2                                                     
+                                                                              
+  echo "$string is a great resource for Linux beginners."                     
+                                                                              
+  The following program outputs the string “UbuntuPit is a great resource     
+  for Linux beginners.” to the screen.                                        
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mNumber and[0m[;1m arithmetic[0m                                                   
+                                                                              
+                                                                              
+                                                                              
+[;1;3m[0m[;1;3m[0m  [;1;3mDouble parens (modern)[0m                                                      
+                                                                              
+[;1m[0m[;1m[0m  [;1mNote[0m: Arithmetic can be evaluated within [;1m(()).[0m This will return             
+  the result to a boolean value.                                              
+                                                                              
+                                                                              
+  You can also use all symbolic logical operators with this syntax. If you    
+  want to return the [;1mresult[0m of a mathematical expression you can use          
+[;1m[0m[;1m[0m  [;1m$(())[0m to save returned value into the [;1m$(())[0m var.                            
+                                                                              
+                                                                              
+  If you remove the sigil and keep double parens you can set a variable       
+  and calculate arithmetic in the same line.                                  
+                                                                              
+  Example:                                                                    
+                                                                              
+  ((mynumber=4+6+$x))                                                         
+                                                                              
+[;1;3m[0m[;1;3m[0m  [;1;3mCan also use ‘expr’ syntax (legacy)[0m                                         
+                                                                              
+[;3m[0m[;3m[0m  [;3mExpression[0m                                                                  
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mInteger[0m[;1m test[0m                                                           
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mBc (basic[0m[;1m calculator)[0m                                                  
+                                                                              
+                                                                              
+  Here statements (as opposed to here docs, which are multi-line) are         
+  perfect for the bc calculator.                                              
+                                                                              
+  bc<<<"$x+$y+10"                                                             
+                                                                              
+  Bc to calculate floating-point calculations                                 
+                                                                              
+  bc<<<"scale=2;$x+$y"                                                        
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mRandom[0m[;1m variable[0m                                                        
+                                                                              
+  Outputs a random number between 0 - 32767                                   
+                                                                              
+                                                                              
+  Get zero through 9 (use modulo bro)                                         
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mArithmetic[0m[;1m Operators[0m                                                   
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mOperator[0m[;1m precedence[0m                                                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mSeq command [0m[;1m(sequence)[0m                                                 
+                                                                              
+  Give a range of number given a soart value, end value, incrementor          
+                                                                              
+  seq <start> <inc > < end >                                                  
+                                                                              
+  Works similar to brace expansion except the order is different:             
+                                                                              
+  echo <start> <end> <inc>                                                    
+                                                                              
+  Also, seq separates each returned value with a newline char whereas         
+  braces only separates by a single space (ideal for command line             
+  arguments).                                                                 
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mConditional[0m[;;1m Statements/operations[0m[;;1m [0m                                         
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mNumerical Relational[0m[;1m operators[0m                                          
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  ^ as seen on last line if you want to use the greater than or less than     
+  symbols on numbers, the numbers need to placed within double-quotes and     
+  the comparison needs to occur inside parens                                 
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mString comparison against many[0m[;1m matches[0m                                  
+                                                                              
+  This checks if $cool is equal to any one of these options                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mBoolean/Logical[0m[;1m operators[0m                                               
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mShort-circuiting with logical[0m[;1m operators[0m                                
+                                                                              
+                                                                              
+                                                                              
+  Also can use: && ||                                                         
+                                                                              
+  Logical operators allow you to do short-circuiting to replace if            
+  statements. Square brackets reokace oarensin                                
+                                                                              
+                                                                              
+                                                                              
+  Use curly braces grouping commands when short-circuiting                    
+                                                                              
+  Example of a one-line if-else statement:s                                   
+                                                                              
+  which cmatrixfail &> /dev/null && { echo "Condition met!" && echo           
+  "Doing condition met stuff!" ; } || { echo "Condition not met..." &&        
+  echo "Doing failure stuff..." ; }                                           
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mTernary[0m[;1m operator[0m                                                       
+                                                                              
+[;1m[0m[;1m[0m  [;1mLegacy[0m                                                                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mNew syntax[0m                                                                  
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mNew and improved (for multi-conditions)[0m                                     
+                                                                              
+[;3m[0m[;3m[0m  [;3mCurly braces can be used to group multiple statements together[0m              
+                                                                              
+  { [[ "${already_running,,}" =~ perl ]] && echo "Hive API Running" ;         
+  }                                                                           
+                                                                              
+[;1m[0m[;1m[0m  [;1m||[0m                                                                          
+                                                                              
+  { echo "Not running. Starting Up...." && $(which perl)                      
+  /home/control-io/www/HiveAPI/index.pl 2> /dev/null & }                      
+                                                                              
+[;1m[0m[;1m[0m  [;1mNote[0m: Every curly brace group must end with a semi-colon UNLESS that        
+  group ends with a statement that starts a background job.                   
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mTesting[0m[;1m commands[0m                                                        
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mIf[0m[;1m statement[0m                                                            
+                                                                              
+                                                                              
+                                                                              
+  Double square brackets is the more modern and preferred syntax [[]]         
+  – as it supports pattern matching ( “$g” =~ ^matchthis[.]$ )and shell       
+  wildcards ( “$g” == foo.* ). Also, allows for the use of locaical           
+  comparison;s                                                                
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  echo -n "Enter a number: "                                                  
+                                                                              
+  read num                                                                    
+                                                                              
+  if [[ $num -gt 10 ]]                                                        
+                                                                              
+  then                                                                        
+                                                                              
+  echo "Number is greater than 10."                                           
+                                                                              
+  elif [[ $num -eq 10 ]]                                                      
+                                                                              
+  then                                                                        
+                                                                              
+  echo "Number is equal to 10."                                               
+                                                                              
+  else                                                                        
+                                                                              
+  echo "Number is less than 10."                                              
+                                                                              
+  fi                                                                          
+                                                                              
+  The else part needs to be placed after the action part of if and before     
+  fi.                                                                         
+                                                                              
+[;1m[0m[;1m[0m  [;1mDouble square brackets vs Single square brackets[0m                            
+                                                                              
+  The form with double brackets is preferred over the form with single        
+  brackets, which is now considered deprecated. Double brackets allows you    
+  to omit surrounding the variable in double quots.                           
+                                                                              
+  If [[ $response -eq yes ]]                                                  
+                                                                              
+  Then                                                                        
+                                                                              
+  …                                                                           
+                                                                              
+  fi                                                                          
+                                                                              
+  Single brackets requires double quotes to prevent an error if no input      
+  is entered                                                                  
+                                                                              
+                                                                              
+  Also single square brackets doesn’t allow for logical operators like        
+  “&&” or “||” but instead requires “-a” and “-o”.                            
+                                                                              
+  Additionally, the new method using double square brackets allows for        
+  multiple conditions in one set of square brackets.                          
+                                                                              
+  If [[ $answer == y || $answer == yes ]]                                     
+                                                                              
+  Also, double brackets accept regular expressions                            
+                                                                              
+  If [[ $answer =~ y|yes ]]                                                   
+                                                                              
+  Alt syntax (preferred)                                                      
+                                                                              
+                                                                              
+                                                                              
+  You don't need square brackets in an of statement if you're testing a       
+  command                                                                     
+                                                                              
+  If which apache2                                                            
+                                                                              
+  ...                                                                         
+                                                                              
+  Fi                                                                          
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mMore review and[0m[;1m examples[0m                                               
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  ^ note how you only need to end the if condition with a semicolon if        
+  you’re the ‘then’ keyword on the same line… don’t so that ☺. Also not       
+  that conditions need one space and beginning and ending inside squarew      
+  brackets.                                                                   
+                                                                              
+  Remember to put spaces around the [ ] brackets.                             
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mCase[0m[;1m statements[0m                                                         
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  #!/bin/sh                                                                   
+                                                                              
+  echo "Do you want to destroy your entire file system?"                      
+                                                                              
+  read response                                                               
+                                                                              
+  case "$response" in                                                         
+                                                                              
+     "yes")              echo "I hope you know what you                       
+  are doing!" ;;                                                              
+                                                                              
+     "no" )              echo "You have some comon                            
+  sense!" ;;                                                                  
+                                                                              
+     "y" | "Y" | "YES" ) echo "I hope you know what you are                   
+  doing!" ;                                                                   
+                                                                              
+                         echo ’I am going to type:                            
+  " rm -rf /"’;;                                                              
+                                                                              
+     "n" | "N" | "NO" )  echo "You have some comon sense!" ;;                 
+                                                                              
+     *   )               echo "You have to give an                            
+  answer!" ;;                                                                 
+                                                                              
+  esac                                                                        
+                                                                              
+  exit 0                                                                      
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mFunctions[0m[;;1m [0m                                                                 
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  Two ways to declare a function                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mFormal:[0m                                                                     
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mInformal (parens can be omitted too):[0m                                       
+                                                                              
+                                                                              
+  Calling a function does not require parens – args are passed as in          
+  command line (see below)                                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mWith[0m[;1m args[0m                                                               
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mReturning[0m[;1m values[0m                                                        
+                                                                              
+  Note values are returned into the [;1m$?[0m Variable                               
+                                                                              
+                                                                              
+  Alternatively we can save returned values directly into a variable:         
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mCalling functions from[0m[;1m functions[0m                                        
+                                                                              
+  No scope?                                                                   
+                                                                              
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mLoops[0m[;;1m [0m                                                                     
+                                                                              
+  • Continue – to skip                                                        
+  • break – break loop                                                        
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mFor [0m[;1m(C-like)[0m                                                            
+                                                                              
+                                                                              
+  The for loop is another widely used bash shell construct that allows        
+  users to iterate over codes efficiently. A simple example is                
+  demonstrated below.                                                         
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  for (( counter=1; counter<=10; counter++ ))                                 
+                                                                              
+  do                                                                          
+                                                                              
+  echo -n "$counter "                                                         
+                                                                              
+  done                                                                        
+                                                                              
+  printf "\n"                                                                 
+                                                                              
+  Save this code in a file named for.sh and run it using ./for.sh. Don’t      
+  forget to make it executable. This program should print out the numbers     
+  1 to 10.                                                                    
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  Just as with ‘then’ with an if statement, we can omit the semicolon if      
+  we give ‘do’ its own line                                                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mFor…in[0m                                                                  
+                                                                              
+[;4m[0m[;4m[0m  [;4mhttps://www.lifewire.com/bash-for-loop-examples-2200575[0m                     
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mRanging over…[0m                                                               
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mYou can even use expansion to loop through files[0m                            
+                                                                              
+  for i in filename-*.txt                                                     
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mFor…range[0m                                                               
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mInfinity for[0m[;1m loop[0m                                                       
+                                                                              
+  for((;;))                                                                   
+                                                                              
+  Do                                                                          
+                                                                              
+  Done                                                                        
+                                                                              
+  Note that it still responds to a break statement                            
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mWhile[0m                                                                   
+                                                                              
+                                                                              
+  The while loop construct is used for running some instruction multiple      
+  times. Check out the following script called while.sh for a better          
+  understanding of this concept.                                              
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  i=0                                                                         
+                                                                              
+  while [ $i -le 2 ]                                                          
+                                                                              
+  do                                                                          
+                                                                              
+  echo Number: $i                                                             
+                                                                              
+  ((i++))                                                                     
+                                                                              
+  done                                                                        
+                                                                              
+  So, the while loop takes the below form.                                    
+                                                                              
+  while [ condition ]                                                         
+                                                                              
+  do                                                                          
+                                                                              
+  commands 1                                                                  
+                                                                              
+  commands n                                                                  
+                                                                              
+  done                                                                        
+                                                                              
+  The space surrounding the square brackets is mandatory.                     
+                                                                              
+                                                                              
+                                                                              
+  A space is required inside square brackets                                  
+                                                                              
+                                                                              
+                                                                              
+  ^ creates 100 files each with ‘another one’ written inside                  
+                                                                              
+  Alternative                                                                 
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mNested while[0m                                                                
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mInfinite while[0m[;1m loop[0m                                                    
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mUntil[0m                                                                   
+                                                                              
+  Executes (while some conditions is false) - [;1;3muntil[0m some condition            
+  is true                                                                     
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mRead-while[0m                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mRead lines in a[0m[;1m command[0m                                                
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mHandling command[0m[;;1m output[0m[;;1m [0m                                                   
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mReading command output (as a file using process[0m[;1m substitution):[0m          
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mFile[0m[;;1m I/O[0m[;;1m [0m                                                                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mFile[0m[;1m operators/conditions[0m                                               
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  Check if files does not exists:                                             
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mChecking if a file is empty[0m                                                 
+                                                                              
+  Works with single quotes for me…                                            
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+  You could also use ‘s’ to see if the file has size (see if there’s any      
+  data written to the fle in question) (i.e. if it’s [;1mnot[0m an an empty          
+  file)                                                                       
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mReading from[0m[;1m file[0m                                                       
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mUsing while[0m[;1m loop[0m                                                       
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  file='editors.txt'                                                          
+                                                                              
+  while read line; do                                                         
+                                                                              
+  echo $line                                                                  
+                                                                              
+  done < $file                                                                
+                                                                              
+                                                                              
+  Assuming the first arg is a file name                                       
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mUsing while loop (and[0m[;1m piping)[0m                                          
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mUsing for[0m[;1m loop[0m                                                         
+                                                                              
+                                                                              
+  Good for one column but not ideal for loop through lines of text as for     
+  loop uses spaces as its default delimeter. Can manually change/reset IFS    
+  though                                                                      
+                                                                              
+  IFS=$'\n' # make newlines the only separator                                
+                                                                              
+  for j in $(cat ./file_wget_med)                                             
+                                                                              
+  do                                                                          
+                                                                              
+  echo "$j"                                                                   
+                                                                              
+  done                                                                        
+                                                                              
+  # Note: IFS needs to be reset to default!                                   
+                                                                              
+  unset IFS                                                                   
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mSaving file content into a[0m[;1m variable[0m                                     
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mDeleting Files[0m                                                          
+                                                                              
+  The following program will demonstrate how to delete a file within Linux    
+  shell scripts. The program will first ask the user to provide the           
+  filename as input and will delete it if it exists. The Linux rm command     
+  does the deletion here.                                                     
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  echo -n "Enter filename ->"                                                 
+                                                                              
+  read name                                                                   
+                                                                              
+  rm -i $name                                                                 
+                                                                              
+  Let’s type in editors.txt as the filename and press y when asked for        
+  confirmation. It should delete the file.                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mAppending to Files[0m                                                      
+                                                                              
+  The below shell script example will show you how to append data to a        
+  file on your filesystem using bash scripts. It adds an additional line      
+  to the earlier editors.txt file.                                            
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  echo "Before appending the file"                                            
+                                                                              
+  cat editors.txt                                                             
+                                                                              
+  echo "6. NotePad++" >> editors.txt                                          
+                                                                              
+  echo "After appending the file"                                             
+                                                                              
+  cat editors.txt                                                             
+                                                                              
+  You should notice by now that we’re using everyday terminal commands        
+  directly from Linux bash scripts.                                           
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mPrint Number of Files or Directories[0m                                    
+                                                                              
+  The below Linux bash script finds the number of files or folders present    
+  inside a given directory. It utilizes the Linux find command to do this.    
+  First, you need to pass the directory name to search for files from the     
+  command line.                                                               
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  if [ -d "$@" ]; then                                                        
+                                                                              
+  echo "Files found: $(find "$@" -type f | wc -l)"                            
+                                                                              
+  echo "Folders found: $(find "$@" -type d | wc -l)"                          
+                                                                              
+  else                                                                        
+                                                                              
+  echo "[ERROR] Please retry with another folder."                            
+                                                                              
+  exit 1                                                                      
+                                                                              
+  fi                                                                          
+                                                                              
+  The program will ask the user to try again if the specified directory       
+  isn’t available or have permission issues.                                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mRemoving Duplicate Lines from Files[0m                                     
+                                                                              
+  File processing takes considerable time and hampers the productivity of     
+  admins in many ways. For example, searching for duplicates in your files    
+  can become a daunting task. Luckily, you can do this with a short shell     
+  script.                                                                     
+                                                                              
+  #! /bin/sh                                                                  
+                                                                              
+  echo -n "Enter Filename-> "                                                 
+                                                                              
+  read filename                                                               
+                                                                              
+  if [ -f "$filename" ]; then                                                 
+                                                                              
+  sort $filename | uniq | tee sorted.txt                                      
+                                                                              
+  else                                                                        
+                                                                              
+  echo "No $filename in $pwd...try again"                                     
+                                                                              
+  fi                                                                          
+                                                                              
+  exit 0                                                                      
+                                                                              
+  The above script goes line by line through your file and removes any        
+  duplicative line. It then places the new content into a new file and        
+  keeps the original file intact.                                             
+                                                                              
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mPattern[0m[;;1m Matching[0m[;;1m [0m                                                          
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mStandard[0m                                                                
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mMatching[0m                                                               
+                                                                              
+                                                                              
+                                                                              
+  Checks for any matches in a list of options (like a “OR” statement)         
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mSubstitution[0m                                                           
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m##### [0m[;1mSubstitution[0m[;1m flags[0m                                                    
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m#### [0m[;1mExtended[0m[;1m RegEx[0m                                                         
+                                                                              
+[;4m[0m[;4m[0m  [;4mhttps://www.tutorialspoint.com/unix/unix-regular-expressions.htm[0m            
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mOther useful/common[0m[;;1m tasks[0m[;;1m [0m                                                 
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mRunning scripts remotely via SSH[0m                                        
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mSend Mails from Shell Scripts[0m                                           
+                                                                              
+  It is quite straightforward to send emails from bash scripts. The           
+  following simple example will demonstrate one way of doing this from        
+  bash applications.                                                          
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  recipient=”admin@example.com”                                               
+                                                                              
+  subject=”Greetings”                                                         
+                                                                              
+  message=”Welcome to UbuntuPit”                                              
+                                                                              
+  `mail -s $subject $recipient <<< $message`                                  
+                                                                              
+  It will send an email to the recipient containing the given subject and     
+  message.                                                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mParsing Date and Time[0m                                                   
+                                                                              
+  The next bash script example will show you how to handle dates and times    
+  using scripts. Again, the Linux date command is used for getting the        
+  necessary information, and our program does the parsing.                    
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  year=`date +%Y`                                                             
+                                                                              
+  month=`date +%m`                                                            
+                                                                              
+  day=`date +%d`                                                              
+                                                                              
+  hour=`date +%H`                                                             
+                                                                              
+  minute=`date +%M`                                                           
+                                                                              
+  second=`date +%S`                                                           
+                                                                              
+  echo `date`                                                                 
+                                                                              
+  echo "Current Date is: $day-$month-$year"                                   
+                                                                              
+  echo "Current Time is: $hour:$minute:$second"                               
+                                                                              
+  Run this program to see how it works. Also, try running the date command    
+  from your terminal.                                                         
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1mPrint current epoch[0m                                                         
+                                                                              
+  date +%s                                                                    
+                                                                              
+[;1m[0m[;1m[0m  [;1mPrint date from epoch[0m                                                       
+                                                                              
+  date -d @<epoch>                                                            
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mThe Sleep Command[0m                                                       
+                                                                              
+  The sleep command allows your shell script to pause between                 
+  instructions. It is useful in a number of scenarios, such as performing     
+  system-level jobs. The next example shows the sleep command in action       
+  from within a shell script.                                                 
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  echo "How long to wait?"                                                    
+                                                                              
+  read time                                                                   
+                                                                              
+  sleep $time                                                                 
+                                                                              
+  echo "Waited for $time seconds!"                                            
+                                                                              
+  This program pauses the last instruction’s execution                        
+  until [;1m$time[0m seconds, which the user in this case provides.                  
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mThe Wait Command[0m                                                        
+                                                                              
+  The wait command is used for pausing system processes from Linux bash       
+  scripts. Check out the following example for a detailed understanding of    
+  how this works in bash.                                                     
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  echo "Testing wait command"                                                 
+                                                                              
+  sleep 5 &                                                                   
+                                                                              
+  pid=$!                                                                      
+                                                                              
+  kill $pid                                                                   
+                                                                              
+  wait $pid                                                                   
+                                                                              
+  echo $pid was terminated.                                                   
+                                                                              
+  Run this program yourself to check out how it works.                        
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mDisplaying the Last Updated File[0m                                        
+                                                                              
+  Sometimes you might need to find the last updated file for certain          
+  operations. The following simple program shows us how to do this in bash    
+  using the awk command. It will list either the last updated or created      
+  file in your current working directory.                                     
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  ls -lrt | grep ^- | awk 'END{print $NF}'                                    
+                                                                              
+  For the sake of simplicity, we’ll avoid describing how awk functions in     
+  this example. Instead, you can simply copy this code to get the task        
+  done.                                                                       
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mAdding Batch Extensions[0m                                                 
+                                                                              
+  The below example will apply a custom extension to all of the files         
+  inside a directory. Create a new directory and put some files in there      
+  for demonstration purposes. My folder has a total of five files, each       
+  named test followed by (0-4). I’ve programmed this script to add            
+  ([;1m.UP)[0m at the end of the files. You can add any extension you want.          
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  dir=$1                                                                      
+                                                                              
+  for file in `ls $1/*`                                                       
+                                                                              
+  do                                                                          
+                                                                              
+  mv $file $file.UP                                                           
+                                                                              
+  done                                                                        
+                                                                              
+  Firstly, do not try this script from any regular directory; instead, run    
+  this from a test directory. Plus, you need to provide the directory name    
+  of your files as a command-line argument. Use period(.) for the current     
+  working directory.                                                          
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mCleaning Log Files[0m                                                      
+                                                                              
+  The next simple example demonstrates a handy way we can use shell           
+  scripts in real life. This program will simply delete all log files         
+  present inside your /var/log directory. You can change the variable that    
+  holds this directory for cleaning up other logs.                            
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  LOG_DIR=/var/log                                                            
+                                                                              
+  cd $LOG_DIR                                                                 
+                                                                              
+  cat /dev/null > messages                                                    
+                                                                              
+  cat /dev/null > wtmp                                                        
+                                                                              
+  echo "Logs cleaned up."                                                     
+                                                                              
+  Remember to run this Linux shell script as root.                            
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mBackup Script Using Bash[0m                                                
+                                                                              
+  Shell scripts provide a robust way to back up your files and                
+  directories. The following example will backup each file or directory       
+  that have been modified within the last 24 hour. This program utilizes      
+  the find command to do this.                                                
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  BACKUPFILE=backup-$(date +%m-%d-%Y)                                         
+                                                                              
+  archive=${1:-$BACKUPFILE}                                                   
+                                                                              
+  find . -mtime -1 -type f -print0 | xargs -0 tar rvf "$archive.tar"          
+                                                                              
+  echo "Directory $PWD backed up in archive file \$archive.tar.gz\."          
+                                                                              
+  exit 0                                                                      
+                                                                              
+  It will print the names of the files and directories after the backup       
+  process is successful.                                                      
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mCheck Whether You’re Root[0m                                               
+                                                                              
+  The below example demonstrates a quick way to determine whether a user      
+  is a root or not from Linux bash scripts.                                   
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  ROOT_UID=0                                                                  
+                                                                              
+  if [ "$UID" -eq "$ROOT_UID" ]                                               
+                                                                              
+  then                                                                        
+                                                                              
+  echo "You are root."                                                        
+                                                                              
+  else                                                                        
+                                                                              
+  echo "You are not root"                                                     
+                                                                              
+  fi                                                                          
+                                                                              
+  exit 0                                                                      
+                                                                              
+  The output of this script depends on the user running it. It will match     
+  the root user based on the [;1m$UID[0m.                                            
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mSystem Maintenance[0m                                                      
+                                                                              
+  I often use a little Linux shell script to upgrade my system instead of     
+  doing it manually. The below simple shell script will show you how to do    
+  this.                                                                       
+                                                                              
+  #!/bin/bash                                                                 
+                                                                              
+  echo -e "\n$(date "+%d-%m-%Y --- %T") --- Starting work\n"                  
+                                                                              
+  apt-get update                                                              
+                                                                              
+  apt-get -y upgrade                                                          
+                                                                              
+  apt-get -y autoremove                                                       
+                                                                              
+  apt-get autoclean                                                           
+                                                                              
+  echo -e "\n$(date "+%T") \t Script Terminated"                              
+                                                                              
+  The script also takes care of old packages that are no longer needed.       
+  You need to run this script using sudo else it will not work properly.      
+                                                                              
+[;;1m[0m[;;1m[0m  [;;1m [0m[;;1mSample[0m[;;1m scripts[0m[;;1m [0m                                                            
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mGit – delete[0m[;1m branches[0m                                                   
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mWrite to new[0m[;1m files[0m                                                      
+                                                                              
+                                                                              
+  ^writes to 100 new files each with text with ‘test-n’ where n is current    
+  iteration index.                                                            
+                                                                              
+[;1m[0m[;1m[0m  [;1mVia prompt[0m                                                                  
+                                                                              
+                                                                              
+  read –p = ‘read from prompt’                                                
+                                                                              
+  When running this script, a prompt will occur asking for a list of          
+  names. For each name entered (separated by a space) that names will be      
+  written into a file with the name ‘Custom-<name>-file.txt                   
+                                                                              
+  #!/bin/sh                                                                   
+                                                                              
+  #shell scripting                                                            
+                                                                              
+  read -p "Enter some names..." NAMES                                         
+                                                                              
+  for NAME in $NAMES                                                          
+                                                                              
+  do                                                                          
+                                                                              
+  echo $NAME >> Custom-$NAME-file.txt                                         
+                                                                              
+  done                                                                        
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mRename 100[0m[;1m files[0m                                                        
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mcreate 100 text[0m[;1m files[0m                                                   
+                                                                              
+  With for loop                                                               
+                                                                              
+                                                                              
+  With while loop                                                             
+                                                                              
+                                                                              
+  ^ create 100 text files                                                     
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mDisplay info about current[0m[;1m session[0m                                      
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mBackup and[0m[;1m move[0m                                                         
+                                                                              
+                                                                              
+                                                                              
+[;1m[0m[;1m[0m  [;1m### [0m[;1mReplace a word with[0m[;1m another[0m                                             
+                                                                              
+  This script will find every time the word ‘dog’ appears (lowercase) in a    
+  file and will replace it with the word ‘cat’                                
+                                                                              
+                                                                              
+[;1;3m[0m[;1;3m[0m  [;1;3mAs in Perl – s for substitution[0m                                             
+                                                                              
+[;3m[0m[;3m[0m  [;3mReplace lowercase ‘I’ with capital and insert into new file[0m                 
+                                                                              
+
+h3: AFTER SED >## \*\*Multi-line comments\*\*<
+h4: AFTER SED >## \\*\\*Multi-line comments\\*\\*<
+## \\*\\*Multi-line comments\\*\\*<

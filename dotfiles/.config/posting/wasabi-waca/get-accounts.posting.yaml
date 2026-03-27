@@ -1,0 +1,6 @@
+name: Get Accounts
+description: Get all accounts
+url: $URL/v1/accounts
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY

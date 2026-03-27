@@ -1,0 +1,6 @@
+name: Get Account Utilization by bucket
+description: Get utilization by accountid by bucket
+url: $URL/v1/accounts/012345/utilizations/bucket/123
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY

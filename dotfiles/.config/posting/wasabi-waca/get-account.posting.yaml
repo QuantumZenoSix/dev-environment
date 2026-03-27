@@ -1,0 +1,6 @@
+name: Get Account
+description: Get account by accountid
+url: $URL/v1/accounts/012345
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY

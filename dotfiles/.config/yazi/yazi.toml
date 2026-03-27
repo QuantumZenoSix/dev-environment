@@ -1,0 +1,47 @@
+[mgr]
+ratio = [1, 2, 5]
+sort_by = "alphabetical"
+sort_sensitive = false
+sort_dir_first = true
+linemode = "size"
+show_hidden = true
+wrap = "yes"
+show_symlink = true
+
+[opener]
+play = [
+	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+	{ run = '"C:\Program Files\mpv.exe" %*', orphan = true, for = "windows" }
+]
+edit = [
+    # I think yazi checks for the $EDITOR value before why shell scripts have loaded - so $EDITOR it won't be set by my .zshr/bashrc
+	{ run = '$EDITOR "$@"', block = true, for = "unix" },
+	{ run = '$EDITOR "$@"', block = true, for = "linux" },
+    # { run = '/opt/nvim-linux64/bin/nvim "$@"', block = true, for = "unix" },
+	{ run = "%EDITOR% %*",  block = true, for = "windows" },
+]
+
+[open]
+rules = [
+	{ mime = "text/*", use = "edit" },
+	{ mime = "video/*", use = "play" },
+
+	# { mime = "application/json", use = "edit" },
+	{ name = "*.json", use = "edit" },
+
+	# Multiple openers for a single rule
+	{ name = "*.html", use = [ "open", "edit" ] },
+]
+
+prepend_previewers = [
+	# HEIC previewer
+	{ mime = "image/heic", run = "heic" },
+]
+
+append_previewers = [
+	# My fallback previewer
+	{ name = "*", run = "binary" },
+]
+
+
+

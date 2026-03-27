@@ -1,0 +1,15 @@
+name: Reset Keys
+description: Reset keys by accountid
+method: POST
+url: $URL/v1/accounts/012345
+body:
+  content: |-
+    {
+    "ResetAccessKeys":true
+    }
+  content_type: application/json
+headers:
+- name: Authorization
+  value: $API_KEY_PRIMARY
+- name: content-type
+  value: application/json
