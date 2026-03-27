@@ -636,3 +636,13 @@ EOF
 echo 'use flake' > .envrc >/dev/null
 direnv allow
 }
+
+git_cloneall(){
+
+	if [[ -z "${1}" ]]; then
+		echo "Usage: git_cloneall myusername"
+		exit 1
+	fi
+
+	curl -s "https://api.github.com/users/$1/repos?per_page=100" | jq -r '.[].name' | xargs -I{} git clone https://github.com/$1/{}.git
+}
