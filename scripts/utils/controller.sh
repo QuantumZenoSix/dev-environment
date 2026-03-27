@@ -254,11 +254,13 @@ setup_nix(){
     install_oh_my_zsh_and_powerline
 
     [[ -f ~/.bashrc ]] && rm ~/.bashrc
+    [[ -f ~/.bashrc.backup ]] && rm ~/.bashrc.backup
     [[ -f ~/.zshrc ]] && rm ~/.zshrc
+    [[ -f ~/.zshrc.backup ]] && rm ~/.zshrc.backup
 
     # Create a ~/.zshrc which only starts home-manager - loading a new shell will trigger it
     cat >  ~/.zshrc<< 'EOF'
-if [ -s /tmp/started_home_manager ]; then
+if [ -f /tmp/started_home_manager ]; then
     echo "→ After loading a new shell run 'nix run github:nix-community/home-manager -- init --switch -b backup --flake .#${USER}' to activate home-manager"
 else
     touch /tmp/started_home_manager
