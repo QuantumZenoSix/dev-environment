@@ -646,3 +646,11 @@ git_cloneall(){
 
 	curl -s "https://api.github.com/users/$1/repos?per_page=100" | jq -r '.[].name' | xargs -I{} git clone https://github.com/$1/{}.git
 }
+
+nix_remove_home_manager(){
+	nix run home-manager/master -- uninstall
+	rm -rf ~/.config/home-manager
+	nix-collect-garbage -d 
+	nix-env --list-generations 
+	nix-env --delete-generations &> /dev/null
+}
