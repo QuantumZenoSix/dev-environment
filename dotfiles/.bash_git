@@ -128,7 +128,7 @@ git_set_sshconnection(){
 
 
             if [[ "${git_url_type}" =~ codeberg ]]; then
-                git_url_type_ssh="$(git config --get remote.origin.url | sed -r 's_https://_ssh://git@:_')"
+                git_url_type_ssh="$(git config --get remote.origin.url | sed -r 's_https://_ssh://git@_')"
                 git config remote.origin.url $git_url_type_ssh
 
             else
