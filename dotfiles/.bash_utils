@@ -1,213 +1,32 @@
 #!/usr/bin/env bash
 
-UTILS_LOADED=1
 
-# Source util files
-# [[ ! -s ~/.fzf-key-bindings.zsh ]] && wget -q https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/shell/key-bindings.zsh -O ~/.fzf-key-bindings.zsh && chmod +x ~/.fzf-key-bindings.zsh 
-# [[ -s ~/.fzf-key-bindings.zsh ]] && source ~/.fzf-key-bindings.zsh
-#
 # Main util functions
+# This file holds many utility functions in bash that are very handy
+# Every one begins with 'ut_' (utility)
 
-local_config_update_and_nvim_update(){
-    local_config_update 'update-nvim'
-}
-local_config_update(){
-
-    # Gets latest config files in repo (which has been cloned) and updates local files
-
-    LOCAL_REPO=~/Documents/Repos/Dev-Environment
-
-    if [[ ! -d $LOCAL_REPO/ ]]; then
-        echo "[!] Repo does not exist locally! Cloning and updating..."
-        cd $LOCAL_REPO/
-        sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
-    else
-
-        if [[ ! -d $LOCAL_REPO/config/ ]]; then
-            mkdir -p $LOCAL_REPO/config/
-        fi
-
-        cd $LOCAL_REPO
-        # by this point the git remote.origin.url must have had to be changed to ssh type now, so we can use our ssh key
-
-        # Should prob add a check for 'https' here and change if not 
-        git_url_type="$(git config --get remote.origin.url)"
-
-        if [[ "${git_url_type}" =~ https ]]; then
-            git config remote.origin.url git@github.com:QuantumZenoSix/Dev-Environment.git
-        fi
-
-        # Save any unsaved changed and pull down the latest
-        git stash save
-        #
-        # Add any ssh keys to ssh agent
-        ssh_keyupdate
-        git pull
-        ./scripts/utils/controller.sh configonly noupdateshellenv   
-
-        # if [[ "$1" = "update-nvim" ]]; then
-        #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
-        #     ./install.sh nvimonly
-        # else
-        #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
-        #
-        # fi
-
-
-    fi
-
-
-    # Nvim is already updated - only continue if we want to keep revert back to current nvim
-    if [[ "$1" = "update-nvim" ]]; then
-        echo "[+] Nvim config updated!"
-        return
-    fi
-
-    # [+] Restore main nvim profile
-    # At this point our nvim config would have been moved to nvim-backup and a fresh install would be in place
-    # Revert that if we're not interested in updated nvim
-    echo "Restoring nvim config to previous one..."
-    if [ -d ~/.config/nvim-new ]; then
-        rm -rf ~/.config/nvim-new
-    fi
-    mv ~/.config/nvim ~/.config/nvim-new
-    mv ~/.config/nvim-backup ~/.config/nvim
-
-    # Restore cache
-    rm -rf ~/.local/share/nvim/
-    mv ~/.local/share/nvim-backup ~/.local/share/nvim
-
-}
-
-local_config_save(){
-    
-    # Copies all of my main config files into my git dir so i can push them up later as needed
-    LOCAL_REPO=~/Documents/Repos/Dev-Environment
-
-    if [[ ! -d $LOCAL_REPO/ ]]; then
-
-        echo "[!] Path does not exist: $LOCAL_REPO "
-        echo "[+] Cloning repo locally..."
-
-        # Ensure base path exists
-        mkdir -p ~/Documents/Repos/ 2> /dev/null
-        cd ~/Documents/Repos/
-        git clone git@github.com:QuantumZenoSix/Dev-Environment.git && cd Dev-Environment
-
-    fi
-
-    DEST=$LOCAL_REPO/config/
-
-    # Ensure $DEST is set and is a valid directory
-    if [ -z "$DEST" ] || [ ! -d "$DEST" ]; then
-      echo "Error: Directory $DEST is not set or is not a valid directory."
-      return 1
-    fi
-
-    printf "Running... [ARG1: $1]\n"
-
-    # FILES
-    cp -v ~/.bash_aliases  $DEST
-    cp -v ~/.bash_git  $DEST
-    cp -v ~/.bash_pbx  $DEST
-    cp -v ~/.bash_utils  $DEST
-    cp -v ~/.bashrc  $DEST
-    # cp -v -r ~/.oh-my-zsh  $DEST
-    cp -v ~/.p10k.zsh  $DEST
-    cp -v ~/.tmux.conf  $DEST
-    cp -v ~/.vimrc  $DEST
-    cp -v ~/.zshrc   $DEST
-    cp -v ~/.zsh_customizations   $DEST
-    cp -v ~/.tmux_init.sh  $DEST
-    cp -v ~/.wezterm.lua  $DEST
-    cp -v -r ~/.config/starship.toml  $DEST.config/
-    # DIRS
-    cp -v -r ~/.config/spotify-player/  $DEST.config/
-    cp -v -r ~/.config/lazydocker/  $DEST.config/
-    cp -v -r ~/.config/lazygit/  $DEST.config/
-    cp -v -r ~/.config/nvim/  $DEST.config/
-    cp -v -r ~/.config/nvim-lazy/  $DEST.config/
-    cp -v -r ~/.config/posting/  $DEST.config/
-    sudo cp -v -r ~/.config/yazi/  $DEST.config/
-
-    # cp -v -r ~/.config/  $DEST
-    #    cp -v -r ~/.local/share/nvim/dadbod_ui/  $DEST
-
-    # NEW - Copy custom files from /usr/local/bin/
-    DEST=$LOCAL_REPO/config/usr_local_bin/
-    # cp /usr/local/bin/* $DEST
-
-    if [[ ! -d $LOCAL_REPO/config/usr_local_bin/ ]]; then
-        mkdir -p $LOCAL_REPO/config/usr_local_bin/
-    fi
-
-    sudo cp -r /usr/local/bin/chatgpt $DEST
-    sudo cp -r /usr/local/bin/dirsync $DEST
-    sudo cp -r /usr/local/bin/grok $DEST
-    sudo cp -r /usr/local/bin/postboy $DEST
-    sudo cp -r /usr/local/bin/posty $DEST
-    sudo cp -r /usr/local/bin/quickconnect $DEST
-    sudo cp -r /usr/local/bin/reposync $DEST
-    sudo cp -r /usr/local/bin/restarthive.sh $DEST
-    sudo cp -r /usr/local/bin/tomahawk $DEST
-    sudo cp -r /usr/local/bin/update_aws_creds.sh $DEST
-    sudo cp -r /usr/local/bin/vscode-cleanup $DEST
-    sudo cp -r /usr/local/bin/vscode-cleanup-pbx $DEST
-
-    # OLD - Copy all files (less than 100MB) in /usr/local/bin
-    # Maximum file size in bytes (100 MB = 100 * 1024 * 1024 bytes)
-    # max_size=$((100 * 1024 * 1024))
-
-    # # Loop through each file in /usr/local/bin (not directories, not recursive)
-    # for file in /usr/local/bin/*; do
-    #     # Get file size in bytes
-    #     file_size=$(stat -c %s "$file" 2>/dev/null)
-    #     if [ -z "$file_size" ]; then
-    #       echo "Warning: Could not determine size of $file, skipping."
-    #       continue
-    #     fi
-    #     # Check if file size is less than 100 MB
-    #     if [ $file_size -lt $max_size ]; then
-    #       echo "Copying $file (size: $((file_size / 1024 / 1024)) MB)"
-    #       sudo cp -r "$file" "$DEST"
-    #       if [ $? -ne 0 ]; then
-    #         echo "Error: Failed to copy $file."
-    #         # exit 1
-    #       fi
-    #     else
-    #       echo "Skipping $file (size: $((file_size / 1024 / 1024)) MB, exceeds 100 MB)"
-    #     fi
-    # done
-
-     echo "Done!"
-}
-alias lcu="local_config_update"
-alias lcs="local_config_save"
-alias lcun="local_config_update_and_nvim_update"
 
 
 
 # ____________________ GENERAL ______________________
 
 # Get side-by-side diff only showing diffs
-diffy(){
+ut_diffy(){
     diff $1 $2 -y --color --suppress-common-lines
 }
 
-clear_nvim_swaps(){
-    find ~/.local/state/nvim/swap -iname "*.swp" -exec rm -v '{}' \;
+
+ut_say_wazzup(){
+    echo wazzup
 }
 
-y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	# yz "$@" --cwd-file="$tmp" # Using local yazi in /usr/local/bin/yz
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
+ut_say_hi_mom(){
+    echo hi mom
 }
 
-docx_to_md() {
+
+
+ut_docx_to_md() {
     # Check if pandoc is installed
     command -v pandoc >/dev/null 2>&1 || { echo "pandoc is required but not installed" >&2; exit 1; }
     # Validate input file
@@ -258,16 +77,7 @@ EOF
 
 }
 
-update_lazy(){
-    sudo apt install ninja-build gettext cmake unzip curl git
-    git clone https://github.com/neovim/neovim
-    cd neovim
-    git checkout stable
-    make CMAKE_BUILD_TYPE=Release
-    sudo make install
-}
-
-detect_distro_type(){
+ut_detect_distro_type(){
     # returns debian|fedora|arch|null
     if [ -f /etc/os-release ]; then
         # shellcheck disable=SC1091
@@ -294,7 +104,7 @@ detect_distro_type(){
     echo "${DISTRO_FAMILY}"
 }
 
-create_and_assume_user() {
+ut_create_and_assume_user() {
     if [[ -z "$1" ]]; then
         echo "[!] Usage: create_and_assume_user <username>"
         echo "    Requires username as an argument"
@@ -326,23 +136,8 @@ create_and_assume_user() {
     fi
 }
 
-remove_nix_home_manager(){
-    nix profile remove home-manager-path
-    rm -rf ~/.local/state/nix/profiles/home-manager*
-    rm -rf ~/.cache/home-manager
-    rm -rf ~/.config/home-manager
-    rm -rf ~/home-manager
-    rm -rf ~/.config/nixpkgs
-    find ~ -maxdepth 2 -type l -lname '/nix/store/*' -exec rm -rf '{}' \;
-    nix-collect-garbage -d
-}
-
-edit_nvim_conf(){
-    nvim ~/.config/nvim/lua/
-}
-
 # Download MP3 audio from youtube URL
-mp3_dl () {
+ut_mp3_dl () {
         if [[ -s /usr/local/bin/yt-dlp ]]
         then
                 sudo yt-dlp -t mp3 $1
@@ -351,8 +146,14 @@ mp3_dl () {
         fi
 }
 
+
+ut_get_wsl_diskusage(){
+    # ncdu must be installed
+    sudo ncdu / --exclude /mnt
+}
+
 # Copy from WSL to Windows host
-wcp(){
+ut_wsl_cp(){
 
     WIN_FOLDER=/mnt/c/Users/BobbyValenzuela/Downloads/WSL/
     WSL_FOLDER=~/WIN/
@@ -392,91 +193,17 @@ wcp(){
     fi
 }
 
-
-# ____________________ WORKFLOW-SPECIFIC ______________________
-tmux_init(){
+ut_tmux_init(){
     bash ~/.tmux_init.sh 2>/dev/null
     tmux attach-session -t Main 2>/dev/null
 }
 
-tt(){
-   cd ~/my_repos/Tomahawk/
-   ~/my_repos/Tomahawk/tomahawk
-}
-
-
-config_sync_alpha(){
-
-    # Sync local config files with cloned repo so i can push up my changes
-    scp ~/.bash_aliases  alpha:/home/ubuntu/
-    scp ~/.bash_git  alpha:/home/ubuntu/
-    scp ~/.bash_pbx  alpha:/home/ubuntu/
-    scp ~/.bash_utils  alpha:/home/ubuntu/
-    scp ~/.bashrc  alpha:/home/ubuntu/
-    #scp -r ~/.oh-my-zsh  alpha:/home/ubuntu/
-    scp ~/.p10k.zsh  alpha:/home/ubuntu/
-    scp ~/.tmux.conf  alpha:/home/ubuntu/
-    scp ~/.vimrc  alpha:/home/ubuntu/
-    scp ~/.zshrc   alpha:/home/ubuntu/
-    scp ~/.tmux_init.sh  alpha:/home/ubuntu/
-    scp ~/.zsh_customizations   alpha:/home/ubuntu/
-
-    scp /usr/local/bin/* alpha:/usr/local/bin
-
-    echo "Done!"
-}
-
-# Switch from current prompt theme to starship (catppuccin mocha) or ohmyposh
-ps1_starship(){
-    export BLASTOFF=1
-    export POSHY=0
-    zsh
-}
-ps1_ohmyposh(){
-    export BLASTOFF=0
-    export POSHY=1
-    zsh
-}
-ps1_powerline(){
-    export BLASTOFF=0
-    export POSHY=0
-    zsh
-}
-# dirsync_alpha(){
-#
-#     for dir in $( find ~/pbx/ -maxdepth 1 -type d -not -path "*/pbx/" -not -path "*/test" -not -path "*_custom_scripts"); do
-#         echo $dir
-#         DIR=$(basename $dir)
-#         $( dirsync $DIR alpha "ongoing" )
-#     done
-#
-# }
-#
-colorme() {
+ut_colorme() {
     pygmentize -f terminal "$@"
 }
 
-docker_force_old_version(){
-    export DOCKER_API_VERSION=1.43
-}
 
-# Spin up quick ubuntu container
-dockbuntu(){
-    # force non-newest docker version as api doesn't support past 1.43 as of 3/26
-    # docker_force_old_version
-    sudo docker run -it --rm ubuntu:24.04 bash -c "apt update && apt install -y sudo wget git curl && DEBIAN_FRONTEND=noninteractive TZ=America/Los_Angeles apt install vim -y && exec bash"
-}
-
-dockarch(){
-    sudo docker run -it --rm archlinux bash -c "yes | pacman -Syu && yes | pacman -S sudo wget git curl which vim && export EDITOR=vim &&  exec bash"
-}
-
-# fedora_container(){
-#     docker run -it --rm fedora:40 bash -c "dnf update && dnf install -y wget git curl wheel"
-# }
-#
-
-uv_start(){
+ut_uv_start(){
     # 1. Downloads and runs the official uv installation script from Astral
     #    - -L = follow redirects, -s = silent, -S = show errors if any, -f = fail silently on server errors
     #    - This is the recommended one-liner way to install uv (Rust-based, very fast Python tool)
@@ -533,15 +260,9 @@ uv_start(){
 }
 
 
-# gs(){
-#     gitsync "$1" "$2"
-# }
-
 # Quick Ed25519 SSH key generator with custom comment
-
 # Usage: mksshkey "my name - 2026 lappy"
-
-mksshkey() {
+ut_make_ssh_key() {
 
     if [ $# -eq 0 ]; then
 
@@ -557,14 +278,15 @@ mksshkey() {
     ssh-keygen -t ed25519 -C "$comment" "$@"
 
 }
-restart_audio(){
+
+ut_restart_audio(){
 
     systemctl --user restart wireplumber pipewire pipewire-pulse
 
 }
 
 
-change_pop_graphics(){
+ut_change_pop_graphics(){
 
     if [[ "${1}" = "low" ]]; then
         sudo system76-power graphics integrated # iGPU only (best battery, no NVIDIA)
@@ -584,84 +306,207 @@ change_pop_graphics(){
 }
 
 
-up(){
 
-    # Git to pull down the latest and greatest and update my local dotfiles via nix home-manager
-    
-    cd ~/.config/home-manager/
 
-    # Add ssh-key to ssh-agent
-    ssh_keyupdate
 
-    # Stash anything lingering
-    git stash save
-    git pull
-    git stash apply
-    git add -A
 
-    home-manager switch -b backup --flake .#${USER}
-
+# Switch from current prompt theme to starship (catppuccin mocha) or ohmyposh
+ps1_starship(){
+    export BLASTOFF=1
+    export POSHY=0
+    zsh
+}
+ps1_ohmyposh(){
+    export BLASTOFF=0
+    export POSHY=1
+    zsh
+}
+ps1_powerline(){
+    export BLASTOFF=0
+    export POSHY=0
+    zsh
 }
 
-get_wsl_diskusage(){
-    # ncdu must be installed
-    sudo ncdu / --exclude /mnt
-}
 
-nix_make_dev_flake(){
-cat << 'EOF' > flake.nix
-{
-outputs = { self, nixpkgs }: {
-    devShells.x86_64-linux.default = let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    in pkgs.mkShell {
-      
-      buildInputs = [ 
-        # pkgs.python311 
-      ];
-		  
-	  # Environment variables
-	  PROJECT_NAME = "my-awesome-project";
-	  NODE_ENV = "development"; 
 
-     shellHook = '' 
-	     echo "🚀 Development environment loaded!" 
-	     #echo "📦 Python $(python --version)"
-	 '';
-    };
-  };
-}
-EOF
 
-echo 'use flake' > .envrc >/dev/null
-direnv allow
-}
 
-git_cloneall(){
 
-	if [[ -z "${1}" ]]; then
-		echo "Usage: git_cloneall myusername"
-		exit 1
-	fi
 
-	curl -s "https://api.github.com/users/$1/repos?per_page=100" | jq -r '.[].name' | xargs -I{} git clone https://github.com/$1/{}.git
-}
 
-nix_remove_home_manager(){
-	nix run home-manager/master -- uninstall
-	rm -rf ~/.config/home-manager
-	nix-collect-garbage -d 
-	nix-env --list-generations 
-	nix-env --delete-generations &> /dev/null
-}
 
-nvim_restore_owner(){
-    # Perms get set to root if I accidentally sudo nvim
-
-    # Fix ownership of the entire Neovim config (safest and most common fix)
-    sudo chown -R $USER:$USER ~/.config/nvim
-
-    # If you want to be extra sure, also fix permissions
-    chmod -R u+rwX ~/.config/nvim
-
-}
+# ut_local_config_update_and_nvim_update(){
+#         local_config_update 'update-nvim'
+# }
+# ut_local_config_update(){
+#
+# # Gets latest config files in repo (which has been cloned) and updates local files
+#
+# LOCAL_REPO=~/.config/home-manager/
+#
+# if [[ ! -d $LOCAL_REPO/ ]]; then
+#     echo "[!] Repo does not exist locally! Cloning and updating..."
+#     cd $LOCAL_REPO/
+#     sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/init_configonly.sh -O -)"
+# else
+#
+#     if [[ ! -d $LOCAL_REPO/config/ ]]; then
+#         mkdir -p $LOCAL_REPO/config/
+#     fi
+#
+#     cd $LOCAL_REPO
+#     # by this point the git remote.origin.url must have had to be changed to ssh type now, so we can use our ssh key
+#
+#     # Should prob add a check for 'https' here and change if not 
+#     git_url_type="$(git config --get remote.origin.url)"
+#
+#     if [[ "${git_url_type}" =~ https ]]; then
+#         git config remote.origin.url git@github.com:QuantumZenoSix/Dev-Environment.git
+#     fi
+#
+#     # Save any unsaved changed and pull down the latest
+#     git stash save
+#     #
+#     # Add any ssh keys to ssh agent
+#     ssh_keyupdate
+#     git pull
+#     ./scripts/utils/controller.sh configonly noupdateshellenv   
+#
+#     # if [[ "$1" = "update-nvim" ]]; then
+#     #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
+#     #     ./install.sh nvimonly
+#     # else
+#     #     ./install.sh configonly noshellswitch   # Calling with 'noshellswitch' so we dont start a new zsh shell
+#     #
+#     # fi
+#
+#
+# fi
+#
+#
+# # Nvim is already updated - only continue if we want to keep revert back to current nvim
+# if [[ "$1" = "update-nvim" ]]; then
+#     echo "[+] Nvim config updated!"
+#     return
+# fi
+#
+# # [+] Restore main nvim profile
+# # At this point our nvim config would have been moved to nvim-backup and a fresh install would be in place
+# # Revert that if we're not interested in updated nvim
+# echo "Restoring nvim config to previous one..."
+# if [ -d ~/.config/nvim-new ]; then
+#     rm -rf ~/.config/nvim-new
+# fi
+# mv ~/.config/nvim ~/.config/nvim-new
+# mv ~/.config/nvim-backup ~/.config/nvim
+#
+# # Restore cache
+# rm -rf ~/.local/share/nvim/
+# mv ~/.local/share/nvim-backup ~/.local/share/nvim
+#
+# }
+#
+# ut_local_config_save(){
+#
+# # Copies all of my main config files into my git dir so i can push them up later as needed
+# LOCAL_REPO=~/Documents/Repos/Dev-Environment
+#
+# if [[ ! -d $LOCAL_REPO/ ]]; then
+#
+#     echo "[!] Path does not exist: $LOCAL_REPO "
+#     echo "[+] Cloning repo locally..."
+#
+#     # Ensure base path exists
+#     mkdir -p ~/Documents/Repos/ 2> /dev/null
+#     cd ~/Documents/Repos/
+#     git clone git@github.com:QuantumZenoSix/Dev-Environment.git && cd Dev-Environment
+#
+# fi
+#
+# DEST=$LOCAL_REPO/config/
+#
+# # Ensure $DEST is set and is a valid directory
+# if [ -z "$DEST" ] || [ ! -d "$DEST" ]; then
+#     echo "Error: Directory $DEST is not set or is not a valid directory."
+#     return 1
+# fi
+#
+# printf "Running... [ARG1: $1]\n"
+#
+# # FILES
+# cp -v ~/.bash_aliases  $DEST
+# cp -v ~/.bash_git  $DEST
+# cp -v ~/.bash_pbx  $DEST
+# cp -v ~/.bash_utils  $DEST
+# cp -v ~/.bashrc  $DEST
+# # cp -v -r ~/.oh-my-zsh  $DEST
+# cp -v ~/.p10k.zsh  $DEST
+# cp -v ~/.tmux.conf  $DEST
+# cp -v ~/.vimrc  $DEST
+# cp -v ~/.zshrc   $DEST
+# cp -v ~/.zsh_customizations   $DEST
+# cp -v ~/.tmux_init.sh  $DEST
+# cp -v ~/.wezterm.lua  $DEST
+# cp -v -r ~/.config/starship.toml  $DEST.config/
+# # DIRS
+# cp -v -r ~/.config/spotify-player/  $DEST.config/
+# cp -v -r ~/.config/lazydocker/  $DEST.config/
+# cp -v -r ~/.config/lazygit/  $DEST.config/
+# cp -v -r ~/.config/nvim/  $DEST.config/
+# cp -v -r ~/.config/nvim-lazy/  $DEST.config/
+# cp -v -r ~/.config/posting/  $DEST.config/
+# sudo cp -v -r ~/.config/yazi/  $DEST.config/
+#
+# # cp -v -r ~/.config/  $DEST
+# #    cp -v -r ~/.local/share/nvim/dadbod_ui/  $DEST
+#
+# # NEW - Copy custom files from /usr/local/bin/
+# DEST=$LOCAL_REPO/config/usr_local_bin/
+# # cp /usr/local/bin/* $DEST
+#
+# if [[ ! -d $LOCAL_REPO/config/usr_local_bin/ ]]; then
+#     mkdir -p $LOCAL_REPO/config/usr_local_bin/
+# fi
+#
+# sudo cp -r /usr/local/bin/chatgpt $DEST
+# sudo cp -r /usr/local/bin/dirsync $DEST
+# sudo cp -r /usr/local/bin/grok $DEST
+# sudo cp -r /usr/local/bin/postboy $DEST
+# sudo cp -r /usr/local/bin/posty $DEST
+# sudo cp -r /usr/local/bin/quickconnect $DEST
+# sudo cp -r /usr/local/bin/reposync $DEST
+# sudo cp -r /usr/local/bin/restarthive.sh $DEST
+# sudo cp -r /usr/local/bin/tomahawk $DEST
+# sudo cp -r /usr/local/bin/update_aws_creds.sh $DEST
+# sudo cp -r /usr/local/bin/vscode-cleanup $DEST
+# sudo cp -r /usr/local/bin/vscode-cleanup-pbx $DEST
+#
+# # OLD - Copy all files (less than 100MB) in /usr/local/bin
+# # Maximum file size in bytes (100 MB = 100 * 1024 * 1024 bytes)
+# # max_size=$((100 * 1024 * 1024))
+#
+# # # Loop through each file in /usr/local/bin (not directories, not recursive)
+# # for file in /usr/local/bin/*; do
+# #     # Get file size in bytes
+# #     file_size=$(stat -c %s "$file" 2>/dev/null)
+# #     if [ -z "$file_size" ]; then
+# #       echo "Warning: Could not determine size of $file, skipping."
+# #       continue
+# #     fi
+# #     # Check if file size is less than 100 MB
+# #     if [ $file_size -lt $max_size ]; then
+# #       echo "Copying $file (size: $((file_size / 1024 / 1024)) MB)"
+# #       sudo cp -r "$file" "$DEST"
+# #       if [ $? -ne 0 ]; then
+# #         echo "Error: Failed to copy $file."
+# #         # exit 1
+# #       fi
+# #     else
+# #       echo "Skipping $file (size: $((file_size / 1024 / 1024)) MB, exceeds 100 MB)"
+# #     fi
+#
+#      echo "Done!"
+# }
+# alias lcu="local_config_update"
+# alias lcs="local_config_save"
+# alias lcun="local_config_update_and_nvim_update"

@@ -50,6 +50,10 @@ alias fv='nvim $(fzf --height 40% --layout reverse --border)'
 alias ff='fzf --height 40% --layout reverse --border'
 
 
+# Lazygit
+alias lg="lazygit" 
+alias gg="lazygit" 
+
 
 # -------------------------------------------
 # WORKFLOW-SPECIFIC
@@ -77,3 +81,22 @@ alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
 
 alias archeck="informant list"
+
+
+
+
+### Bash functions that are 3 letters are less I will consider aliases
+y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	# yz "$@" --cwd-file="$tmp" # Using local yazi in /usr/local/bin/yz
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+tt(){
+   cd ~/my_repos/Tomahawk/
+   ~/my_repos/Tomahawk/tomahawk
+}
+

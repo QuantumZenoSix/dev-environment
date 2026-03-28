@@ -177,8 +177,7 @@ copy_config_files(){
 
     # # Sync local config files with cloned repo so i can push up my changes
     cp -f -v ./dotfiles/.bash_aliases  $HOME/
-    cp -f -v ./dotfiles/.bash_git  $HOME/
-    cp -f -v ./dotfiles/.bash_pbx  $HOME/
+    cp -f -v ./dotfiles/.bash_wrappers  $HOME/
     cp -f -v ./dotfiles/.bash_utils  $HOME/
     cp -f -v ./dotfiles/.bashrc  $HOME/
     cp -f -v ./dotfiles/.p10k.zsh  $HOME/

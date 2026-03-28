@@ -1,0 +1,307 @@
+#!/usr/bin/env bash
+
+# These are 'wrapper' functions/aliases
+# They 'wrap' existing commands to extend their functionality or perform mulitiple tasks in succession
+# Every one beings with a two character prefix of the command they wrap
+#
+# Example:
+#   Docker  -> dk_
+#   Nix     -> nx_
+#   Git     -> gt_
+#   Neovim  -> nv_
+
+
+# ────────────────────────────────────────────────
+#             Git ('gt_')
+# ────────────────────────────────────────────────
+
+# 'Git Clean' - drop all local changes - head to master, git pull, and restart apache
+alias gt_discard_changes_pull_master_="git stash save && git stash drop && git checkout master && git pull && echo 'Cleaned Up!'"
+
+# Add ssh key to agent and push
+alias gt_add_ssh_key_and_push="eval \$(ssh-agent -s) && ssh-add && git push && echo 'Pushed to GitHub!'"
+
+# Shows last 15 merges
+alias gt_show_merges="git log --oneline --merges -E --grep 'DEV-[0-9]+' -n 15" 
+
+gt_discard_old_stashes(){
+    current=10
+
+    stash_count=$( (expr 0 + $( git stash list | wc -l ) ) )
+    echo "Current stash count (keeping latest 10): $stash_count"
+
+    while [ $current -lt $stash_count ]
+    do
+        echo "In Loop: $current"
+        current=$(expr $current + 1)
+        output=$(git stash drop stash@{$current})
+    done
+}
+
+# Re-track current branch to repo
+gt_retrack_branch(){
+    branch=$(git branch | grep \* | sed 's:*::' | xargs)
+   git checkout master && git pull && git branch -D ${branch} && git checkout --track origin/${branch}
+}
+
+# Stage and commit
+gt_stage_and_commit(){
+    git add -A && git commit -m "${1}" && echo "Staged and Committed!"
+}
+
+gt_fix_conflict(){
+    branch=$(git branch | grep \* | sed 's:*::' | xargs)
+    git checkout master
+    git pull
+    git branch -D ${branch} 2> /dev/null
+    git checkout -b ${branch}
+    git pull origin ${branch} --no-commit
+}
+
+gt_merge_changes_from_stash(){
+    
+    # Save thine stash with unique id - epoch
+    stash_save_name=$(date +%s | tr -s [:space:])
+
+    git stash save "${stash_save_name}"
+
+    # Remove leading chars we don't need (xargs removes leading/trailing whitespace too)
+    current_branch_name=$(git branch | grep '*' | sed s:'*':: | tr -s [:space:] | xargs)
+
+    git checkout master && git pull && git checkout -b "${current_branch_name}-merged-${stash_save_name}" 
+
+    # This is name of stash to additionally apply - blank by default so  you wil be prompted. 
+    # Hardcode in a value if you plan to always merge with a certain stash
+    stash_name=""
+
+    # If blank then prompt
+    [[ "${stash_name}" == "" ]] && read -p "Enter the name of the stash to merge with your current changes: " stash_name
+
+    # Find thine stash index
+    stash_num=$(git stash list | grep $stash_name | tr -s [:alpha:] '-' | tr -s [:punct:] '-' | sed -E 's/ |\-//g')
+
+    # Thine Error handling
+    [[ "${stash_num}" == "" ]] && echo 'No stash found with that name' && exit 1;
+
+    echo "Found '${stash_name}'. Applying stash..."
+
+    # Apply thine stashes thereof - first apply found stash
+    git stash apply --index $stash_num
+
+    # Applying a second stash (our original unstaged code) - can pipe to git apply to bypass git warning of conflicting stashes 
+    git stash show -p 0 | git apply
+}
+
+gt_apply_stash_by_name(){
+    stash_name="${1}"
+
+    [[ "${stash_name}" == "" ]] && read -p "Enter the name of your stash: " stash_name
+
+    # get stash index
+    stash_num=$(git stash list | grep $stash_name | tr -s [:alpha:] '-' | tr -s [:punct:] '-' | sed -E 's/ |\-//g')
+
+    # Error handling
+    [[ "${stash_num}" == "" ]] && echo 'No stash found with that name' && exit 1;
+
+    echo "Found '${stash_name}'. Applying stash..."
+
+    # apply 
+    git stash apply --index $stash_num
+}
+
+
+
+gt_set_sshkey() {
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        echo "Error: Not inside a git repository" >&2
+        return 1
+    fi
+
+    if [[ -z "$1" || ! -f "$1" || ! -r "$1" ]]; then
+        echo "Usage: git_setsshkey <path-to-private-key>"
+        echo "Error: Please provide a readable key file" >&2
+        return 1
+    fi
+
+    git config core.sshCommand "ssh -i \"$1\" -F /dev/null" &&
+        echo "Repository now using SSH key: $1"
+}
+
+gt_set_connection_to_ssh(){
+        # Should prob add a check for 'https' here and change if not 
+        git_url_type="$(git config --get remote.origin.url)"
+
+        if [[ "${git_url_type}" =~ https ]]; then
+
+
+            if [[ "${git_url_type}" =~ codeberg ]]; then
+                git_url_type_ssh="$(git config --get remote.origin.url | sed -r 's_https://_ssh://git@_')"
+                git config remote.origin.url $git_url_type_ssh
+
+            else
+                git_url_type_ssh="$(git config --get remote.origin.url | sed -r 's_https://github.com/_git@github.com:_')"
+                git config remote.origin.url $git_url_type_ssh
+
+            fi
+
+        fi
+}
+
+gt_clone_all_public_repos(){
+
+	if [[ -z "${1}" ]]; then
+		echo "Usage: git_cloneall myusername"
+		exit 1
+	fi
+
+	curl -s "https://api.github.com/users/$1/repos?per_page=100" | jq -r '.[].name' | xargs -I{} git clone https://github.com/$1/{}.git
+}
+
+
+
+
+
+
+
+
+# ────────────────────────────────────────────────
+#             Nix ('nx_')
+# ────────────────────────────────────────────────
+
+
+nx_up(){
+
+    # Git to pull down the latest and greatest and update my local dotfiles via nix home-manager
+    
+    cd ~/.config/home-manager/
+
+    # Add ssh-key to ssh-agent
+    ssh_keyupdate
+
+    # Stash anything lingering
+    git stash save
+    git pull
+    git stash apply
+    git add -A
+
+    home-manager switch -b backup --flake .#${USER}
+
+}
+
+nx_make_dev_flake(){
+cat << 'EOF' > flake.nix
+{
+outputs = { self, nixpkgs }: {
+    devShells.x86_64-linux.default = let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    in pkgs.mkShell {
+      
+      buildInputs = [ 
+        # pkgs.python311 
+      ];
+		  
+	  # Environment variables
+	  PROJECT_NAME = "my-awesome-project";
+	  NODE_ENV = "development"; 
+
+     shellHook = '' 
+	     echo "🚀 Development environment loaded!" 
+	     #echo "📦 Python $(python --version)"
+	 '';
+    };
+  };
+}
+EOF
+
+echo 'use flake' > .envrc >/dev/null
+direnv allow
+}
+
+
+nx_remove_home_manager(){
+	nix run home-manager/master -- uninstall
+	rm -rf ~/.config/home-manager
+	nix-collect-garbage -d 
+	nix-env --list-generations 
+	nix-env --delete-generations &> /dev/null
+}
+
+
+nx_remove_home_manager(){
+    nix profile remove home-manager-path
+    rm -rf ~/.local/state/nix/profiles/home-manager*
+    rm -rf ~/.cache/home-manager
+    rm -rf ~/.config/home-manager
+    rm -rf ~/home-manager
+    rm -rf ~/.config/nixpkgs
+    find ~ -maxdepth 2 -type l -lname '/nix/store/*' -exec rm -rf '{}' \;
+    nix-collect-garbage -d
+}
+
+
+
+
+
+# ────────────────────────────────────────────────
+#             Docker ('dk_')
+# ────────────────────────────────────────────────
+
+
+
+dk_force_old_version(){
+    export DOCKER_API_VERSION=1.43
+}
+
+# Spin up quick ubuntu container
+dk_ubuntu(){
+    # force non-newest docker version as api doesn't support past 1.43 as of 3/26
+    # docker_force_old_version
+    sudo docker run -it --rm ubuntu:24.04 bash -c "apt update && apt install -y sudo wget git curl && DEBIAN_FRONTEND=noninteractive TZ=America/Los_Angeles apt install vim -y && exec bash"
+}
+
+dk_arch(){
+    sudo docker run -it --rm archlinux bash -c "yes | pacman -Syu && yes | pacman -S sudo wget git curl which vim && export EDITOR=vim &&  exec bash"
+}
+
+# fedora_container(){
+#     docker run -it --rm fedora:40 bash -c "dnf update && dnf install -y wget git curl wheel"
+# }
+#
+
+
+
+
+
+
+# ────────────────────────────────────────────────
+#             Neovim ('nv_')
+# ────────────────────────────────────────────────
+
+nv_clear_swaps(){
+    find ~/.local/state/nvim/swap -iname "*.swp" -exec rm -v '{}' \;
+}
+
+nv_update_lazy(){
+    sudo apt install ninja-build gettext cmake unzip curl git
+    git clone https://github.com/neovim/neovim
+    cd neovim
+    git checkout stable
+    make CMAKE_BUILD_TYPE=Release
+    sudo make install
+}
+
+nv_edit_conf(){
+    nvim ~/.config/home-manager/dotfiles/.config/nvim/lua/
+}
+
+nv_restore_owner(){
+    # Perms get set to root if I accidentally sudo nvim
+
+    # Fix ownership of the entire Neovim config (safest and most common fix)
+    sudo chown -R $USER:$USER ~/.config/nvim
+
+    # If you want to be extra sure, also fix permissions
+    chmod -R u+rwX ~/.config/nvim
+
+}
+

@@ -123,9 +123,9 @@ configure_ohmyzsh
 # Force other bash files to load
 [[ -s ~/.creds.env ]] && source ~/.creds.env
 [[ -s ~/.bash_aliases ]] && source ~/.bash_aliases
-[[ -s ~/.bash_pbx ]] && source ~/.bash_pbx
-[[ -s ~/.bash_git ]] && source ~/.bash_git
-[[ -s ~/.bash_utils ]] && source ~/.bash_utils
+[[ -s ~/.bash_wrappers ]] && source ~/.bash_wrappers
+# [[ -s ~/.bash_git ]] && source ~/.bash_git
+# [[ -s ~/.bash_utils ]] && source ~/.bash_utils
 # [[ -s ~/.oh-my-zsh/oh-my-zsh.sh ]] && source ~/.oh-my-zsh/oh-my-zsh.sh
 
 
@@ -152,5 +152,6 @@ export PATH="$PATH:${HOME}/.nix-profile/bin"
 #[[ ${UTILS_LOADED} -ne 1 && -s ~/.bash_utils ]] && source ~/.bash_utils
 
 
+# eval $(declare -f | grep 'ut_' | awk '{print $1}' | fzf)
 
 
