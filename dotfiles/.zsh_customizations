@@ -240,10 +240,10 @@ alias -g NULL=" &> /dev/null"   # Nothing: myscript.sh NULL
 alias -g NE=" &> /dev/null"     # No Error: df -f NE
 
 # Hash locations (location aliases -> ~xx)
-hash -d z=~/.zshrc              # zsh conf (good for sourcing): . ~c 
-hash -d bu=~/.bash_utils         
-hash -d ba=~/.bash_aliases         
-hash -d nc=~/.config/nvim/lua/   # Edit nvim dir: nvim -n
+hash -d z=~/.config/home-manager/dotfiles/.zshrc              # zsh conf (good for sourcing): . ~c 
+hash -d bu=~/.config/home-manager/dotfiles/.bash_utils         
+hash -d ba=~/.config/home-manager/dotfiles/.bash_aliases         
+hash -d nc=~/.config/home-manager/dotfiles/.config/nvim/lua/   # Edit nvim dir: nvim -n
 # hash -d de=~/Documents/Repos/Dev-Environment/         
 hash -d de=~/.config/home-manager/
 hash -d hm=~/.config/home-manager/
