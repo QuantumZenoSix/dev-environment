@@ -654,3 +654,14 @@ nix_remove_home_manager(){
 	nix-env --list-generations 
 	nix-env --delete-generations &> /dev/null
 }
+
+nvim_restore_owner(){
+    # Perms get set to root if I accidentally sudo nvim
+
+    # Fix ownership of the entire Neovim config (safest and most common fix)
+    sudo chown -R $USER:$USER ~/.config/nvim
+
+    # If you want to be extra sure, also fix permissions
+    chmod -R u+rwX ~/.config/nvim
+
+}
