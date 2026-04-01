@@ -74,7 +74,7 @@ neovim
 vim   			# vim-gtk3: GUI vim with GTK/X11 
 zsh 
 bat
-
+ttf-nerd-fonts-symbols-mono
 
 
 NOTE: Installing  system/misc tools...
