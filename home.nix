@@ -195,8 +195,7 @@
         ".zsh_customizations".source   = ./dotfiles/.zsh_customizations;
         ".p10k.zsh".source             = ./dotfiles/.p10k.zsh;
         ".bash_aliases".source         = ./dotfiles/.bash_aliases;
-        ".bash_git".source             = ./dotfiles/.bash_git;
-        ".bash_pbx".source             = ./dotfiles/.bash_pbx;
+        ".bash_wrappers".source             = ./dotfiles/.bash_wrappers;
         ".bash_utils".source           = ./dotfiles/.bash_utils;
         ".tmux.conf".source            = ./dotfiles/.tmux.conf;
         ".vimrc".source                = ./dotfiles/.vimrc;
