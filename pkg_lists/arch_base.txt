@@ -5,36 +5,44 @@
 # (already installed) rustup
 
 NOTE: system-level/essentials tools (drivers, graphics, audio, compiler dependencies, os tools, etc)...
+NetworkManager
 base-devel
 binutils
-font-manager
 bzip2  			# p7zip-full: 7zip compression 
 clang 
 cmake 
 coreutils  		# coreutils: GNU utils, base 
 curl  			# curl: Network downloader, system scripts rely on it 
+dnsutils
+font-manager
 gawk  			# gawk: AWK, base 
 gcc  			# gcc: Compiler, base-devel 
 glibc  			# libc6: Core C lib 
+iproute2        # ip, ss, etc
+iw
 lib32-glibc  	# libc6-dev-i386: 32-bit libc dev 
 libxcb            # libxcb1-dev: XCB render, shape, etc
+linux-firmware
 llvm  
 make  			# make: Builder, base-devel 
+man
 nasm 
+net-tools       # containing ifconfig, arp, netstat
 ninja 
+openssh
 openssl           # libssl-dev: Crypto
 p7zip  			# p7zip-full: 7zip compression 
 perl 
 pkgconf  		# pkg-config: Build helper
+rsync
 sed    			# sed: Text processor, base 
+sudo
 tar    			# tar: Archiver, base system 
 unzip  			# unzip: Zip handler, base 
 wget  			# wget: Downloader, core for scripts 
 which 
 xclip  			# xclip: Clipboard, X11 integration 
 xsel  			# xsel: Clipboard, X11 
-sudo
-openssh
 
 
 NOTE: Installing programming languages and tools...
@@ -120,7 +128,6 @@ csvlens
 dust
 yazi
 lazygit
-informant       # Read arch news before updating
 
 
 

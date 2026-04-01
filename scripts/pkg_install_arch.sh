@@ -21,6 +21,7 @@ interactive_pkgs=(
     "font-manager"
     "alsa-lib"
     "ffmpeg"
+    "p7zip"
 )
 
 
@@ -216,6 +217,8 @@ echo "[+] Enabling Docker service..."
 $SUDO  systemctl enable docker
 $SUDO  systemctl start docker
 
+# User should install informant on their own as it could block other things the script installs
+# pacman -S informant       # Read arch news before updating
 
 echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 echo "#        PACKAGE INSTALLATION COMPLETE!"
