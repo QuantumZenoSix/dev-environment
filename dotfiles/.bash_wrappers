@@ -220,26 +220,16 @@ direnv allow
 
 nx_remove_home_manager(){
 	nix run home-manager/master -- uninstall
-	rm -rf ~/.config/home-manager
-	nix-collect-garbage -d 
-	nix-env --list-generations 
-	nix-env --delete-generations &> /dev/null
-}
-
-
-nx_remove_home_manager(){
     nix profile remove home-manager-path
     rm -rf ~/.local/state/nix/profiles/home-manager*
     rm -rf ~/.cache/home-manager
-    rm -rf ~/.config/home-manager
-    rm -rf ~/home-manager
+	rm -rf ~/.config/home-manager
     rm -rf ~/.config/nixpkgs
+	nix-collect-garbage -d 
+	nix-env --list-generations 
+	nix-env --delete-generations &> /dev/null
     find ~ -maxdepth 2 -type l -lname '/nix/store/*' -exec rm -rf '{}' \;
-    nix-collect-garbage -d
 }
-
-
-
 
 
 # ────────────────────────────────────────────────
@@ -298,10 +288,12 @@ nv_restore_owner(){
     # Perms get set to root if I accidentally sudo nvim
 
     # Fix ownership of the entire Neovim config (safest and most common fix)
-    sudo chown -R $USER:$USER ~/.config/nvim
+    # sudo chown -R $USER:$USER ~/.config/nvim
 
     # If you want to be extra sure, also fix permissions
-    chmod -R u+rwX ~/.config/nvim
+    # chmod -R u+rwX ~/.config/nvim
+
+    rm -f ~/.config/nvim/lazy-lock.json*
 
 }
 

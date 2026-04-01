@@ -285,6 +285,10 @@ ut_restart_audio(){
 
 }
 
+ut_ssh_refresh_key(){
+    eval $(ssh-agent -s)
+    ssh-add
+}
 
 ut_change_pop_graphics(){
 
