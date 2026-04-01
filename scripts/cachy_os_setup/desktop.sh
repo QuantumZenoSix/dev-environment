@@ -121,26 +121,26 @@ echo -e "==========================================${NC}"
 sleep 1
 
 sudo pacman -S --needed --noconfirm steam
-sudo pacman -S --needed --noconfirm libreoffice-fresh
-sudo pacman -S --needed --noconfirm vlc
-sudo pacman -S --needed --noconfirm obs-studio
 sudo pacman -S --needed --noconfirm wireshark-qt
 sudo pacman -S --needed --noconfirm thonny
 sudo pacman -S --needed --noconfirm audacity
-sudo pacman -S --needed --noconfirm mpv
 sudo pacman -S --needed --noconfirm signal-desktop
-sudo pacman -S --needed --noconfirm docker
 sudo pacman -S --needed --noconfirm discord
-sudo pacman -S --needed --noconfirm libreoffice-fresh
 sudo pacman -S --needed --noconfirm gimp
-sudo pacman -S --needed --noconfirm inkscape
-sudo pacman -S --needed --noconfirm brave-bin
-paru --needed --noconfirm -S obsidian-bin
-paru --needed --noconfirm -S wezterm-bin
-paru --needed --noconfirm -S telegram-desktop
 paru --needed --noconfirm -S postman-bin
-paru --needed --noconfirm -S spotify
 
+# INSTALL VIA SHELLY 
+# paru --needed --noconfirm -S wezterm-bin
+# sudo pacman -S --needed --noconfirm brave-bin
+# sudo pacman -S --needed --noconfirm libreoffice-fresh
+# sudo pacman -S --needed --noconfirm vlc
+# sudo pacman -S --needed --noconfirm obs-studio
+# sudo pacman -S --needed --noconfirm mpv
+# sudo pacman -S --needed --noconfirm docker
+# sudo pacman -S --needed --noconfirm inkscape
+# paru --needed --noconfirm -S obsidian-bin
+# paru --needed --noconfirm -S telegram-desktop
+# paru --needed --noconfirm -S spotify
 
 echo -e "${GREEN}=========================================="
 echo -e " Firewall setup (ufw) — simple + enable "
