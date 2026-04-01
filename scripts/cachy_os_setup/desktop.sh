@@ -137,6 +137,7 @@ echo "   → Usage example: winetricks corefonts vcrun2019 dxvk    (run inside a
 # Flatpak setup + Flathub (safe to run multiple times)
 # ─────────────────────────────────────────────────────────────────────
 echo -e "\n→ Enabling Flatpak and adding Flathub repo (if not present)..."
+sudo pacman -S --needed --noconfirm flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 # ─────────────────────────────────────────────────────────────────────
