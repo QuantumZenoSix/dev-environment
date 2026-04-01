@@ -176,7 +176,7 @@ nx_up(){
     cd ~/.config/home-manager/
 
     # Add ssh-key to ssh-agent
-    ssh_keyupdate
+    ut_ssh_reload_key
 
     # Stash anything lingering
     git stash save

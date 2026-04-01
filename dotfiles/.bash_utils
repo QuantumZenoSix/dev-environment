@@ -285,7 +285,7 @@ ut_restart_audio(){
 
 }
 
-ut_ssh_refresh_key(){
+ut_ssh_reload_key(){
     eval $(ssh-agent -s)
     ssh-add
 }
