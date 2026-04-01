@@ -72,28 +72,75 @@ echo -e "==========================================${NC}"
 sleep 1
 
 echo -e "Installing common packages (codecs, fonts, firmware, tools) ..."
-sudo pacman -S --needed --noconfirm \
-    ttf-ms-fonts noto-fonts-emoji \
-    vulkan-icd-loader libva-vdpau-driver libva-utils \
-    ffmpeg ffmpegthumbnailer gst-plugin-pipewire gst-plugins-{good,bad,ugly} \
-    linux-firmware intel-ucode amd-ucode \
-    networkmanager network-manager-applet \
-    ufw gufw \
-    bash-completion fish zsh \
-    lm-sensors tlp tlp-rdw \
-    git base-devel paru   # paru AUR helper is usually already there, but ensure
+sudo pacman -S --needed --noconfirm amd-ucode
+sudo pacman -S --needed --noconfirm base-devel
+sudo pacman -S --needed --noconfirm bash-completion
+sudo pacman -S --needed --noconfirm ffmpeg
+sudo pacman -S --needed --noconfirm ffmpegthumbnaileramd-ucodeamd-ucode
+sudo pacman -S --needed --noconfirm base-devel
+sudo pacman -S --needed --noconfirm bash-completion
+sudo pacman -S --needed --noconfirm ffmpeg
+sudo pacman -S --needed --noconfirm ffmpegthumbnailer
+sudo pacman -S --needed --noconfirm base-devel
+sudo pacman -S --needed --noconfirm bash-completion
+sudo pacman -S --needed --noconfirm ffmpeg
+sudo pacman -S --needed --noconfirm ffmpegthumbnailer
+sudo pacman -S --needed --noconfirm fish
+sudo pacman -S --needed --noconfirm git
+sudo pacman -S --needed --noconfirm gst-plugin-pipewire
+sudo pacman -S --needed --noconfirm gst-plugins-{good,bad,ugly}
+sudo pacman -S --needed --noconfirm gufw
+sudo pacman -S --needed --noconfirm intel-ucode
+sudo pacman -S --needed --noconfirm libva-utils
+sudo pacman -S --needed --noconfirm libva-vdpau-driver
+sudo pacman -S --needed --noconfirm linux-firmware
+sudo pacman -S --needed --noconfirm lm-sensors
+sudo pacman -S --needed --noconfirm network-manager-applet
+sudo pacman -S --needed --noconfirm networkmanager
+sudo pacman -S --needed --noconfirm noto-fonts-emoji
+sudo pacman -S --needed --noconfirm paru
+sudo pacman -S --needed --noconfirm tlp
+sudo pacman -S --needed --noconfirm tlp-rdw
+sudo pacman -S --needed --noconfirm ttf-ms-fonts
+sudo pacman -S --needed --noconfirm ufw
+sudo pacman -S --needed --noconfirm vulkan-icd-loader
+sudo pacman -S --needed --noconfirm zsh
+
+
+# cahchy comes with paru out of the box
 
 # Optional: extra Intel/AMD GPU media packages (chwd often installs these already)
-sudo pacman -S --needed --noconfirm intel-media-driver intel-media-sdk onevpl-intel-gpu || true
+sudo pacman -S --needed --noconfirm intel-media-driver
+sudo pacman -S --needed --noconfirm intel-media-sdk
+sudo pacman -S --needed --noconfirm onevpl-intel-gpu
+
 
 echo -e "${GREEN}=========================================="
 echo -e " Common useful GUI/desktop applications: Spotify, Discord, LibreOffice, etc "
 echo -e "==========================================${NC}"
 sleep 1
 
-sudo pacman -S --needed --noconfirm steam libreoffice-fresh vlc obs-studio wireshark-qt thonny audacity mpv signal-desktop docker discord libreoffice-fresh gimp inkscape brave-bin
+sudo pacman -S --needed --noconfirm steam
+sudo pacman -S --needed --noconfirm libreoffice-fresh
+sudo pacman -S --needed --noconfirm vlc
+sudo pacman -S --needed --noconfirm obs-studio
+sudo pacman -S --needed --noconfirm wireshark-qt
+sudo pacman -S --needed --noconfirm thonny
+sudo pacman -S --needed --noconfirm audacity
+sudo pacman -S --needed --noconfirm mpv
+sudo pacman -S --needed --noconfirm signal-desktop
+sudo pacman -S --needed --noconfirm docker
+sudo pacman -S --needed --noconfirm discord
+sudo pacman -S --needed --noconfirm libreoffice-fresh
+sudo pacman -S --needed --noconfirm gimp
+sudo pacman -S --needed --noconfirm inkscape
+sudo pacman -S --needed --noconfirm brave-bin
+paru --needed --noconfirm -S obsidian-bin
+paru --needed --noconfirm -S wezterm-bin
+paru --needed --noconfirm -S telegram-desktop
+paru --needed --noconfirm -S postman-bin
+paru --needed --noconfirm -S spotify
 
-paru --needed --noconfirm -S obsidian-bin wezterm-bin telegram-desktop postman-bin spotify 
 
 echo -e "${GREEN}=========================================="
 echo -e " Firewall setup (ufw) — simple + enable "
