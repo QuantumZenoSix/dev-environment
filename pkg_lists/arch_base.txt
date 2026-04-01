@@ -75,6 +75,7 @@ vim   			# vim-gtk3: GUI vim with GTK/X11
 zsh 
 bat
 ttf-nerd-fonts-symbols-mono
+chafa           # Needed to render images in cli for things like alacritty
 
 
 NOTE: Installing  system/misc tools...
