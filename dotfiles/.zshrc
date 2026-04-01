@@ -124,8 +124,8 @@ configure_ohmyzsh
 [[ -s ~/.creds.env ]] && source ~/.creds.env
 [[ -s ~/.bash_aliases ]] && source ~/.bash_aliases
 [[ -s ~/.bash_wrappers ]] && source ~/.bash_wrappers
+[[ -s ~/.bash_utils ]] && source ~/.bash_utils
 # [[ -s ~/.bash_git ]] && source ~/.bash_git
-# [[ -s ~/.bash_utils ]] && source ~/.bash_utils
 # [[ -s ~/.oh-my-zsh/oh-my-zsh.sh ]] && source ~/.oh-my-zsh/oh-my-zsh.sh
 
 
