@@ -1,6 +1,8 @@
 -- Pull in the wezterm API
 local wezterm = require 'wezterm'
 
+enable_wayland = true
+
 -- This will hold the configuration.
 
 
@@ -174,7 +176,7 @@ config.wsl_domains = {
   },
 }
 
-config.default_domain = 'WSL:archlinux'
+-- config.default_domain = 'WSL:archlinux'
 config.window_background_opacity = 0.90
 -- config.win32_system_backdrop = 'Mica'
 -- config.win32_system_backdrop = 'Acrylic'
@@ -236,7 +238,7 @@ config.inactive_pane_hsb = {
   brightness = 0.8,
 }
 
-config.window_background_image = 'Downloads\\black_wave.gif'
+-- config.window_background_image = 'Downloads\\black_wave.gif'
 
 config.window_background_image_hsb = {
   -- Darken the background image by reducing it to 1/3rd
