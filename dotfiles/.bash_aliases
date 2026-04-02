@@ -18,6 +18,7 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 
 alias mkdir='mkdir -pv'
+alias l='ls -halX'
 
 # If we have colorized versions of cat and less use those by default
 # [[ ccless ]] && alias less='cless'

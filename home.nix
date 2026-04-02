@@ -219,6 +219,11 @@
           recursive = true;
         };
 
+        ".config/niri" = {
+          source = ./dotfiles/.config/niri;
+          recursive = true;
+        };
+
         ".config/yazi" = {
           source = ./dotfiles/.config/yazi;
           recursive = true;
