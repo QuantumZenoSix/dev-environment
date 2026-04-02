@@ -168,7 +168,9 @@ cargo install --locked tree-sitter-cli
 echo "[+] Installing Spotify Player dependencies..."
 
 # 1. Modern / recommended (PipeWire + official package)
-$PACMAN libsixel spotify-player pavucontrol --noconfirm   # pavucontrol still works via pipewire-pulse
+$PACMAN spotify-player --noconfirm  
+$PACMAN libsixel-player --noconfirm  
+$PACMAN pavucontrol --noconfirm   # pavucontrol still works via pipewire-pulse
 
 # ────────────────────────────────────────────────
 # 2. OR if you insist on PulseAudio backend:

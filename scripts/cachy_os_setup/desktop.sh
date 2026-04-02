@@ -130,7 +130,6 @@ sudo pacman -S --needed --noconfirm gimp
 paru --needed --noconfirm -S postman-bin
 
 # INSTALL VIA SHELLY 
-# paru --needed --noconfirm -S wezterm-bin
 # sudo pacman -S --needed --noconfirm brave-bin
 # sudo pacman -S --needed --noconfirm libreoffice-fresh
 # sudo pacman -S --needed --noconfirm vlc
@@ -141,6 +140,11 @@ paru --needed --noconfirm -S postman-bin
 # paru --needed --noconfirm -S obsidian-bin
 # paru --needed --noconfirm -S telegram-desktop
 # paru --needed --noconfirm -S spotify
+
+
+# This hasn't worked for me - wezterm-gui is preferred
+# paru --needed --noconfirm -S wezterm-bin
+paru --needed --noconfirm -S wezterm-git
 
 echo -e "${GREEN}=========================================="
 echo -e " Firewall setup (ufw) — simple + enable "

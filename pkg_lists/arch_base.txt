@@ -75,12 +75,13 @@ vim   			# vim-gtk3: GUI vim with GTK/X11
 zsh 
 bat
 ttf-nerd-fonts-symbols-mono
+ttf-jetbrains-mono-nerd
 chafa           # Needed to render images in cli for things like alacritty
+powerline-fonts	# fonts-powerline: Fonts for terminals 
 
 
 NOTE: Installing  system/misc tools...
 # Terminal/system extras: System integration like fonts/GUI/audio mounts.
-powerline-fonts	# fonts-powerline: Fonts for terminals 
 sshfs  			# sshfs: FUSE mount, system fs 
 sshpass  		# sshpass: SSH passwords, utils 
 
