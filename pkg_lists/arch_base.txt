@@ -75,6 +75,7 @@ vim   			# vim-gtk3: GUI vim with GTK/X11
 zsh 
 bat
 ttf-nerd-fonts-symbols-mono
+ttf-nerd-fonts-symbols
 ttf-jetbrains-mono-nerd
 chafa           # Needed to render images in cli for things like alacritty
 powerline-fonts	# fonts-powerline: Fonts for terminals 
@@ -97,6 +98,7 @@ pandoc
 unixodbc          # unixodbc-dev: ODBC 
 yt-dlp            # YouTube downloader
 wl-clipboard
+dysk
 
 
 NOTE: Installing media/sound-related pkgs...
