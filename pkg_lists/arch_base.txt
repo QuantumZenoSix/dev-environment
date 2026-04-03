@@ -61,7 +61,8 @@ ufw  			# gawk: AWK, base
 nodejs-lts-jod
 treesitter-cli
 npm
-
+partitionmanager
+filelight       # Disk usage visualizer
 
 NOTE: Installing workflow and cli tools..."
 bc  		    # bc: Calculator, base 
