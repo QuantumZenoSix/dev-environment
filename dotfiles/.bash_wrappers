@@ -186,6 +186,10 @@ nx_up(){
 
     home-manager switch -b backup --flake .#${USER}
 
+    # While I'm here, backup any niri/noctalia changes
+    cp -r ~/.config/niri/* ~/.config/home-manager/dotfiles/.config/niri/
+    cp -r ~/.config/noctalia/* ~/.config/home-manager/dotfiles/.config/noctalia/
+
 }
 
 nx_make_dev_flake(){
