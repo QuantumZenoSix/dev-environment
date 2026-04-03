@@ -189,6 +189,7 @@ More keybinds in my workflow: [keybinds](./key_bindings.md)
 
 <br />
 
+__Common Pacman keys__  
 
 | Key    | Description |
 | --- |--|  
