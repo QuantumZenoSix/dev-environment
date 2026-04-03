@@ -83,6 +83,7 @@ alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
 alias archeck="informant list"
 
+alias up="nx_up"
 
 
 

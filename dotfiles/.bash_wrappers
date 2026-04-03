@@ -190,6 +190,8 @@ nx_up(){
     cp -r ~/.config/niri/* ~/.config/home-manager/dotfiles/.config/niri/
     cp -r ~/.config/noctalia/* ~/.config/home-manager/dotfiles/.config/noctalia/
 
+    # Unstage everything so I can manually choose what to save
+    git reset .
 }
 
 nx_make_dev_flake(){
