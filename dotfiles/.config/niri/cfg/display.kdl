@@ -6,6 +6,7 @@
 output "eDP-2" {
     mode "2560x1400@60.000" // Set resolution and refresh rate
     scale 1.7 
+    position x=0 y=0
 
 
     // scale 2.0
@@ -34,5 +35,8 @@ output "eDP-2" {
 
 }
 
-
-
+output "DP-1" {
+    mode "2560x1440@74.599" // Set resolution and refresh rate
+    scale 1
+    position x=0 y=1440
+}
