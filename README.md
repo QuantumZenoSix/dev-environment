@@ -187,4 +187,28 @@ Fedora, maybe one day.
 
 More keybinds in my workflow: [keybinds](./key_bindings.md)
 
+<br />
+
+
+| Key    | Description |
+| --- |--|  
+| `Syu`  | Update system |  
+| `Rns`  | Remove package|  
+| `Ssq`  | Query repo for pkg (`Ss` for just the name) |  
+
+
+<br />
+
+### Info on Niri
+
+Note: If using Niri, check out this noctalia-based custom sddm theme
+https://github.com/mahaveergurjar/sddm/tree/noctalia  
+
+And of course - astronaut
+https://github.com/Keyitdev/sddm-astronaut-theme
+
+Great FAQ: https://github.com/niri-wm/niri/wiki/FAQ
+
+Kanshi for multi-monitor profiles
+https://wiki.archlinux.org/title/Kanshi
 
