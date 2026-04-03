@@ -212,6 +212,12 @@ echo -e "Optional Tools "
 echo -e "==========================================${NC}"
 sleep 1
 
+printf "\n[+] Installing sddm loging manager (astronaut)\n\n"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+
+
+printf "\n[+] Installing archlinux-tweak-tool-git (optional)\n\n"
+paru -S archlinux-tweak-tool-git
 
 # ─────────────────────────────────────────────────────────────────────
 # Optional: Virtualization stack (qemu + virt-manager) for VMs / future GPU passthrough
