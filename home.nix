@@ -219,10 +219,11 @@
           recursive = true;
         };
 
-        ".config/niri" = {
-          source = ./dotfiles/.config/niri;
-          recursive = true;
-        };
+        # Noctalia needs to edit these confs directly - can't have nix claiming ownership
+        # ".config/niri" = {
+        #   source = ./dotfiles/.config/niri;
+        #   recursive = true;
+        # };
 
         ".config/yazi" = {
           source = ./dotfiles/.config/yazi;
