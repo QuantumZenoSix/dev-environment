@@ -750,9 +750,9 @@
         "linkLightAndDarkWallpapers": true,
         "monitorDirectories": [
         ],
-        "overviewBlur": 0.4,
-        "overviewEnabled": false,
-        "overviewTint": 0.6,
+        "overviewBlur": 0.58,
+        "overviewEnabled": true,
+        "overviewTint": 0.53,
         "panelPosition": "follow_bar",
         "randomIntervalSec": 300,
         "setWallpaperOnAllMonitors": true,

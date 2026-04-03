@@ -4,7 +4,8 @@
     }
 
     layer-rule {
-        // match namespace="^noctalia-overview*"
-        match namespace="^noctalia-wallpaper*"
+        // match namespace="^noctalia-wallpaper*"
+        // Wallpaper is blurred in overview mode
+        match namespace="^noctalia-overview*"
         place-within-backdrop true
     }
