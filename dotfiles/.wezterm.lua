@@ -182,7 +182,7 @@ config.wsl_domains = {
 }
 
 -- config.default_domain = 'WSL:archlinux'
-config.window_background_opacity = 0.5
+config.window_background_opacity = 0.6
 -- config.win32_system_backdrop = 'Mica'
 -- config.win32_system_backdrop = 'Acrylic'
 

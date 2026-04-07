@@ -423,7 +423,7 @@
         "deadOpacity": 0.6,
         "displayMode": "auto_hide",
         "dockType": "floating",
-        "enabled": true,
+        "enabled": false,
         "floatingRatio": 0.31,
         "groupApps": false,
         "groupClickAction": "cycle",
@@ -726,7 +726,7 @@
     "ui": {
         "boxBorderEnabled": false,
         "fontDefault": "Adwaita Sans",
-        "fontDefaultScale": 0.91,
+        "fontDefaultScale": 1.05,
         "fontFixed": "monospace",
         "fontFixedScale": 1,
         "panelBackgroundOpacity": 0.93,

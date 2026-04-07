@@ -86,6 +86,10 @@ NOTE: Installing  system/misc tools...
 # Terminal/system extras: System integration like fonts/GUI/audio mounts.
 sshfs  			# sshfs: FUSE mount, system fs 
 sshpass  		# sshpass: SSH passwords, utils 
+fuse2           # manage app images
+flatpak
+smbclient
+cifs-utils
 
 NOTE: Installing misc. tools...
 docker            # docker.io: Containers, system service 
@@ -133,6 +137,7 @@ csvlens
 dust
 yazi
 lazygit
+wlsunset-git        # For night mode - warm colors to reduce blue light
 
 
 

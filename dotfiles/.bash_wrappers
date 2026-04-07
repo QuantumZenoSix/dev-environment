@@ -265,7 +265,9 @@ dk_arch(){
 #
 
 
-
+dk_enter_smb_container(){
+    sudo docker exec -it $( docker ps -a | awk '/samba/ {print $1}' | xargs) /bin/bash
+}
 
 
 
