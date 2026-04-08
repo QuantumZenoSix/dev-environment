@@ -103,7 +103,6 @@ htop              # htop: Process viewer
 pandoc  
 unixodbc          # unixodbc-dev: ODBC 
 yt-dlp            # YouTube downloader
-wl-clipboard
 dysk
 
 
