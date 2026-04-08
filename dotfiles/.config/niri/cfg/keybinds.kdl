@@ -34,6 +34,12 @@ binds {
     XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness increase"; }
     XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness decrease"; }
 
+    // Other
+    Mod+V                               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call launcher clipboard"; }
+
+
+
+
     // ─── Window Movement and Focus ───
     Mod+Q                               { close-window; }
 

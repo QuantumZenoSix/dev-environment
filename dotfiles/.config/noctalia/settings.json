@@ -1,6 +1,6 @@
 {
     "appLauncher": {
-        "autoPasteClipboard": false,
+        "autoPasteClipboard": true,
         "clipboardWatchImageCommand": "wl-paste --type image --watch cliphist store",
         "clipboardWatchTextCommand": "wl-paste --type text --watch cliphist store",
         "clipboardWrapText": true,
@@ -196,21 +196,12 @@
                 },
                 {
                     "defaultSettings": {
-                        "autoMount": false,
-                        "fileBrowser": "yazi",
-                        "hideWhenEmpty": false,
-                        "iconColor": "none",
-                        "showBadge": false,
-                        "showNotifications": true,
-                        "terminalCommand": "kitty"
-                    },
-                    "id": "plugin:usb-drive-manager"
-                },
-                {
-                    "defaultSettings": {
                         "refreshInterval": 5000
                     },
                     "id": "plugin:mini-docker"
+                },
+                {
+                    "id": "plugin:keybind-cheatsheet"
                 },
                 {
                     "defaultSettings": {
@@ -280,7 +271,19 @@
                     "id": "plugin:syncthing-status"
                 },
                 {
-                    "id": "plugin:keybind-cheatsheet"
+                    "defaultSettings": {
+                        "autoMount": false,
+                        "fileBrowser": "yazi",
+                        "hideWhenEmpty": false,
+                        "iconColor": "none",
+                        "showBadge": false,
+                        "showNotifications": true,
+                        "terminalCommand": "kitty"
+                    },
+                    "id": "plugin:usb-drive-manager"
+                },
+                {
+                    "id": "plugin:ssh-sessions"
                 },
                 {
                     "applyToAllMonitors": false,
