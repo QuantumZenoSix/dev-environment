@@ -43,6 +43,7 @@ wget  			# wget: Downloader, core for scripts
 which 
 xclip  			# xclip: Clipboard, X11 integration 
 xsel  			# xsel: Clipboard, X11 
+rsync
 
 
 NOTE: Installing programming languages and tools...
