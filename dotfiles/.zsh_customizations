@@ -244,6 +244,7 @@ hash -d z=~/.config/home-manager/dotfiles/.zshrc              # zsh conf (good f
 hash -d bu=~/.config/home-manager/dotfiles/.bash_utils         
 hash -d ba=~/.config/home-manager/dotfiles/.bash_aliases         
 hash -d nc=~/.config/home-manager/dotfiles/.config/nvim/lua/   # Edit nvim dir: nvim -n
+hash -d nv=~/.config/home-manager/dotfiles/.config/nvim/lua/   # Edit nvim dir: nvim -n
 hash -d nr=~/.config/niri/   
 # hash -d de=~/Documents/Repos/Dev-Environment/         
 hash -d de=~/.config/home-manager/
