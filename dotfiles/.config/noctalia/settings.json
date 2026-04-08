@@ -58,7 +58,7 @@
         "fontScale": 1,
         "frameRadius": 12,
         "frameThickness": 8,
-        "hideOnOverview": false,
+        "hideOnOverview": true,
         "marginHorizontal": 4,
         "marginVertical": 4,
         "middleClickAction": "none",
@@ -97,7 +97,7 @@
                     "id": "Workspace",
                     "labelMode": "index",
                     "occupiedColor": "secondary",
-                    "pillSize": 0.6,
+                    "pillSize": 0.53,
                     "showApplications": false,
                     "showApplicationsHover": false,
                     "showBadge": true,
@@ -150,10 +150,10 @@
                     "colorizeIcons": false,
                     "hideMode": "hidden",
                     "id": "ActiveWindow",
-                    "maxWidth": 145,
+                    "maxWidth": 100,
                     "scrollingMode": "hover",
                     "showIcon": true,
-                    "showText": true,
+                    "showText": false,
                     "textColor": "none",
                     "useFixedWidth": false
                 },
@@ -179,7 +179,7 @@
                     "blacklist": [
                     ],
                     "chevronColor": "none",
-                    "colorizeIcons": false,
+                    "colorizeIcons": true,
                     "drawerEnabled": true,
                     "hidePassive": false,
                     "id": "Tray",
@@ -187,44 +187,12 @@
                     ]
                 },
                 {
-                    "hideWhenZero": false,
-                    "hideWhenZeroUnread": false,
+                    "hideWhenZero": true,
+                    "hideWhenZeroUnread": true,
                     "iconColor": "none",
                     "id": "NotificationHistory",
                     "showUnreadBadge": true,
                     "unreadBadgeColor": "primary"
-                },
-                {
-                    "deviceNativePath": "__default__",
-                    "displayMode": "graphic-clean",
-                    "hideIfIdle": false,
-                    "hideIfNotDetected": true,
-                    "id": "Battery",
-                    "showNoctaliaPerformance": false,
-                    "showPowerProfiles": false
-                },
-                {
-                    "displayMode": "onhover",
-                    "iconColor": "none",
-                    "id": "Volume",
-                    "middleClickCommand": "pwvucontrol || pavucontrol",
-                    "textColor": "none"
-                },
-                {
-                    "applyToAllMonitors": false,
-                    "displayMode": "onhover",
-                    "iconColor": "none",
-                    "id": "Brightness",
-                    "textColor": "none"
-                },
-                {
-                    "colorizeDistroLogo": false,
-                    "colorizeSystemIcon": "none",
-                    "customIconPath": "",
-                    "enableColorization": false,
-                    "icon": "noctalia",
-                    "id": "ControlCenter",
-                    "useDistroLogo": false
                 },
                 {
                     "defaultSettings": {
@@ -310,6 +278,47 @@
                         "verifyTls": false
                     },
                     "id": "plugin:syncthing-status"
+                },
+                {
+                    "id": "plugin:keybind-cheatsheet"
+                },
+                {
+                    "applyToAllMonitors": false,
+                    "displayMode": "onhover",
+                    "iconColor": "none",
+                    "id": "Brightness",
+                    "textColor": "none"
+                },
+                {
+                    "displayMode": "onhover",
+                    "iconColor": "none",
+                    "id": "Bluetooth",
+                    "textColor": "none"
+                },
+                {
+                    "displayMode": "onhover",
+                    "iconColor": "none",
+                    "id": "Volume",
+                    "middleClickCommand": "pwvucontrol || pavucontrol",
+                    "textColor": "none"
+                },
+                {
+                    "deviceNativePath": "__default__",
+                    "displayMode": "graphic-clean",
+                    "hideIfIdle": false,
+                    "hideIfNotDetected": true,
+                    "id": "Battery",
+                    "showNoctaliaPerformance": false,
+                    "showPowerProfiles": false
+                },
+                {
+                    "colorizeDistroLogo": false,
+                    "colorizeSystemIcon": "none",
+                    "customIconPath": "",
+                    "enableColorization": false,
+                    "icon": "noctalia",
+                    "id": "ControlCenter",
+                    "useDistroLogo": false
                 }
             ]
         }
@@ -567,13 +576,13 @@
         "wifiDetailsViewMode": "grid"
     },
     "nightLight": {
-        "autoSchedule": true,
-        "dayTemp": "6500",
-        "enabled": true,
+        "autoSchedule": false,
+        "dayTemp": "3044",
+        "enabled": false,
         "forced": false,
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
-        "nightTemp": "4000"
+        "nightTemp": "1971"
     },
     "noctaliaPerformance": {
         "disableDesktopWidgets": true,
