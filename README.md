@@ -214,3 +214,5 @@ Great FAQ: https://github.com/niri-wm/niri/wiki/FAQ
 Kanshi for multi-monitor profiles
 https://wiki.archlinux.org/title/Kanshi
 
+General Niri configuration notes  
+https://github.com/niri-wm/niri/wiki/Configuration:-Key-Bindings
