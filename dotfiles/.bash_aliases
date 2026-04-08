@@ -81,9 +81,13 @@ alias ds="ollama run deepseek-r1:14b"
 alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
 
-alias archeck="informant list"
 
+# Sync home manager
 alias up="nx_up"
+
+# Read arch news in cli (cachy)
+alias news="cachy-update -n"
+alias archeck="informant list"
 
 
 
