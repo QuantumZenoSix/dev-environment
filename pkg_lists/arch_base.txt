@@ -59,7 +59,7 @@ nvm
 python 
 ufw  			# gawk: AWK, base 
 nodejs-lts-jod
-treesitter-cli
+tree-sitter-cli
 npm
 
 
@@ -154,3 +154,4 @@ snitch-bin
 # https://github.com/hymkor/csvi
 # https://github.com/byawitz/ggh
 # https://github.com/charmbracelet/vhs
+# https://github.com/microsoft/markitdown
