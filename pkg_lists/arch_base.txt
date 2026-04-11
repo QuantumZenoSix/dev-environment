@@ -56,31 +56,11 @@ gettext  		# gettext: Localization, system
 jq
 lua 
 nvm 
-python-pipx 
 python 
 ufw  			# gawk: AWK, base 
 nodejs-lts-jod
 treesitter-cli
 npm
-partitionmanager
-filelight       # Disk usage visualizer
-
-NOTE: Installing workflow and cli tools..."
-bc  		    # bc: Calculator, base 
-tmux
-entr
-fzf 
-python-pygments 
-ripgrep 
-neovim 
-vim   			# vim-gtk3: GUI vim with GTK/X11 
-zsh 
-bat
-ttf-nerd-fonts-symbols-mono
-ttf-nerd-fonts-symbols
-ttf-jetbrains-mono-nerd
-chafa           # Needed to render images in cli for things like alacritty
-powerline-fonts	# fonts-powerline: Fonts for terminals 
 
 
 NOTE: Installing  system/misc tools...
@@ -91,20 +71,12 @@ fuse2           # manage app images
 flatpak
 smbclient
 cifs-utils
-
-NOTE: Installing misc. tools...
 docker            # docker.io: Containers, system service 
 docker-compose    # docker-compose-plugin: Docker compose 
 entr              # entr ─ super useful file watcher (needed for tmux autoreload)
 fastfetch         # fastfetch: System info
 fd                # → fd
-glow              # Markdown reader
-htop              # htop: Process viewer 
-pandoc  
 unixodbc          # unixodbc-dev: ODBC 
-yt-dlp            # YouTube downloader
-dysk
-
 
 NOTE: Installing media/sound-related pkgs...
 # Sound-related: Audio libs/hardware accel integration.
@@ -121,37 +93,64 @@ playerctl         # playerctl: Media control
 poppler           # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
 rubberband        # librubberband2: Audio stretch 
 
+NOTE: Installing workflow and tui/cli tools..."
+bat
+bc  		    # bc: Calculator, base 
+chafa           # Needed to render images in cli for things like alacritty
+doxx              # .docx in-terminal file viewer
+dysk
+filelight       # Disk usage visualizer
+fzf 
+glow              # Markdown reader
+gum
+htop              # htop: Process viewer 
+neovim 
+pandoc            # Document converter  
+partitionmanager
+powerline-fonts	  # fonts-powerline: Fonts for terminals 
+python-pygments 
+ripgrep 
+tmux
+treemd
+vim   			  # vim-gtk3: GUI vim with GTK/X11 
+yt-dlp            # YouTube downloader
+zsh 
+
+ttf-nerd-fonts-symbols-mono
+ttf-nerd-fonts-symbols
+ttf-jetbrains-mono-nerd
+
 
 
 
 NOTE-AUR: Processing AUR pkgs from this point on
 #tmux-plugin-manager 
-zimg                      # libzimg2: Image scaling 
-mlocate                   # locate: File indexer, system db 
-jless                     # json viewer
-lazysql           # almost always AUR
+csvlens           # tui csv viewer
+dust              # 'du' alternative (disk usage)
 eget              # usually AUR
-ggh               # SSH session manager – AUR
-uv
-csvlens
-dust
-yazi
-lazygit
-wlsunset-git        # For night mode - warm colors to reduce blue light
+#ggh               # SSH session manager – AUR
+jless             # json viewer
+lazygit           # TUI for git in terminal  
+lazysql           # almost always AUR
+mlocate           # locate: File indexer, system db 
+oyo               # Git diff viewer + live playback
+uv                # Python package and virtual env manager
+wlsunset-git      # For night mode - warm colors to reduce blue light
+yazi              # tui file explorer  
+zimg              # libzimg2: Image scaling 
+gittop
+snitch-bin
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# EXTRAS NOT TO INSTALL BUT TO INSTALL AD-HOC AS NEEDED
+# https://github.com/Rodrigodd/strace-tui 
+# https://github.com/Kohei-Wada/taskdog
+# https://github.com/harehare/mq
+# https://github.com/antoniorodr/cronboard
+# https://github.com/FedericoBruzzone/tgt
+# https://github.com/sectordistrict/intentrace
+# https://terminaltrove.com/jiq/
+# https://github.com/hymkor/csvi
+# https://github.com/byawitz/ggh
+# https://github.com/charmbracelet/vhs
