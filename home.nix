@@ -230,6 +230,11 @@
           recursive = true;
         };
 
+        ".config/oyo" = {
+          source = ./dotfiles/.config/oyo;
+          recursive = true;
+        };
+
         ".config/spotify-player" = {
           source = ./dotfiles/.config/spotify-player;
           recursive = true;
