@@ -205,12 +205,6 @@
                 },
                 {
                     "defaultSettings": {
-                        "refreshInterval": 5000
-                    },
-                    "id": "plugin:mini-docker"
-                },
-                {
-                    "defaultSettings": {
                         "autoHeight": true,
                         "cheatsheetData": [
                         ],
@@ -497,7 +491,7 @@
         "deadOpacity": 0.6,
         "displayMode": "auto_hide",
         "dockType": "floating",
-        "enabled": false,
+        "enabled": true,
         "floatingRatio": 0.31,
         "groupApps": false,
         "groupClickAction": "cycle",
@@ -643,7 +637,7 @@
     "nightLight": {
         "autoSchedule": false,
         "dayTemp": "3044",
-        "enabled": false,
+        "enabled": true,
         "forced": false,
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
