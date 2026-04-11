@@ -333,7 +333,10 @@ EOF
 
 }
 
-
+ut_update_nvidia_drivers_arch(){
+    sudo pacman -Syu nvidia-utils lib32-nvidia-utils opencl-nvidia lib32-opencl-nvidia   
+    nvidia-smi
+}
 
 
 # Switch from current prompt theme to starship (catppuccin mocha) or ohmyposh
