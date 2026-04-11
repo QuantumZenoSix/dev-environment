@@ -16,6 +16,9 @@
 # Add path for go installs
 export PATH="$PATH:$HOME/go/bin"
 
+# Add path for cargo installs
+export PATH="$PATH:$HOME/.cargo/bin"
+
 # Add /usr/local/go/bin to PATH in case you have a later version here
 export PATH=/usr/local/go/bin:$PATH
 
