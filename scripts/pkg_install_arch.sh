@@ -99,6 +99,10 @@ rm -rvf ./yay
 echo
 
 
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+echo "#        PACKAGE INSTALLATION | Installing pacman and aur packages"
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+
 using_pacman=1
 
 # Main PKG installation loop
@@ -157,6 +161,20 @@ echo "[+] Handling packages/tasks that cannot be directly handles with package m
 yes | $AUR lazydocker        || curl -sSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 yes | $AUR posting           || uv tool install --python 3.13 posting   # fallback
 
+echo "[+] Installing lazyssh..."
+# Detect latest version
+LATEST_TAG=$(curl -fsSL https://api.github.com/repos/Adembc/lazyssh/releases/latest | jq -r .tag_name)
+# Download the correct binary for your system
+curl -LJO "https://github.com/Adembc/lazyssh/releases/download/${LATEST_TAG}/lazyssh_$(uname)_$(uname -m).tar.gz"
+# Extract the binary
+tar -xzf lazyssh_$(uname)_$(uname -m).tar.gz
+# Move to /usr/local/bin or another directory in your PATH
+sudo mv lazyssh /usr/local/bin/
+# enjoy!
+# lazyssh
+
+echo "[+] Installing darya..."
+curl -fsSL https://mr.katebzadeh.xyz/tools/darya/install | bash
 
 echo "[+] Installing TPM (tmux plugin manager)..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -164,6 +182,47 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo "[+] Installing tree-sitter-cli..."
 rustup default stable
 cargo install --locked tree-sitter-cli
+
+echo "[+] Installing basalt (obsidian reader)..."
+cargo install basalt-tui
+
+echo "[+] Installing x-cmd..."
+eval "$(curl https://get.x-cmd.com)"
+
+echo "[+] Setting default nodejs version to use via npm"
+
+# Source and install node version
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+if command -v nvm >/dev/null; then
+    echo "nvm installation suceeded. installing version."
+    # echo -e "\t[!] Available nvm versions:"
+    # nvm list-remote       # avaiable versions
+    echo -e "\t[+] Installing node v22..."
+    nvm install v22.17.0  # install a version
+    echo -e "\t[+] Installed versions:"
+    nvm list              # View installed versions
+    echo -e "\t[+] Selecting v22.17"
+    nvm use v22.17.0 
+fi
+
+
+echo "[+] Enabling Docker service..."
+$SUDO  systemctl enable docker
+$SUDO  systemctl start docker
+
+
+
+echo "[+] Installing Docker Compose Viewer (dcv)..."
+git clone https://github.com/tokuhirom/dcv.git
+cd dcv
+make build-helpers
+go build -o dcv
+sudo mv dcv /usr/local/bin/
+
+
+
 
 echo "[+] Installing Spotify Player dependencies..."
 
@@ -190,23 +249,11 @@ if systemctl --user is-active pipewire >/dev/null; then
 fi
 
 
-echo "[+] Setting default nodejs version to use via npm"
 
-# Source and install node version
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+echo "#        PACKAGE INSTALLATION COMPLETE!"
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
 
-if command -v nvm >/dev/null; then
-    echo "nvm installation suceeded. installing version."
-    # echo -e "\t[!] Available nvm versions:"
-    # nvm list-remote       # avaiable versions
-    echo -e "\t[+] Installing node v22..."
-    nvm install v22.17.0  # install a version
-    echo -e "\t[+] Installed versions:"
-    nvm list              # View installed versions
-    echo -e "\t[+] Selecting v22.17"
-    nvm use v22.17.0 
-fi
 
 # NOT USING AT THE MOMENT
 # $AUR  mssql-tools  # mssql-tools: MS SQL tools, AUR 
@@ -215,13 +262,9 @@ fi
 # yes | $PACMAN gvim  # vim-gtk3: GUI vim with GTK/X11 
 # $PACMAN zoxide         || $AUR zoxide
 
-echo "[+] Enabling Docker service..."
-$SUDO  systemctl enable docker
-$SUDO  systemctl start docker
+# echo "[+] Installing siggy..."
+# cargo install siggy
+# no longer using - requires signal-cli (https://github.com/AsamK/signal-cli) which has its own dependencies (including java - not worth it)
 
 # User should install informant on their own as it could block other things the script installs
 # pacman -S informant       # Read arch news before updating
-
-echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
-echo "#        PACKAGE INSTALLATION COMPLETE!"
-echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
