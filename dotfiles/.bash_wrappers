@@ -192,6 +192,8 @@ nx_up(){
 
     # Unstage everything so I can manually choose what to save
     git reset .
+
+    cd -
 }
 
 nx_make_dev_flake(){
