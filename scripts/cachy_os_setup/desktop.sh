@@ -76,15 +76,8 @@ sudo pacman -S --needed --noconfirm amd-ucode
 sudo pacman -S --needed --noconfirm base-devel
 sudo pacman -S --needed --noconfirm bash-completion
 sudo pacman -S --needed --noconfirm ffmpeg
+sudo pacman -S --needed --noconfirm ffmpegthumbnailer
 sudo pacman -S --needed --noconfirm ffmpegthumbnaileramd-ucodeamd-ucode
-sudo pacman -S --needed --noconfirm base-devel
-sudo pacman -S --needed --noconfirm bash-completion
-sudo pacman -S --needed --noconfirm ffmpeg
-sudo pacman -S --needed --noconfirm ffmpegthumbnailer
-sudo pacman -S --needed --noconfirm base-devel
-sudo pacman -S --needed --noconfirm bash-completion
-sudo pacman -S --needed --noconfirm ffmpeg
-sudo pacman -S --needed --noconfirm ffmpegthumbnailer
 sudo pacman -S --needed --noconfirm fish
 sudo pacman -S --needed --noconfirm git
 sudo pacman -S --needed --noconfirm gst-plugin-pipewire
@@ -104,9 +97,9 @@ sudo pacman -S --needed --noconfirm tlp-rdw
 sudo pacman -S --needed --noconfirm ttf-ms-fonts
 sudo pacman -S --needed --noconfirm ufw
 sudo pacman -S --needed --noconfirm vulkan-icd-loader
+sudo pacman -S --needed --noconfirm wl-clipboard    # Clipboard manager
+sudo pacman -S --needed --noconfirm wtype           # Used to allow auto-pasting from wl-clipboard
 sudo pacman -S --needed --noconfirm zsh
-sudo pacman -S --needed --noconfirm wl-clipboard
-sudo pacman -S --needed --noconfirm wtype       # Used to allow auto-pasting from wl-clipboard
 
 
 
