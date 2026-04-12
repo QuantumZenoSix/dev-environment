@@ -1,0 +1,41 @@
+bat | cat(1) clone with syntax highlighting and Git integration | https://github.com/sharkdp/bat | Tags: cat, git
+bc | Arbitrary precision calculator | 
+chafa | Terminal graphics/image renderer (sixels, kitty, etc.) | https://github.com/hpjansson/chafa
+cronboard | Terminal dashboard for managing cron jobs | https://github.com/antoniorodr/cronboard
+csvlens | TUI CSV viewer with filtering and navigation | https://github.com/YS-L/csvlens
+darya | Fast TUI disk usage explorer with live treemap | https://github.com/mrkatebzadeh/darya
+dcv | Simple tool for decompression/viewing archives | https://github.com/tokuhirom/dcv
+doxx | TUI .docx file viewer (no Office required) | https://github.com/bgreenwell/doxx
+dust | Intuitive du alternative (disk usage analyzer) | https://github.com/bootandy/dust
+dysk | Better df with detailed filesystem info | https://github.com/Canop/dysk
+eget | Easily install prebuilt binaries from GitHub releases | https://github.com/zyedidia/eget
+filelight | Graphical disk usage visualizer (KDE) | 
+fzf | Fuzzy finder for the command line | https://github.com/junegunn/fzf
+gittop | Beautiful TUI for visualizing Git repository statistics | https://github.com/hjr265/gittop
+glow | Markdown renderer in the terminal | https://github.com/charmbracelet/glow
+htop | Interactive process viewer | https://github.com/htop-dev/htop
+jless | Command-line JSON viewer with search and navigation | https://github.com/PaulJuliusMartinez/jless
+lazydocker | Simple TUI for Docker and Docker Compose | https://github.com/jesseduffield/lazydocker
+lazygit | Simple terminal UI for git | https://github.com/jesseduffield/lazygit
+lazysql | TUI for browsing SQL databases | https://github.com/jorgerojas26/lazysql
+lazyssh | Terminal-based SSH connection manager (TUI) | https://github.com/Adembc/lazyssh
+mlocate | Fast file indexing and searching (updated locate) | 
+neovim | Hyperextensible Vim-based text editor | https://github.com/neovim/neovim
+pandoc | Universal document converter | https://github.com/jgm/pandoc
+posting | Modern TUI HTTP client / API tester | https://github.com/darrenburns/posting
+powerline-fonts | Patched fonts for Powerline statuslines | 
+python-pygments | Syntax highlighting library | 
+ripgrep | Extremely fast grep alternative (rg) | https://github.com/BurntSushi/ripgrep
+snitch | Pretty TUI/netstat alternative for network connections | https://github.com/karol-broda/snitch
+spotify-player | Feature-rich Spotify client in the terminal | https://github.com/aome510/spotify-player
+tmux | Terminal multiplexer | https://github.com/tmux/tmux
+tree | Display directory structure as a tree | 
+treemd | Interactive TUI Markdown navigator with tree view | https://github.com/Epistates/treemd
+uv | Extremely fast Python package installer and project manager | https://github.com/astral-sh/uv
+vim | Vim text editor (with GTK GUI) | 
+wlsunset | Wayland night light / blue light filter | https://github.com/kennylevinsen/wlsunset
+x-cmd | Shell superpower toolkit (modular CLI tools) | https://github.com/x-cmd/x-cmd
+yazi | Blazing fast terminal file manager | https://github.com/sxyazi/yazi
+yt-dlp | Feature-rich YouTube downloader | https://github.com/yt-dlp/yt-dlp
+zimg | High-quality image processing / scaling library | https://github.com/sekrit-twc/zimg
+
