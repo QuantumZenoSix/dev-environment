@@ -143,6 +143,37 @@ export PATH="$PATH:${HOME}/.nix-profile/bin"
 
 
 
+
+# ────────────────────────────────────────────────
+# Custom commands for finding my core things
+# ────────────────────────────────────────────────
+# Keep this at the end - this is a function that lets you fuzzy-find all my custom functions
+
+# Command finder (cf) | find all my custom bash functions
+command_finder(){
+    eval $(compgen -c | grep -E '^(nx_|gt_|nv_|dk_|ut_)' | sort | fzf)
+}
+alias cf="command_finder "
+
+# Tui finder (tf) | reads a list of my fav tui apps and allows me to find them by brief description.
+tui_finder(){
+
+    TUI_FILE=~/.config/home-manager/pkg_lists/tui_list.txt
+    eval $(awk '{print $1}'  $TUI_FILE | sort -r | fzf --preview="awk '/^{}/ {print \$0}' $TUI_FILE " --preview-window='right:75%')
+
+}
+alias tf="tui_finder "
+
+
+
+
+
+
+
+
+
+
+
 # Mount SSHFS dirs as needed
 # SSHFS_MOUNT_COUNT=$(ps aux | grep -i sftp | grep -v grep | wc -l )
 # [[ ${SSHFS_MOUNT_COUNT} -eq 0 ]] && sudo sshfs alpha:/home/control-io/ /home/bobby/alpha -oIdentityFile=/home/bobby/.ssh/pbx-pems/<key>.pem
