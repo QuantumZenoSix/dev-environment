@@ -38,7 +38,9 @@ binds {
     Mod+V                               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call launcher clipboard"; }
 
 
-
+    // ─── Displays Controls ───
+    // Example: Super + P cycles or toggles common modes
+    Mod+P { spawn-sh "$HOME/.config/niri/niri-toggle-displays.sh"; } 
 
     // ─── Window Movement and Focus ───
     Mod+Q                               { close-window; }
