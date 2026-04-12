@@ -140,6 +140,7 @@ yazi              # tui file explorer
 zimg              # libzimg2: Image scaling 
 gittop
 snitch-bin
+qview
 
 
 
