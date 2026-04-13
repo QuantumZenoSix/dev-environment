@@ -1,0 +1,17 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /              btrfs   subvol=/@,defaults,noatime,compress=zstd:1 0 0
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /home          btrfs   subvol=/@home,defaults,noatime,compress=zstd:1 0 0
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /root          btrfs   subvol=/@root,defaults,noatime,compress=zstd:1 0 0
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /srv           btrfs   subvol=/@srv,defaults,noatime,compress=zstd:1 0 0
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /var/cache     btrfs   subvol=/@cache,defaults,noatime,compress=zstd:1 0 0
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /var/tmp       btrfs   subvol=/@tmp,defaults,noatime,compress=zstd:1 0 0
+UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /var/log       btrfs   subvol=/@log,defaults,noatime,compress=zstd:1 0 0
+UUID=C226-9A50                            /boot          vfat    defaults,umask=0077 0 2
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+//100.77.122.38/myhdd /mnt/myhdd cifs credentials=/home/zeno/.smbcredentials,vers=3.0,iocharset=utf8,noperm,x-systemd.automount 0 0
