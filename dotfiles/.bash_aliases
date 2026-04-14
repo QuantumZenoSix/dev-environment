@@ -51,10 +51,12 @@ alias fv='nvim $(fzf --height 40% --layout reverse --border)'
 alias ff='fzf --height 40% --layout reverse --border'
 
 
-# Lazygit
+# Lazy
 alias lg="lazygit" 
 alias gg="lazygit" 
-
+alias lzs="lazyssh"
+alias lzd="lazydocker"
+alias lzq="lazysql"
 
 # -------------------------------------------
 # WORKFLOW-SPECIFIC
