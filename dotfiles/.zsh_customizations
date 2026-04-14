@@ -251,6 +251,7 @@ hash -d de=~/.config/home-manager/
 hash -d hm=~/.config/home-manager/
 hash -d wk=~/Documents/Work/pbx_repos/
 hash -d df=~/.config/home-manager/dotfiles/
+hash -d docs=~/Documents/
 
 # Ctrl-x followed by gc runs git commit with cursor inside msg
 bindkey -s '^Xgc' 'git commit -m ""\C-b'
