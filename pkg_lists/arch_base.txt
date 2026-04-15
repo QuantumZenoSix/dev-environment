@@ -106,7 +106,6 @@ gum
 htop              # htop: Process viewer 
 neovim 
 pandoc            # Document converter  
-partitionmanager
 powerline-fonts	  # fonts-powerline: Fonts for terminals 
 python-pygments 
 ripgrep 

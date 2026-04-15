@@ -67,6 +67,28 @@ glxinfo | grep "OpenGL renderer" || echo "glxinfo not found yet"
 # COMMENTED THE ABOVE OUT - SHOULD WORK BUT RISKY
 
 echo -e "${GREEN}=========================================="
+echo -e " Configure Display and X11 compatibility"
+echo -e "==========================================${NC}"
+sleep 1
+
+sudo pacman -S  --needed --noconfirm xorg-xhost
+sudo pacman -S  --needed --noconfirm polkit-gnome
+
+echo -e "Installing disk managme utilities ..."
+sudo pacman -S  --needed --noconfirm gparted
+
+if ! command -v gparted; then
+    sudo pacman -S  --needed --noconfirm partitionmanager       # From KDE Plasma - gparted is better, but this is backup
+fi
+
+# mkdir -p ~/.local/share/applications
+# cp /usr/share/applications/gparted.desktop ~/.local/share/applications/
+# chmod +x ~/.local/share/applications/gparted.desktop
+# update-desktop-database ~/.local/share/applications
+
+sudo pacman -S  --needed --noconfirm gnome-disk-utility
+
+echo -e "${GREEN}=========================================="
 echo -e " Common useful packages: codecs, fonts, firmware, utilities "
 echo -e "==========================================${NC}"
 sleep 1
