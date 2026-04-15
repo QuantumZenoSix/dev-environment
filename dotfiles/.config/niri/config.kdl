@@ -6,3 +6,6 @@ include "./cfg/display.kdl"
 include "./cfg/layout.kdl"
 include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
+
+// Note: xhost +SI:localuser:root is the standard workaround used across Arch, Fedora, Ubuntu, etc. on Wayland compositors for X11 compatibility (including Niri/Sway/Hyprland). 
+spawn-sh-at-startup "xhost +SI:localuser:root"
