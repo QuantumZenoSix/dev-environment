@@ -1,10 +1,11 @@
 bat | cat(1) clone with syntax highlighting and Git integration | https://github.com/sharkdp/bat | Tags: cat, git
+basalt | Obsidian TUI | https://github.com/erikjuhani/basalt
 bc | Arbitrary precision calculator | 
+btop | Htop but better and more comprehensive | https://github.com/aristocratos/btop
 chafa | Terminal graphics/image renderer (sixels, kitty, etc.) | https://github.com/hpjansson/chafa
-cronboard | Terminal dashboard for managing cron jobs | https://github.com/antoniorodr/cronboard
 csvlens | TUI CSV viewer with filtering and navigation | https://github.com/YS-L/csvlens
 darya | Fast TUI disk usage explorer with live treemap | https://github.com/mrkatebzadeh/darya
-dcv | Simple tool for decompression/viewing archives | https://github.com/tokuhirom/dcv
+dcv | Tool to view docker compose containers | https://github.com/tokuhirom/dcv
 doxx | TUI .docx file viewer (no Office required) | https://github.com/bgreenwell/doxx
 dust | Intuitive du alternative (disk usage analyzer) | https://github.com/bootandy/dust
 dysk | Better df with detailed filesystem info | https://github.com/Canop/dysk

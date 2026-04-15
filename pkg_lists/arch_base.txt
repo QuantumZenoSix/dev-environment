@@ -8,6 +8,7 @@ NOTE: system-level/essentials tools (drivers, graphics, audio, compiler dependen
 NetworkManager
 base-devel
 binutils
+btop            # htop on steroids
 bzip2  			# p7zip-full: 7zip compression 
 clang 
 cmake 
