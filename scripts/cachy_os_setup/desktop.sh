@@ -146,7 +146,10 @@ sudo pacman -S --needed --noconfirm audacity
 sudo pacman -S --needed --noconfirm signal-desktop
 sudo pacman -S --needed --noconfirm discord
 sudo pacman -S --needed --noconfirm gimp
+sudo pacman -S --nneeded --noconfirm gvfs-smb   # Access to SMB shares via nautilus file explorer
 paru --needed --noconfirm -S postman-bin
+
+
 
 # INSTALL VIA SHELLY 
 # sudo pacman -S --needed --noconfirm brave-bin
