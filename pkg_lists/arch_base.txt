@@ -44,7 +44,7 @@ wget  			# wget: Downloader, core for scripts
 which 
 xclip  			# xclip: Clipboard, X11 integration 
 xsel  			# xsel: Clipboard, X11 
-rsync
+restic
 
 
 NOTE: Installing programming languages and tools...
@@ -112,6 +112,7 @@ python-pygments
 ripgrep 
 tmux
 treemd
+vi
 vim   			  # vim-gtk3: GUI vim with GTK/X11 
 yt-dlp            # YouTube downloader
 zsh 
