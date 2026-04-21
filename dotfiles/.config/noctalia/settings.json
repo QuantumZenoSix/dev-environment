@@ -28,7 +28,7 @@
         "screenshotAnnotationTool": "",
         "showCategories": true,
         "showIconBackground": false,
-        "sortByMostUsed": true,
+        "sortByMostUsed": false,
         "terminalCommand": "wezterm --config-file ~/.wezterm.lua",
         "viewMode": "list"
     },
@@ -108,6 +108,7 @@
             "left": [
                 {
                     "colorizeSystemIcon": "none",
+                    "colorizeSystemText": "none",
                     "customIconPath": "",
                     "enableColorization": false,
                     "icon": "rocket",
@@ -373,6 +374,7 @@
                 {
                     "colorizeDistroLogo": false,
                     "colorizeSystemIcon": "none",
+                    "colorizeSystemText": "none",
                     "customIconPath": "",
                     "enableColorization": false,
                     "icon": "noctalia",
@@ -386,7 +388,7 @@
         "backlightDeviceMappings": [
         ],
         "brightnessStep": 5,
-        "enableDdcSupport": false,
+        "enableDdcSupport": true,
         "enforceMinimum": true
     },
     "calendar": {
@@ -525,7 +527,7 @@
         "autoStartAuth": false,
         "avatarImage": "/mnt/myhdd/Pictures/Personal/Book-Tunnel.jpg",
         "boxRadiusRatio": 1,
-        "clockFormat": "hh\\nmm",
+        "clockFormat": "h:mm AP ",
         "clockStyle": "custom",
         "compactLockScreen": false,
         "dimmerOpacity": 0.23,
@@ -562,7 +564,7 @@
         "language": "",
         "lockOnSuspend": true,
         "lockScreenAnimations": false,
-        "lockScreenBlur": 0,
+        "lockScreenBlur": 0.12,
         "lockScreenCountdownDuration": 4000,
         "lockScreenMonitors": [
         ],
@@ -655,7 +657,7 @@
         "enableBatteryToast": true,
         "enableKeyboardLayoutToast": true,
         "enableMarkdown": false,
-        "enableMediaToast": false,
+        "enableMediaToast": true,
         "enabled": true,
         "location": "top_right",
         "lowUrgencyDuration": 3,
@@ -722,36 +724,36 @@
                 "action": "hibernate",
                 "command": "",
                 "countdownEnabled": true,
-                "enabled": true,
-                "keybind": "3"
+                "enabled": false,
+                "keybind": ""
             },
             {
                 "action": "reboot",
                 "command": "",
                 "countdownEnabled": true,
                 "enabled": true,
-                "keybind": "4"
+                "keybind": "3"
             },
             {
                 "action": "logout",
                 "command": "",
                 "countdownEnabled": true,
                 "enabled": true,
-                "keybind": "5"
+                "keybind": "4"
             },
             {
                 "action": "shutdown",
                 "command": "",
                 "countdownEnabled": true,
                 "enabled": true,
-                "keybind": "6"
+                "keybind": "5"
             },
             {
                 "action": "rebootToUefi",
                 "command": "",
                 "countdownEnabled": true,
-                "enabled": true,
-                "keybind": "7"
+                "enabled": false,
+                "keybind": ""
             },
             {
                 "action": "userspaceReboot",

@@ -25,6 +25,9 @@ ut_say_hi_mom(){
 }
 
 
+ut_restart_noctalia(){
+    $(nohup qs -c noctalia-shell &)
+}
 
 ut_docx_to_md() {
     # Check if pandoc is installed
@@ -331,6 +334,15 @@ cat > avante.md << EOF
              Thank you for strictly following this.,
 EOF
 
+}
+
+ut_view_incoming_requests(){
+    local PORT=
+    if [ -z "${PORT}" ]; then
+        echo "no port passed in, defaulting to 22 (ssh)"
+        PORT=22
+    fi
+    sudo tcpdump --direction=in port ${PORT}   -i wlan0 -v
 }
 
 ut_update_nvidia_drivers_arch(){

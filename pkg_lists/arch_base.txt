@@ -78,6 +78,7 @@ entr              # entr ─ super useful file watcher (needed for tmux autorelo
 fastfetch         # fastfetch: System info
 fd                # → fd
 unixodbc          # unixodbc-dev: ODBC 
+tcpdump
 
 NOTE: Installing media/sound-related pkgs...
 # Sound-related: Audio libs/hardware accel integration.
@@ -93,6 +94,7 @@ ncurses           # libncursesw5-dev: Curses wide
 playerctl         # playerctl: Media control 
 poppler           # poppler-utils (pdf → text/images utilities including pdftoppm, pdftohtml…)
 rubberband        # librubberband2: Audio stretch 
+wiremix
 
 NOTE: Installing workflow and tui/cli tools..."
 bat
