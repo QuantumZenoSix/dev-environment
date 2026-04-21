@@ -555,6 +555,7 @@ set wrap! (toggle on of off)
 | ---                       | ---                           | ---                                                       | ---                               |
 | Vim Navigation / Moving along file | `gg`                     | Go to top of file                                         |                                   |
 | Vim Navigation / Moving along file | `G`                      | go to bottom of file                                      |                                   |
+| Vim Navigation / Moving along file | `{num}G` (Ex: `42G`)     | Go to line (preferred as its added to jumplist)           |                                   |
 | Vim Navigation / Moving along file | `: {num}`                | Go to line                                                |                                   |
 | Vim Navigation / Moving along file | `zz`                     | Center screen with cursor position (don't confuse with ZZ - save) |                                   |
 | Vim Navigation / Moving along file | `I`/`A`                  | Go to begin/end of line                                   |                                   |
@@ -569,7 +570,7 @@ set wrap! (toggle on of off)
 | Vim Navigation / Markers  | `<leader> rm`                 | Remove markers                                            |                                   |
 | Vim Navigation / Markers  | `:marks`                      | View all markers                                          |                                   |
 | Vim Navigation / Markers  | `:cc 22`                      | View the 22nd quickfix item                               |                                   |
-| Vim Navigation / Markers  | `'`                           | View all markers w/explanations [🔌]                      |                                   |
+| Vim Navigation / Markers  | `'` (backtick or single quote) | View all markers w/explanations [🔌]                      |                                   |
 | Vim Navigation / Markers  | `m {a-z}`                     | Setting markers/waypoints as {a-z}                        |                                   |
 | Vim Navigation / Markers  | `'{a-z}`                      | Move to marker/position {a-z}                             |                                   |
 | Vim Navigation / Markers  | `:delm!`                      | vim clear all marks (or specific ranges like `:delm a-zA-Z0-9`) |                                   |
@@ -719,9 +720,10 @@ _(Can also use dgn to delete multiple references)_
 | Brackets && Braces        | `di{`                         | Delete text inside brackets (inclusively)                 |                                   |
 | Brackets && Braces        | `da{`                         | Delete text inside brackets (exclusively)                 |                                   |
 | Brackets && Braces        | `{action}ab`                  | (y)ank/ (d)elete, (v)isual select entire block of code including lines where curly braces are on. Or, `zcdd` (zc to fold the block and dd to cut). |                                   |
-| Brackets && Braces        | `[{`                          | Go to opening containing curly brace (can use repeatedly) |                                   |
-| Brackets && Braces        | `]}`                          | Go to closing containing curly brace (can use repeatedly) |                                   |
-
+| Brackets && Braces        | `[{`                          | Go to opening containing curly brace (scope-based) |                                   |
+| Brackets && Braces        | `[{`                          | Go to opening containing curly brace (scope-based) |                                   |
+| Brackets && Braces        | `]]`                          | Go to top-level opening '{', good for iteratiing through function starts. |                                   |
+| Brackets && Braces        | `[[`                          | Go to top-level opening closed '{', good for iteratiing through function ends. |                                   |
 ## Editing    
 
 | Subcategory               | Command                       | Description                                               | Notes                             |
