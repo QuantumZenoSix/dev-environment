@@ -46,6 +46,12 @@
         eza.icons = "auto";
         eza.git = true;
 
+        # Think this may require zsh to be installed via nix
+        # bash.enable = true;
+        # fzf.enable = true;
+        # fzf.enableZshIntegration = true;
+        # fzf.enableBashIntegration = true;
+
         # neovim = {
         #             enable = true;
         #     defaultEditor = true;          # EDITOR=nvim
@@ -185,6 +191,8 @@
     # ────────────────────────────────────────────────────────────────
     #  Manual dotfile symlinking (alternative / legacy style)
     # ────────────────────────────────────────────────────────────────
+
+    # path is relative to the user home directory 
 
     # home.file."Documents/Topics/".source = ./Science;
     home.file = {
