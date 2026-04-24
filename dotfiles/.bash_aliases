@@ -82,6 +82,8 @@ alias nvim-custom='NVIM_APPNAME="nvim-custom" nvim'
 alias ds="ollama run deepseek-r1:14b"
 alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
+# Finding files with fd (default options)
+alias f="fd --regex --max-depth 10 --min-depth 0 --hidden"      # -e extention | -t type
 
 
 # Sync home manager

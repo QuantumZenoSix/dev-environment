@@ -372,7 +372,15 @@ ps1_powerline(){
 
 
 
-
+# == FD
+# replace img
+# fd --regex --max-depth=10 --min-depth=0 'ML.md$' -x sed -i -r  's/<img\s*?src="([^"]+)"\s*?style=(\S|\s)*$/\!\[\]\(\1\)/g' '{}'
+#
+# remove alt start
+# fd --regex --max-depth=10 --min-depth=0 '.md$' -x sed -r -i  '/^\s*alt=.*$/d' '{}'
+#
+# Replace 
+# fd --regex --max-depth=10 --min-depth=0 'Apache.md$' -x sed  -r -i 's/<img\s*?src="([^"]+)"\s*$/\!\[\]\(\1\)/g' '{}'
 
 
 
