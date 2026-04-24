@@ -350,6 +350,11 @@ ut_update_nvidia_drivers_arch(){
     nvidia-smi
 }
 
+ut_find_largest_files(){
+    # finds largest files recursively from pwd
+    find ./ -type f -exec du -h {} + | sort -h -r | head -25
+}
+
 
 # Switch from current prompt theme to starship (catppuccin mocha) or ohmyposh
 ps1_starship(){
