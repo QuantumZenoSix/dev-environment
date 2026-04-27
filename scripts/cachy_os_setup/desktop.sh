@@ -74,7 +74,22 @@ sleep 1
 sudo pacman -S  --needed --noconfirm xorg-xhost
 sudo pacman -S  --needed --noconfirm polkit-gnome
 
-echo -e "Installing disk managme utilities ..."
+echo -e "Installing GUI theming pkgs..."
+sudo pacman --needed --noconfirm -S gsettings-desktop-schemas
+sudo pacman --needed --noconfirm -S gtk3
+sudo pacman --needed --noconfirm -S gtk4
+sudo pacman --needed --noconfirm -S qt6ct
+sudo pacman --needed --noconfirm -S qt5ct
+sudo pacman --needed --noconfirm -S kvantum
+sudo pacman --needed --noconfirm -S kvantum-qt5
+sudo pacman --needed --noconfirm -S kvantum
+sudo pacman --needed --noconfirm -S xdg-desktop-portal
+sudo pacman --needed --noconfirm -S xdg-desktop-portal-gtk
+
+
+
+
+echo -e "Installing disk managment utilities ..."
 sudo pacman -S  --needed --noconfirm gparted
 
 if ! command -v gparted; then
