@@ -82,11 +82,20 @@ sudo pacman --needed --noconfirm -S qt6ct
 sudo pacman --needed --noconfirm -S qt5ct
 sudo pacman --needed --noconfirm -S kvantum
 sudo pacman --needed --noconfirm -S kvantum-qt5
-sudo pacman --needed --noconfirm -S kvantum
 sudo pacman --needed --noconfirm -S xdg-desktop-portal
 sudo pacman --needed --noconfirm -S xdg-desktop-portal-gtk
 
+# Set gtk theme
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
+# Configure qt apps
+export QT_QPA_PLATFORMTHEME=qt6ct
+export QT_STYLE_OVERRIDE=kvantum
+
+
+# Installing and allow flatpak theming
+flatpak install flathub org.gtk.Gtk3theme.Adwaita-dark
+flatpak override --user --env=GTK_THEME=Adwaita-dark
 
 
 echo -e "Installing disk managment utilities ..."
@@ -167,15 +176,15 @@ paru --needed --noconfirm -S postman-bin
 
 
 
-# INSTALL VIA SHELLY 
-# sudo pacman -S --needed --noconfirm brave-bin
-# sudo pacman -S --needed --noconfirm libreoffice-fresh
-# sudo pacman -S --needed --noconfirm obs-studio
-# sudo pacman -S --needed --noconfirm docker
-# sudo pacman -S --needed --noconfirm inkscape
-# paru --needed --noconfirm -S obsidian-bin
-# paru --needed --noconfirm -S telegram-desktop
-# paru --needed --noconfirm -S spotify
+# INSTALL VIA SHELLY CONF IF THESE INSTALLS FAIL
+sudo pacman -S --needed --noconfirm brave-bin
+sudo pacman -S --needed --noconfirm libreoffice-fresh
+sudo pacman -S --needed --noconfirm obs-studio
+sudo pacman -S --needed --noconfirm docker
+sudo pacman -S --needed --noconfirm inkscape
+paru --needed --noconfirm -S obsidian-bin
+paru --needed --noconfirm -S telegram-desktop
+paru --needed --noconfirm -S spotify
 sudo pacman -S --needed --noconfirm mpv
 sudo pacman -S --needed --noconfirm vlc
 yay --needed --noconfirm -Sy brave-origin-nightly-bin
@@ -329,5 +338,4 @@ echo "  • Use CachyOS Hello / Package Installer for more GUI-based apps"
 echo "  • Wiki: https://wiki.cachyos.org/configuration/post_install_setup"
 echo "  • Forum: https://discuss.cachyos.org"
 echo "Enjoy CachyOS! 🚀"
-
 

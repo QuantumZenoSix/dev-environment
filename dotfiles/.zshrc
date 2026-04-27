@@ -142,7 +142,11 @@ configure_ohmyzsh
 export PATH="$PATH:${HOME}/.nix-profile/bin"
 
 
-
+# ────────────────────────────────────────────────
+# GUI THEMING (commenting out for now - added to niri config)
+# ────────────────────────────────────────────────
+# export QT_QPA_PLATFORMTHEME=qt6ct
+# export QT_STYLE_OVERRIDE=kvantum
 
 # ────────────────────────────────────────────────
 # Custom commands for finding my core things
