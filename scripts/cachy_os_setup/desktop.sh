@@ -187,6 +187,7 @@ paru --needed --noconfirm -S telegram-desktop
 paru --needed --noconfirm -S spotify
 sudo pacman -S --needed --noconfirm mpv
 sudo pacman -S --needed --noconfirm vlc
+sudo pacman -S --needed --noconfirm neovim-qt
 yay --needed --noconfirm -Sy brave-origin-nightly-bin
 
 
