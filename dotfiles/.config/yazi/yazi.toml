@@ -10,7 +10,8 @@ show_symlink = true
 
 [opener]
 play = [
-	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+	{ run = 'vlc "$@"', orphan = true, for = "unix" },
+	# { run = 'mpv "$@"', orphan = true, for = "unix" },
 	{ run = '"C:\Program Files\mpv.exe" %*', orphan = true, for = "windows" }
 ]
 edit = [
@@ -20,17 +21,34 @@ edit = [
     # { run = '/opt/nvim-linux64/bin/nvim "$@"', block = true, for = "unix" },
 	{ run = "%EDITOR% %*",  block = true, for = "windows" },
 ]
+view_image = [
+  # { run = 'sxiv "$@"', desc = "View image with sxiv", block = false }
+  { run = 'qview "$@"', desc = "View image with qview gui", block = false }
+]
+
+system_default_linux = [
+  { run = 'xdg-open "$@"', desc = "System Default", block = false, for = "unix" }
+]
 
 [open]
 rules = [
+    # Play
+    { mime = "video/*", use = "play" },
+    { mime = "audio/*", use = [ "play", "reveal" ] },
+
+
+    # Edit
 	{ mime = "text/*", use = "edit" },
-	{ mime = "video/*", use = "play" },
+    { name = "*.json", use = "edit" },
+    { name = "*.html", use = [ "open", "edit" ] },
 
-	# { mime = "application/json", use = "edit" },
-	{ name = "*.json", use = "edit" },
 
-	# Multiple openers for a single rule
-	{ name = "*.html", use = [ "open", "edit" ] },
+    # View image
+    # Use sxiv for images
+    { mime = "image/*", use = ["view_image"] },
+  
+    # Use system default for everything else
+    { name = "*", use = ["system_default_linux"] } # Change to system_default_windows if on Windows
 ]
 
 prepend_previewers = [
