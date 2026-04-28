@@ -426,12 +426,14 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
         . ./scripts/cachy_os_setup/housekeeping.sh
 
         MSG="
-        ### Post-Install Todo (figure out what to do with this list)
-        - Copy Login Screen Files
-        - Copy Niri config
+        ### Post-Install Todos
+        - Copy Login Screen Files (/usr/share/sddm/themes/)
+        - Copy Niri config (~/.config/niri)
         - Connect to tailscale
-        - Add samba share (ada-pi)
+        - Connect to samba share (ada-pi)
         - Connect to syncthing for Obsdian notes
+
+        ### Desktop todos
         - Run 'qt6ct' and 'kvantummanager' to configure theme for qt apps
         - Confirm running with 'ps aux | grep xdg-desktop-portal'
         - or start it manually:
