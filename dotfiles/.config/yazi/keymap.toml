@@ -13,3 +13,13 @@ run  = 'shell "powershell.exe" --block'
 desc = "Open PowerShell here"
 
 
+[[mgr.prepend_keymap]]
+on = [ "g", "h" ]
+run = "cd ~/.config/home-manager"
+desc = "Cd to nix home-manager"
+
+[[mgr.prepend_keymap]]
+on = [ "g", "n" ]
+run = "cd /mnt/myhdd"
+desc = "Cd to NAS"
+

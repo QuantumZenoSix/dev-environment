@@ -22,8 +22,8 @@ edit = [
 	{ run = "%EDITOR% %*",  block = true, for = "windows" },
 ]
 view_image = [
-  # { run = 'sxiv "$@"', desc = "View image with sxiv", block = false }
-  { run = 'qview "$@"', desc = "View image with qview gui", block = false }
+  { run = 'sxiv "$@"', desc = "View image with sxiv", block = false }
+  # { run = 'qview "$@"', desc = "View image with qview gui", block = false }
 ]
 
 system_default_linux = [
