@@ -221,8 +221,8 @@ make build-helpers
 go build -o dcv
 sudo mv dcv /usr/local/bin/
 
-
-
+echo "[+] Installing Yazi bookmarks plugin..."
+sudo ya pkg add dedukun/bookmarks
 
 echo "[+] Installing Spotify Player dependencies..."
 
