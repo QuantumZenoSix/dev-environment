@@ -209,6 +209,15 @@ sudo ufw default allow outgoing
 sudo ufw --force enable
 sudo systemctl enable --now ufw
 
+
+# RDP
+sudo pacman -S --needed --noconfirm remmina 
+sudo pacman -S --needed --noconfirm freerdp
+
+# Screen-recorder
+sudo pacman -S --needed --noconfirm gpu-screen-recorder 
+
+
 echo -e "${GREEN}=========================================="
 echo -e " Gaming packages (very common on CachyOS) "
 echo -e "==========================================${NC}"
