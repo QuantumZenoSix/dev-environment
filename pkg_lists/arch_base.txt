@@ -45,6 +45,7 @@ which
 xclip  			# xclip: Clipboard, X11 integration 
 xsel  			# xsel: Clipboard, X11 
 restic
+pnpm            # package manager
 
 
 NOTE: Installing programming languages and tools...
