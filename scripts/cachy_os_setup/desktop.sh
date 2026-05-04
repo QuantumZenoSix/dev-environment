@@ -183,6 +183,7 @@ sudo pacman -S --needed --noconfirm obs-studio
 sudo pacman -S --needed --noconfirm docker
 sudo pacman -S --needed --noconfirm inkscape
 paru --needed --noconfirm -S obsidian-bin
+paru --needed --noconfirm -S omniget-bin
 paru --needed --noconfirm -S telegram-desktop
 paru --needed --noconfirm -S spotify
 sudo pacman -S --needed --noconfirm mpv
@@ -194,6 +195,15 @@ yay --needed --noconfirm -Sy brave-origin-nightly-bin
 # This hasn't worked for me - wezterm-gui is preferred
 # paru --needed --noconfirm -S wezterm-bin
 paru --needed --noconfirm -S wezterm-git
+
+# printf "\n[+] Installing omniget...\n\n"
+# git clone https://github.com/tonhowtf/omniget.git
+# cd omniget
+# pnpm install
+# pnpm tauri build
+#
+
+
 
 echo -e "${GREEN}=========================================="
 echo -e " Firewall setup (ufw) — simple + enable "

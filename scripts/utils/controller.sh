@@ -425,6 +425,8 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
         . ./scripts/cachy_os_setup/desktop.sh
         . ./scripts/cachy_os_setup/housekeeping.sh
 
+        # NOTE: PWD MAY BE OFF AT THIS POINT
+
         MSG="
         ### Post-Install Todos
         - Copy Login Screen Files (/usr/share/sddm/themes/)
