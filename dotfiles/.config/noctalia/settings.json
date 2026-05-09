@@ -22,7 +22,8 @@
             "spotify-launcher",
             "org.gnome.Nautilus",
             "org.wezfurlong.wezterm",
-            "obsidian"
+            "obsidian",
+            "omniget"
         ],
         "position": "center",
         "screenshotAnnotationTool": "",
@@ -107,25 +108,6 @@
             ],
             "left": [
                 {
-                    "colorizeSystemIcon": "none",
-                    "colorizeSystemText": "none",
-                    "customIconPath": "",
-                    "enableColorization": false,
-                    "icon": "rocket",
-                    "iconColor": "none",
-                    "id": "Launcher",
-                    "useDistroLogo": false
-                },
-                {
-                    "clockColor": "none",
-                    "customFont": "",
-                    "formatHorizontal": "hh:mm AP ddd, MMM dd",
-                    "formatVertical": "HH mm - dd MM",
-                    "id": "Clock",
-                    "tooltipFormat": "HH:mm ddd, MMM dd",
-                    "useCustomFont": false
-                },
-                {
                     "compactMode": true,
                     "diskPath": "/",
                     "iconColor": "none",
@@ -148,100 +130,33 @@
                     "usePadding": false
                 },
                 {
-                    "colorizeIcons": false,
-                    "hideMode": "hidden",
-                    "id": "ActiveWindow",
-                    "maxWidth": 100,
-                    "scrollingMode": "hover",
-                    "showIcon": true,
-                    "showText": false,
-                    "textColor": "none",
-                    "useFixedWidth": false
-                },
-                {
-                    "compactMode": false,
-                    "hideMode": "hidden",
-                    "hideWhenIdle": false,
-                    "id": "MediaMini",
-                    "maxWidth": 145,
-                    "panelShowAlbumArt": true,
-                    "scrollingMode": "hover",
-                    "showAlbumArt": true,
-                    "showArtistFirst": true,
-                    "showProgressRing": true,
-                    "showVisualizer": false,
-                    "textColor": "none",
-                    "useFixedWidth": false,
-                    "visualizerType": "linear"
-                }
-            ],
-            "right": [
-                {
-                    "blacklist": [
-                    ],
-                    "chevronColor": "none",
-                    "colorizeIcons": true,
-                    "drawerEnabled": true,
-                    "hidePassive": false,
-                    "id": "Tray",
-                    "pinned": [
-                    ]
-                },
-                {
-                    "hideWhenZero": true,
-                    "hideWhenZeroUnread": true,
-                    "iconColor": "none",
-                    "id": "NotificationHistory",
-                    "showUnreadBadge": true,
-                    "unreadBadgeColor": "primary"
-                },
-                {
                     "defaultSettings": {
-                        "enableTodoIntegration": false,
-                        "notecardsEnabled": true,
-                        "pincardsEnabled": true,
-                        "showCloseButton": true
-                    },
-                    "id": "plugin:clipper"
-                },
-                {
-                    "defaultSettings": {
-                        "autoHeight": true,
-                        "cheatsheetData": [
-                        ],
-                        "columnCount": 3,
-                        "detectedCompositor": "",
-                        "hyprlandConfigPath": "~/.config/hypr/hyprland.conf",
-                        "modKeyVariable": "$mod",
-                        "niriConfigPath": "~/.config/niri/config.kdl",
-                        "windowHeight": 0,
-                        "windowWidth": 1400
-                    },
-                    "id": "plugin:keybind-cheatsheet"
-                },
-                {
-                    "defaultSettings": {
-                        "audioCodec": "opus",
-                        "audioSource": "default_output",
-                        "colorRange": "limited",
-                        "copyToClipboard": false,
-                        "customReplayDuration": "30",
-                        "directory": "",
-                        "filenamePattern": "recording_yyyyMMdd_HHmmss",
-                        "frameRate": "60",
-                        "hideInactive": false,
+                        "autoMount": false,
+                        "fileBrowser": "yazi",
+                        "hideWhenEmpty": false,
                         "iconColor": "none",
-                        "quality": "very_high",
-                        "replayDuration": "30",
-                        "replayEnabled": false,
-                        "replayStorage": "ram",
-                        "resolution": "original",
-                        "restorePortalSession": false,
-                        "showCursor": true,
-                        "videoCodec": "h264",
-                        "videoSource": "portal"
+                        "showBadge": false,
+                        "showNotifications": true,
+                        "terminalCommand": "kitty"
                     },
-                    "id": "plugin:screen-recorder"
+                    "id": "plugin:usb-drive-manager"
+                },
+                {
+                    "defaultSettings": {
+                        "hideSystemPorts": false,
+                        "hideWhenEmpty": false,
+                        "refreshInterval": 5
+                    },
+                    "id": "plugin:port-monitor"
+                },
+                {
+                    "commandPrefix": "ssh",
+                    "defaultSettings": {
+                        "pollInterval": 10,
+                        "showInactiveHosts": true,
+                        "terminalCommand": ""
+                    },
+                    "id": "plugin:ssh-sessions"
                 },
                 {
                     "defaultSettings": {
@@ -273,35 +188,6 @@
                         "verifyTls": false
                     },
                     "id": "plugin:syncthing-status"
-                },
-                {
-                    "defaultSettings": {
-                        "autoMount": false,
-                        "fileBrowser": "yazi",
-                        "hideWhenEmpty": false,
-                        "iconColor": "none",
-                        "showBadge": false,
-                        "showNotifications": true,
-                        "terminalCommand": "kitty"
-                    },
-                    "id": "plugin:usb-drive-manager"
-                },
-                {
-                    "defaultSettings": {
-                        "hideSystemPorts": false,
-                        "hideWhenEmpty": false,
-                        "refreshInterval": 5
-                    },
-                    "id": "plugin:port-monitor"
-                },
-                {
-                    "commandPrefix": "ssh",
-                    "defaultSettings": {
-                        "pollInterval": 10,
-                        "showInactiveHosts": true,
-                        "terminalCommand": ""
-                    },
-                    "id": "plugin:ssh-sessions"
                 },
                 {
                     "commandPrefix": "music-search",
@@ -343,10 +229,93 @@
                     "id": "plugin:music-search"
                 },
                 {
-                    "displayMode": "onhover",
+                    "compactMode": false,
+                    "hideMode": "hidden",
+                    "hideWhenIdle": false,
+                    "id": "MediaMini",
+                    "maxWidth": 600,
+                    "panelShowAlbumArt": true,
+                    "scrollingMode": "hover",
+                    "showAlbumArt": true,
+                    "showArtistFirst": false,
+                    "showProgressRing": true,
+                    "showVisualizer": true,
+                    "textColor": "none",
+                    "useFixedWidth": false,
+                    "visualizerType": "linear"
+                }
+            ],
+            "right": [
+                {
+                    "blacklist": [
+                    ],
+                    "chevronColor": "none",
+                    "colorizeIcons": true,
+                    "drawerEnabled": true,
+                    "hidePassive": false,
+                    "id": "Tray",
+                    "pinned": [
+                    ]
+                },
+                {
+                    "hideWhenZero": true,
+                    "hideWhenZeroUnread": true,
                     "iconColor": "none",
-                    "id": "Bluetooth",
-                    "textColor": "none"
+                    "id": "NotificationHistory",
+                    "showUnreadBadge": true,
+                    "unreadBadgeColor": "primary"
+                },
+                {
+                    "defaultSettings": {
+                        "autoHeight": true,
+                        "cheatsheetData": [
+                        ],
+                        "columnCount": 3,
+                        "detectedCompositor": "",
+                        "hyprlandConfigPath": "~/.config/hypr/hyprland.conf",
+                        "modKeyVariable": "$mod",
+                        "niriConfigPath": "~/.config/niri/config.kdl",
+                        "windowHeight": 0,
+                        "windowWidth": 1400
+                    },
+                    "id": "plugin:keybind-cheatsheet"
+                },
+                {
+                    "defaultSettings": {
+                        "enableTodoIntegration": false,
+                        "notecardsEnabled": true,
+                        "pincardsEnabled": true,
+                        "showCloseButton": true
+                    },
+                    "id": "plugin:clipper"
+                },
+                {
+                    "defaultSettings": {
+                        "audioCodec": "opus",
+                        "audioSource": "default_output",
+                        "colorRange": "limited",
+                        "copyToClipboard": false,
+                        "customReplayDuration": "30",
+                        "directory": "",
+                        "filenamePattern": "recording_yyyyMMdd_HHmmss",
+                        "frameRate": "60",
+                        "hideInactive": false,
+                        "iconColor": "none",
+                        "quality": "very_high",
+                        "replayDuration": "30",
+                        "replayEnabled": false,
+                        "replayStorage": "ram",
+                        "resolution": "original",
+                        "restorePortalSession": false,
+                        "showCursor": true,
+                        "videoCodec": "h264",
+                        "videoSource": "portal"
+                    },
+                    "id": "plugin:screen-recorder"
+                },
+                {
+                    "iconColor": "none",
+                    "id": "DarkMode"
                 },
                 {
                     "displayMode": "onhover",
@@ -356,10 +325,9 @@
                     "textColor": "none"
                 },
                 {
-                    "applyToAllMonitors": false,
                     "displayMode": "onhover",
                     "iconColor": "none",
-                    "id": "Brightness",
+                    "id": "Bluetooth",
                     "textColor": "none"
                 },
                 {
@@ -370,6 +338,15 @@
                     "id": "Battery",
                     "showNoctaliaPerformance": false,
                     "showPowerProfiles": false
+                },
+                {
+                    "clockColor": "none",
+                    "customFont": "",
+                    "formatHorizontal": "hh:mm AP ddd, MMM dd",
+                    "formatVertical": "HH mm - dd MM",
+                    "id": "Clock",
+                    "tooltipFormat": "HH:mm ddd, MMM dd",
+                    "useCustomFont": false
                 },
                 {
                     "colorizeDistroLogo": false,
@@ -480,9 +457,93 @@
     },
     "desktopWidgets": {
         "enabled": false,
-        "gridSnap": false,
+        "gridSnap": true,
         "gridSnapScale": false,
         "monitorWidgets": [
+            {
+                "name": "DP-1",
+                "widgets": [
+                    {
+                        "hideMode": "visible",
+                        "id": "MediaPlayer",
+                        "roundedCorners": true,
+                        "scale": 0.9471511338019429,
+                        "showAlbumArt": true,
+                        "showBackground": true,
+                        "showButtons": true,
+                        "showVisualizer": true,
+                        "visualizerType": "linear",
+                        "x": 0,
+                        "y": 40
+                    },
+                    {
+                        "defaultSettings": {
+                            "barWidth": 0.6,
+                            "bloomIntensity": 0.5,
+                            "customPrimaryColor": "#6750A4",
+                            "customSecondaryColor": "#625B71",
+                            "fadeWhenIdle": false,
+                            "innerDiameter": 0.7,
+                            "ringOpacity": 0.8,
+                            "rotationSpeed": 0.5,
+                            "sensitivity": 1.5,
+                            "useCustomColors": false,
+                            "visualizationMode": 3,
+                            "waveThickness": 1
+                        },
+                        "id": "plugin:fancy-audiovisualizer",
+                        "scale": 1,
+                        "showBackground": true,
+                        "x": 600,
+                        "y": 600
+                    },
+                    {
+                        "colorName": "primary",
+                        "height": 72,
+                        "hideWhenIdle": false,
+                        "id": "AudioVisualizer",
+                        "roundedCorners": true,
+                        "scale": 1,
+                        "showBackground": true,
+                        "visualizerType": "linear",
+                        "width": 320,
+                        "x": 1160,
+                        "y": 600
+                    },
+                    {
+                        "diskPath": "/",
+                        "id": "SystemStat",
+                        "layout": "bottom",
+                        "roundedCorners": true,
+                        "scale": 1,
+                        "showBackground": true,
+                        "statType": "CPU",
+                        "x": 1160,
+                        "y": 800
+                    },
+                    {
+                        "id": "Weather",
+                        "roundedCorners": true,
+                        "scale": 1,
+                        "showBackground": true,
+                        "x": 1160,
+                        "y": 440
+                    },
+                    {
+                        "clockColor": "none",
+                        "clockStyle": "digital",
+                        "customFont": "",
+                        "format": "HH:mm\\nd MMMM yyyy",
+                        "id": "Clock",
+                        "roundedCorners": true,
+                        "scale": 1,
+                        "showBackground": true,
+                        "useCustomFont": false,
+                        "x": 1520,
+                        "y": 360
+                    }
+                ]
+            }
         ],
         "overviewEnabled": true
     },
@@ -491,7 +552,7 @@
         "backgroundOpacity": 1,
         "colorizeIcons": false,
         "deadOpacity": 0.6,
-        "displayMode": "auto_hide",
+        "displayMode": "always_visible",
         "dockType": "floating",
         "enabled": false,
         "floatingRatio": 0.31,
@@ -508,6 +569,8 @@
         "launcherPosition": "end",
         "launcherUseDistroLogo": false,
         "monitors": [
+            "DP-1",
+            "eDP-2"
         ],
         "onlySameOutput": true,
         "pinnedApps": [
