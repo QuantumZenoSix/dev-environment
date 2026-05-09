@@ -155,7 +155,7 @@ export PATH="$PATH:${HOME}/.nix-profile/bin"
 
 # Command finder (cf) | find all my custom bash functions
 command_finder(){
-    eval $(compgen -c | grep -E '^(nx_|gt_|nv_|dk_|ut_)' | sort | fzf)
+    eval $(compgen -c | grep -E '^(nx_|gt_|nv_|dk_|ut_|ps1_)' | sort | fzf)
 }
 alias cf="command_finder "
 
