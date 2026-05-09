@@ -309,6 +309,55 @@ nv_restore_owner(){
 
 
 
+# ────────────────────────────────────────────────
+#             Diff
+# ────────────────────────────────────────────────
+
+# Get side-by-side diff only showing diffs
+ut_diff(){
+    diff $1 $2 -y --color --suppress-common-lines
+}
+
+
+
+# ────────────────────────────────────────────────
+#             Niri
+# ────────────────────────────────────────────────
+
+nr_restart_noctalia(){
+    $(nohup qs -c noctalia-shell &)
+}
+
+
+
+
+
+# ────────────────────────────────────────────────
+#             Prompt
+# ────────────────────────────────────────────────
+
+# Switch from current prompt theme to starship (catppuccin mocha) or ohmyposh
+ps1_starship(){
+    export BLASTOFF=1
+    export POSHY=0
+    zsh
+}
+ps1_ohmyposh(){
+    export BLASTOFF=0
+    export POSHY=1
+    zsh
+}
+ps1_powerline(){
+    export BLASTOFF=0
+    export POSHY=0
+    zsh
+}
+
+
+
+
+
+
 
 
 # ────────────────────────────────────────────────
