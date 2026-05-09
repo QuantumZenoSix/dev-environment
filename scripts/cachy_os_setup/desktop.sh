@@ -103,6 +103,7 @@ sudo pacman -S  --needed --noconfirm gparted
 
 if ! command -v gparted; then
     sudo pacman -S  --needed --noconfirm partitionmanager       # From KDE Plasma - gparted is better, but this is backup
+    # sudo pacman -S  --needed --noconfirm gnome-disk-utility
 fi
 
 # mkdir -p ~/.local/share/applications
@@ -110,7 +111,6 @@ fi
 # chmod +x ~/.local/share/applications/gparted.desktop
 # update-desktop-database ~/.local/share/applications
 
-sudo pacman -S  --needed --noconfirm gnome-disk-utility
 
 echo -e "${GREEN}=========================================="
 echo -e " Common useful packages: codecs, fonts, firmware, utilities "
@@ -171,8 +171,10 @@ sudo pacman -S --needed --noconfirm signal-desktop
 sudo pacman -S --needed --noconfirm discord
 sudo pacman -S --needed --noconfirm gimp
 sudo pacman -S --needed --noconfirm picard      # Music metadata bulk editor and scanner
+sudo pacman -S --nneeded --noconfirm nemo       # file explorer   
 sudo pacman -S --nneeded --noconfirm gvfs-smb   # Access to SMB shares via nautilus file explorer
 paru --needed --noconfirm -S postman-bin
+paru --needed --noconfirm -S neohtop
 
 
 
@@ -188,6 +190,7 @@ paru --needed --noconfirm -S telegram-desktop
 paru --needed --noconfirm -S spotify
 sudo pacman -S --needed --noconfirm mpv
 sudo pacman -S --needed --noconfirm vlc
+sudo pacman -S --needed --noconfirm sniffnet
 sudo pacman -S --needed --noconfirm neovim-qt
 yay --needed --noconfirm -Sy brave-origin-nightly-bin
 

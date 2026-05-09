@@ -173,7 +173,7 @@ sudo mv lazyssh /usr/local/bin/
 # enjoy!
 # lazyssh
 
-echo "[+] Installing darya..."
+echo "[+] Installing darya..."          # cli alternative to gui-based baobab (https://github.com/GNOME/baobab)
 curl -fsSL https://mr.katebzadeh.xyz/tools/darya/install | bash
 
 echo "[+] Installing TPM (tmux plugin manager)..."
@@ -225,6 +225,9 @@ echo "[+] Installing Yazi bookmarks plugin..."
 sudo ya pkg add dedukun/bookmarks
 
 echo "[+] Installing Spotify Player dependencies..."
+
+echo "[+] Installing neohtop-cli..."
+$SUDO npm install -g neohtop-cli
 
 # 1. Modern / recommended (PipeWire + official package)
 $PACMAN spotify-player --noconfirm  
