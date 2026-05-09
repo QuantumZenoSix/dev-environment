@@ -2,7 +2,7 @@
 
 
 # Main util functions
-# This file holds many utility functions in bash that are very handy
+# This file holds many utility functions that contain one or more commands in succession to achieve some goal
 # Every one begins with 'ut_' (utility)
 
 
@@ -10,26 +10,12 @@
 
 # ____________________ GENERAL ______________________
 
-# Get side-by-side diff only showing diffs
-ut_diffy(){
-    diff $1 $2 -y --color --suppress-common-lines
-}
 
+# ────────────────────────────────────────────────
+#             text 
+# ────────────────────────────────────────────────
 
-ut_say_wazzup(){
-    echo wazzup
-}
-
-ut_say_hi_mom(){
-    echo hi mom
-}
-
-
-ut_restart_noctalia(){
-    $(nohup qs -c noctalia-shell &)
-}
-
-ut_docx_to_md() {
+ut_txt_docx_to_md() {
     # Check if pandoc is installed
     command -v pandoc >/dev/null 2>&1 || { echo "pandoc is required but not installed" >&2; exit 1; }
     # Validate input file
@@ -80,7 +66,25 @@ EOF
 
 }
 
-ut_detect_distro_type(){
+ut_txt_list_difference(){
+    # What lines are in list 2 that arent in list 1
+
+    # Check if exactly two arguments are provided
+    if [ "$#" -ne 2 ]; then
+        echo "See which lines are in list 2 that arent in list 1"
+        echo "Error: Exactly 2 arguments required, but $# provided." >&2
+        return 1
+    fi
+
+    grep -F -x -v -f ${1} ${2}
+
+}
+
+# ────────────────────────────────────────────────
+#             sys
+# ────────────────────────────────────────────────
+
+ut_sys_detect_distro_type(){
     # returns debian|fedora|arch|null
     if [ -f /etc/os-release ]; then
         # shellcheck disable=SC1091
@@ -107,7 +111,7 @@ ut_detect_distro_type(){
     echo "${DISTRO_FAMILY}"
 }
 
-ut_create_and_assume_user() {
+ut_sys_create_and_assume_user(){
     if [[ -z "$1" ]]; then
         echo "[!] Usage: create_and_assume_user <username>"
         echo "    Requires username as an argument"
@@ -139,18 +143,82 @@ ut_create_and_assume_user() {
     fi
 }
 
-# Download MP3 audio from youtube URL
-ut_mp3_dl () {
-        if [[ -s /usr/local/bin/yt-dlp ]]
-        then
-                sudo yt-dlp -t mp3 $1
-        else
-                youtube-dl -x --audio-format mp3 $1
-        fi
+
+ut_sys_restart_audio(){
+
+    systemctl --user restart wireplumber pipewire pipewire-pulse
+
+}
+
+ut_sys_change_pop_graphics(){
+
+    if [[ "${1}" = "low" ]]; then
+        sudo system76-power graphics integrated # iGPU only (best battery, no NVIDIA)
+    elif [[ "${1}" = "med" ]]; then
+        sudo system76-power graphics hybrid    # default & most battery-friendly
+
+    elif [[ "${1}" = "high" ]]; then
+        sudo system76-power graphics nvidia    # max performance (uses more power)
+    else
+        echo "Options are 'low' | 'med' | 'high'"
+    fi
+
+    echo 
+
+    local current=$(system76-power graphics )
+    echo "Current: $current"
+}
+
+ut_sys_view_incoming_requests(){
+    local PORT=
+    if [ -z "${PORT}" ]; then
+        echo "no port passed in, defaulting to 22 (ssh)"
+        PORT=22
+    fi
+    sudo tcpdump --direction=in port ${PORT}   -i wlan0 -v
+}
+
+ut_sys_update_nvidia_drivers_arch(){
+    sudo pacman -Syu nvidia-utils lib32-nvidia-utils opencl-nvidia lib32-opencl-nvidia   
+    nvidia-smi
 }
 
 
-ut_get_wsl_diskusage(){
+
+# ────────────────────────────────────────────────
+#             ssh
+# ────────────────────────────────────────────────
+
+# Quick Ed25519 SSH key generator with custom comment
+# Usage: mksshkey "my name - 2026 lappy"
+ut_ssh_make_key() {
+
+    if [ $# -eq 0 ]; then
+
+        echo "Usage: mksshkey 'your comment here'  [extra ssh-keygen options...]"
+        echo "Example:"
+        echo "  mksshkey 'bobby@work-laptop' -a 150"
+        return 1
+
+    fi
+
+    local comment="$1"
+    shift  # remove the comment so remaining args go to ssh-keygen
+    ssh-keygen -t ed25519 -C "$comment" "$@"
+
+}
+
+ut_ssh_reload_key(){
+    eval $(ssh-agent -s)
+    ssh-add
+}
+
+
+# ────────────────────────────────────────────────
+#            wsl
+# ────────────────────────────────────────────────
+
+ut_wsl_get_diskusage(){
     # ncdu must be installed
     sudo ncdu / --exclude /mnt
 }
@@ -169,8 +237,6 @@ ut_wsl_cp(){
     full_path=$(realpath "$$1" 2>/dev/null || readlink -f "$$1" 2>/dev/null)
 
     DEST=
-
-
 
     # Check if full_path is not empty
     if [ -n "$full_path" ]; then
@@ -196,17 +262,65 @@ ut_wsl_cp(){
     fi
 }
 
-ut_tmux_init(){
+
+
+
+
+# ────────────────────────────────────────────────
+#            other)
+# ────────────────────────────────────────────────
+
+ut_o_clear_log_files(){
+    sudo truncate -s 0 /var/log/{syslog*,kern*,ufw*}.*
+    sudo journalctl --vacuum-size=500M
+}
+
+ut_o_create_avante_md(){
+
+cat > avante.md << EOF
+             # Project Instructions - Strict Selected-Lines-Only Mode
+
+             ## Core Behavioral Rule (highest priority - always obey this unless explicitly told otherwise),
+
+             - If I have selected lines of code, **ONLY** edit code from the **currently selected lines** (the lines I have visually selected / highlighted in Neovim when I send the request).,
+             - You may suggest edits to code directly relating to that line (for example if I'm in a function you can suggest edits to other parts of the function if they directly relate to changes we're makling in the selected lines of code or to other lines of code that call this function.,
+             - Never suggest moving code outside the selection, refactoring adjacent unselected code, or adding imports/references that would require unselected parts of the file.,
+             - If I have selected lines of code, you are to primarily consider the lines of code I've selected. You can look at other lines but give your core opinions on the code I've selected.,
+
+             ## Response Style,
+
+             - Be concise.,
+             - If following the strict selected-lines rule, prefix important answers with: **[Selected-lines-only mode]**,
+
+             This rule exists because I usually work with small, focused selections and want to prevent context pollution / token waste / wrong assumptions.,
+
+             Thank you for strictly following this.,
+EOF
+
+}
+
+# Download MP3 audio from youtube URL
+ut_o_mp3_dl () {
+        if [[ -s /usr/local/bin/yt-dlp ]]
+        then
+                sudo yt-dlp -t mp3 $1
+        else
+                youtube-dl -x --audio-format mp3 $1
+        fi
+}
+
+
+
+ut_o_tmux_init(){
     bash ~/.tmux_init.sh 2>/dev/null
     tmux attach-session -t Main 2>/dev/null
 }
 
-ut_colorme() {
+ut_o_colorme() {
     pygmentize -f terminal "$@"
 }
 
-
-ut_uv_start(){
+ut_o_uv_init(){
     # 1. Downloads and runs the official uv installation script from Astral
     #    - -L = follow redirects, -s = silent, -S = show errors if any, -f = fail silently on server errors
     #    - This is the recommended one-liner way to install uv (Rust-based, very fast Python tool)
@@ -261,118 +375,6 @@ ut_uv_start(){
 
 
 }
-
-
-# Quick Ed25519 SSH key generator with custom comment
-# Usage: mksshkey "my name - 2026 lappy"
-ut_make_ssh_key() {
-
-    if [ $# -eq 0 ]; then
-
-        echo "Usage: mksshkey 'your comment here'  [extra ssh-keygen options...]"
-        echo "Example:"
-        echo "  mksshkey 'bobby@work-laptop' -a 150"
-        return 1
-
-    fi
-
-    local comment="$1"
-    shift  # remove the comment so remaining args go to ssh-keygen
-    ssh-keygen -t ed25519 -C "$comment" "$@"
-
-}
-
-ut_restart_audio(){
-
-    systemctl --user restart wireplumber pipewire pipewire-pulse
-
-}
-
-ut_ssh_reload_key(){
-    eval $(ssh-agent -s)
-    ssh-add
-}
-
-ut_change_pop_graphics(){
-
-    if [[ "${1}" = "low" ]]; then
-        sudo system76-power graphics integrated # iGPU only (best battery, no NVIDIA)
-    elif [[ "${1}" = "med" ]]; then
-        sudo system76-power graphics hybrid    # default & most battery-friendly
-
-    elif [[ "${1}" = "high" ]]; then
-        sudo system76-power graphics nvidia    # max performance (uses more power)
-    else
-        echo "Options are 'low' | 'med' | 'high'"
-    fi
-
-    echo 
-
-    local current=$(system76-power graphics )
-    echo "Current: $current"
-}
-
-ut_create_avante_md(){
-
-cat > avante.md << EOF
-             # Project Instructions - Strict Selected-Lines-Only Mode
-
-             ## Core Behavioral Rule (highest priority - always obey this unless explicitly told otherwise),
-
-             - If I have selected lines of code, **ONLY** edit code from the **currently selected lines** (the lines I have visually selected / highlighted in Neovim when I send the request).,
-             - You may suggest edits to code directly relating to that line (for example if I'm in a function you can suggest edits to other parts of the function if they directly relate to changes we're makling in the selected lines of code or to other lines of code that call this function.,
-             - Never suggest moving code outside the selection, refactoring adjacent unselected code, or adding imports/references that would require unselected parts of the file.,
-             - If I have selected lines of code, you are to primarily consider the lines of code I've selected. You can look at other lines but give your core opinions on the code I've selected.,
-
-             ## Response Style,
-
-             - Be concise.,
-             - If following the strict selected-lines rule, prefix important answers with: **[Selected-lines-only mode]**,
-
-             This rule exists because I usually work with small, focused selections and want to prevent context pollution / token waste / wrong assumptions.,
-
-             Thank you for strictly following this.,
-EOF
-
-}
-
-ut_view_incoming_requests(){
-    local PORT=
-    if [ -z "${PORT}" ]; then
-        echo "no port passed in, defaulting to 22 (ssh)"
-        PORT=22
-    fi
-    sudo tcpdump --direction=in port ${PORT}   -i wlan0 -v
-}
-
-ut_update_nvidia_drivers_arch(){
-    sudo pacman -Syu nvidia-utils lib32-nvidia-utils opencl-nvidia lib32-opencl-nvidia   
-    nvidia-smi
-}
-
-ut_find_largest_files(){
-    # finds largest files recursively from pwd
-    find ./ -type f -exec du -h {} + | sort -h -r | head -25
-}
-
-
-# Switch from current prompt theme to starship (catppuccin mocha) or ohmyposh
-ps1_starship(){
-    export BLASTOFF=1
-    export POSHY=0
-    zsh
-}
-ps1_ohmyposh(){
-    export BLASTOFF=0
-    export POSHY=1
-    zsh
-}
-ps1_powerline(){
-    export BLASTOFF=0
-    export POSHY=0
-    zsh
-}
-
 
 
 
