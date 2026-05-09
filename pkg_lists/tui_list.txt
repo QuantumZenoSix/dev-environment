@@ -8,9 +8,8 @@ darya | Fast TUI disk usage explorer with live treemap | https://github.com/mrka
 dcv | Tool to view docker compose containers | https://github.com/tokuhirom/dcv
 doxx | TUI .docx file viewer (no Office required) | https://github.com/bgreenwell/doxx
 dust | Intuitive du alternative (disk usage analyzer) | https://github.com/bootandy/dust
-dysk | Better df with detailed filesystem info | https://github.com/Canop/dysk
+dysk | Better df with detailed filesystem info (disk) | https://github.com/Canop/dysk
 eget | Easily install prebuilt binaries from GitHub releases | https://github.com/zyedidia/eget
-filelight | Graphical disk usage visualizer (KDE) | 
 fzf | Fuzzy finder for the command line | https://github.com/junegunn/fzf
 gittop | Beautiful TUI for visualizing Git repository statistics | https://github.com/hjr265/gittop
 glow | Markdown renderer in the terminal | https://github.com/charmbracelet/glow

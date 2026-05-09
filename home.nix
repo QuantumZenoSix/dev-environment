@@ -30,8 +30,77 @@
     #  Programs – declarative configuration of popular software
     # ────────────────────────────────────────────────────────────────
     programs = {
+        # Note for any program you set 'enable = true' nix will manage the associating config file(s) so you must the file contents here either imperatively or declaratively. You cannot copy your own conf file over is that prorgam is being managed by nix (enable = true).
+        # One way to get around this and still copy your files over is to use this the 'lib.mkForce' keyword when copying: 
+            # home.file.".bashrc".source = lib.mkForce ./dotfiles/.bashrc;  
 
         home-manager.enable = true;   # required – lets home-manager manage itself
+        #bash.enable = true;
+
+        zsh = {
+          enable = true;
+          autocd = true;
+          autosuggestion.enable = true;
+          syntaxHighlighting.enable = true;
+
+          # ~/.zshrc 
+          # initExtraFirst = ''
+          #     source ${./dotfiles/.bashrc}   # or just paste the content
+          #     '';
+
+          # ~/.zshrc 
+          initExtra = ''
+              source ${./dotfiles/.zshrc}   # or just paste the content
+              '';
+
+
+          # ~/.zshenv
+          # envExtra = ''
+          #     source ${./dotfiles/.bashrc}   # or just paste the content
+          #     '';
+
+          # ~/.zprofile
+          # profileExtra = ''
+          #     source ${./dotfiles/.bashrc}   # or just paste the content
+          #     '';
+
+          # ~/.zlogout
+          # logoutExtra = ''
+          #     source ${./dotfiles/.bashrc}   # or just paste the content
+          #     '';
+
+          # ~/.zshrc
+          # initExtraBeforeCompInit = ''
+          #     source ${./dotfiles/.bashrc}   # or just paste the content
+          #     '';
+
+
+
+
+
+          shellAliases = {
+            ll     = "eza -la --icons --git";
+            ls     = "eza --icons";
+            cat    = "bat";
+            gs     = "git status";
+            gc     = "git commit";
+            gp     = "git push";
+            gco    = "git checkout";
+            update = "home-manager switch -b backup --flake ~/nix-config#zeno";
+            rebuild = "update";
+            flake-check = "nix flake check ~/nix-config";
+          };
+
+
+
+          # oh-my-zsh = {
+          #   enable = true;
+          #   theme = "agnoster";          # ← very popular, clean alternative to robbyrussell
+          #   plugins = [ "git" "docker" "docker-compose" "z" "fzf" ];
+          # };
+
+          #If you prefer pure zsh without oh-my-zsh → comment oh-my-zsh and use zsh plugins instead zplug or zinit can also be used via programs.zsh.plugins
+        };
 
 
         direnv = {
@@ -48,23 +117,25 @@
 
         # Think this may require zsh to be installed via nix
         # bash.enable = true;
+
         # fzf.enable = true;
         # fzf.enableZshIntegration = true;
         # fzf.enableBashIntegration = true;
 
-        # neovim = {
-        #             enable = true;
-        #     defaultEditor = true;          # EDITOR=nvim
-        #         viAlias = true;
-        #     vimAlias = true;
-        # # If you use nixvim → remove this block and import nixvim module instead
-        # };
         #
         # fzf = {
         #     enable = true;
         #     enableZshIntegration = true;
         #     defaultCommand = "fd --type f --hidden --exclude .git";
         #     defaultOptions = [ "--height 50%" "--layout=reverse" "--border" ];
+        # };
+
+        # neovim = {
+        #     enable = true;
+        #     defaultEditor = true;          # EDITOR=nvim
+        #     viAlias = true;
+        #     vimAlias = true;
+        #     # If you use nixvim → remove this block and import nixvim module instead
         # };
 
         # git = {
@@ -88,34 +159,6 @@
         # };
         #
 
-        # zsh = {
-        #   enable = true;
-        #   autocd = true;
-        #   autosuggestion.enable = true;
-        #   syntaxHighlighting.enable = true;
-        #
-        #   shellAliases = {
-        #     ll     = "eza -la --icons --git";
-        #     ls     = "eza --icons";
-        #     cat    = "bat";
-        #     gs     = "git status";
-        #     gc     = "git commit";
-        #     gp     = "git push";
-        #     gco    = "git checkout";
-        #     update = "home-manager switch -b backup --flake ~/nix-config#zeno";
-        #     rebuild = "update";
-        #     flake-check = "nix flake check ~/nix-config";
-        #   };
-
-          # oh-my-zsh = {
-          #   enable = true;
-            # theme = "agnoster";          # ← very popular, clean alternative to robbyrussell
-            # plugins = [ "git" "docker" "docker-compose" "z" "fzf" ];
-          #};
-
-          # If you prefer pure zsh without oh-my-zsh → comment oh-my-zsh and use zsh plugins instead
-          # zplug or zinit can also be used via programs.zsh.plugins
-        # };
 
          # Modern alternative to zsh + oh-my-zsh (many people switch to this in 2025+)
          # fish = {
@@ -171,7 +214,12 @@
         VISUAL     = "nvim";
         MANPAGER   = "sh -c 'col -bx | bat -l man -p'";
         BAT_THEME  = "catppuccin-mocha";
+
         # Add any other env vars you need globally
+        FOO = "Hello";
+        BAR = "${config.home.sessionVariables.FOO} World!";
+
+
     };
 
     # ────────────────────────────────────────────────────────────────

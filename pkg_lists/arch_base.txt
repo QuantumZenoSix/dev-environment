@@ -50,6 +50,7 @@ pnpm            # package manager
 
 NOTE: Installing programming languages and tools...
 # System dev/build tools: Compilers/linkers for kernel modules/AUR; libs for system-wide linking.
+bat
 tree  			
 less  			# tar: Archiver, base system 
 direnv 
@@ -103,12 +104,12 @@ bc  		    # bc: Calculator, base
 chafa           # Needed to render images in cli for things like alacritty
 doxx              # .docx in-terminal file viewer
 dysk
-filelight       # Disk usage visualizer
 fzf 
 glow              # Markdown reader
 gum
 htop              # htop: Process viewer 
 neovim 
+nvtop               # gpu monitoring
 pandoc            # Document converter  
 powerline-fonts	  # fonts-powerline: Fonts for terminals 
 python-pygments 
