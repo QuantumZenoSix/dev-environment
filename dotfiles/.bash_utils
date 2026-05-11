@@ -120,7 +120,7 @@ ut_sys_create_and_assume_user(){
 
     local user="$1"
 
-    local distro_family=$(detect_distro_type)
+    local distro_family=$(ut_sys_detect_distro_type)
     local super_group="sudo"
 
     if [[ "$distro_family" == "arch" || "$distro_family" == "fedora" ]]; then
