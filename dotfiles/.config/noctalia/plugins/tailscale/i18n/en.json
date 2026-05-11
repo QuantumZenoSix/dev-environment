@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Only show online peers in the panel",
     "hide-mullvad-exit-nodes": "Hide Mullvad Exit Nodes",
     "hide-mullvad-exit-nodes-desc": "Hide Mullvad VPN exit nodes from the peer list",
+    "show-search-bar": "Show Search Bar",
+    "show-search-bar-desc": "Display a search field above the panel node list",
     "terminal": "Terminal Configuration",
     "terminal-command": "Terminal Command",
     "ssh-username": "SSH Username",
@@ -34,7 +36,10 @@
     "taildrop-receive-mode": "Receive Mode",
     "taildrop-receive-mode-desc": "How to run 'tailscale file get'. Operator mode requires no prompts if you have run 'sudo tailscale set --operator $USER'.",
     "taildrop-receive-mode-operator": "Operator (no prompt)",
-    "taildrop-receive-mode-pkexec": "pkexec (prompt each time)"
+    "taildrop-receive-mode-pkexec": "pkexec (prompt each time)",
+    "authentication": "Authentication",
+    "login-server": "Login Server",
+    "login-server-desc": "Custom login server URL (e.g. Headscale). Leave empty for default Tailscale server."
   },
   "actions": {
     "widget-settings": "Widget Settings"
@@ -49,7 +54,8 @@
     "ssh": "SSH to host",
     "ping": "Ping host",
     "use-exit-node": "Use as Exit Node",
-    "send-file": "Send File"
+    "send-file": "Send File",
+    "login": "Login"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,13 +72,18 @@
     "terminal-not-configured": {
       "title": "Terminal Not Configured",
       "message": "Please set a terminal command in plugin settings"
-    }
+    },
+    "login-browser-opened": "Authentication page opened in browser",
+    "login-failed": "Login failed"
   },
   "panel": {
     "title": "Tailscale Network",
     "peers": "peers",
     "not-connected": "Not connected",
+    "not-authenticated": "Not authenticated",
     "no-peers": "No connected peers",
+    "search-placeholder": "Search nodes...",
+    "no-search-results": "No nodes match your search",
     "admin-console": "Admin Console",
     "terminal-warning": {
       "title": "Terminal Not Configured",

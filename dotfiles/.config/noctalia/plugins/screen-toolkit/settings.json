@@ -1,12 +1,18 @@
 {
   "colorHistory": [],
-  "paletteColors": [],
+  "paletteColors": "",
   "installedLangs": [
     "eng"
   ],
   "transAvailable": false,
   "selectedOcrLang": "eng",
+  "screenshotPath": "",
+  "videoPath": "",
+  "filenameFormat": "",
   "detectedRecorder": "",
+  "recordSkipConfirmation": false,
+  "recordCopyToClipboard": false,
+  "gifMaxSeconds": 30,
   "stateIsRunning": false,
   "stateActiveTool": "",
   "stateMirrorVisible": false,
@@ -14,5 +20,11 @@
   "resultRgb": "",
   "resultHsv": "",
   "resultHsl": "",
-  "colorCapturePath": ""
+  "colorCapturePath": "",
+  "colorCacheBust": 0,
+  "ocrResult": "",
+  "ocrCapturePath": "",
+  "qrResult": "",
+  "qrCapturePath": "",
+  "translateResult": ""
 }

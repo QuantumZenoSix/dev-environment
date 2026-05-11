@@ -40,6 +40,11 @@ ColumnLayout {
     pluginApi?.manifest?.metadata?.defaultSettings?.hideMullvadExitNodes ??
     true
 
+  property bool editShowSearchBar:
+    pluginApi?.pluginSettings?.showSearchBar ??
+    pluginApi?.manifest?.metadata?.defaultSettings?.showSearchBar ??
+    false
+
   property string editTerminalCommand:
     pluginApi?.pluginSettings?.terminalCommand ||
     pluginApi?.manifest?.metadata?.defaultSettings?.terminalCommand ||
@@ -74,6 +79,11 @@ ColumnLayout {
     pluginApi?.pluginSettings?.taildropReceiveMode ||
     pluginApi?.manifest?.metadata?.defaultSettings?.taildropReceiveMode ||
     "operator"
+
+  property string editLoginServer:
+    pluginApi?.pluginSettings?.loginServer ||
+    pluginApi?.manifest?.metadata?.defaultSettings?.loginServer ||
+    ""
 
   spacing: Style.marginM
 
@@ -171,6 +181,15 @@ ColumnLayout {
 
   NToggle {
     Layout.fillWidth: true
+    label: pluginApi?.tr("settings.show-search-bar")
+    description: pluginApi?.tr("settings.show-search-bar-desc")
+    checked: root.editShowSearchBar
+    onToggled: checked => root.editShowSearchBar = checked
+  }
+
+
+  NToggle {
+    Layout.fillWidth: true
     label: pluginApi?.tr("settings.hide-disconnected")
     description: pluginApi?.tr("settings.hide-disconnected-desc")
     checked: root.editHideDisconnected
@@ -183,6 +202,26 @@ ColumnLayout {
     description: pluginApi?.tr("settings.hide-mullvad-exit-nodes-desc")
     checked: root.editHideMullvadExitNodes
     onToggled: checked => root.editHideMullvadExitNodes = checked
+  }
+
+  // Authentication section
+  NDivider {
+    Layout.fillWidth: true
+    Layout.topMargin: Style.marginM
+    Layout.bottomMargin: Style.marginM
+  }
+
+  NLabel {
+    label: pluginApi?.tr("settings.authentication")
+  }
+
+  NTextInput {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.login-server")
+    description: pluginApi?.tr("settings.login-server-desc")
+    placeholderText: "https://login.tailscale.com"
+    text: root.editLoginServer
+    onTextChanged: root.editLoginServer = text
   }
 
   // Terminal section
@@ -309,6 +348,7 @@ ColumnLayout {
     pluginApi.pluginSettings.showPeerCount = root.editShowPeerCount
     pluginApi.pluginSettings.hideDisconnected = root.editHideDisconnected
     pluginApi.pluginSettings.hideMullvadExitNodes = root.editHideMullvadExitNodes
+    pluginApi.pluginSettings.showSearchBar = root.editShowSearchBar
     pluginApi.pluginSettings.terminalCommand = root.editTerminalCommand
     pluginApi.pluginSettings.sshUsername = root.editSshUsername
     pluginApi.pluginSettings.pingCount = root.editPingCount
@@ -316,6 +356,7 @@ ColumnLayout {
     pluginApi.pluginSettings.taildropEnabled = root.editTaildropEnabled
     pluginApi.pluginSettings.taildropDownloadDir = root.editTaildropDownloadDir
     pluginApi.pluginSettings.taildropReceiveMode = root.editTaildropReceiveMode
+    pluginApi.pluginSettings.loginServer = root.editLoginServer
 
     pluginApi.saveSettings()
 

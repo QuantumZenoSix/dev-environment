@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Visa endast online peers i panelen",
     "hide-mullvad-exit-nodes": "Dölj Mullvad-utgångsnoder",
     "hide-mullvad-exit-nodes-desc": "Dölj Mullvad VPN-utgångsnoder från peer-listan",
+    "show-search-bar": "Visa sökfält",
+    "show-search-bar-desc": "Visa ett sökfält ovanför nodlistan i panelen",
     "terminal": "Terminalkonfiguration",
     "terminal-command": "Terminalkommando",
     "terminal-command-desc": "Kommando för att starta terminal för SSH/ping (t.ex. 'ghostty', 'alacritty', 'kitty')",
@@ -34,7 +36,10 @@
     "taildrop-receive-mode": "Mottagningsläge",
     "taildrop-receive-mode-desc": "Hur 'tailscale file get' körs. Operatörsläget kräver ingen bekräftelse om du har kört 'sudo tailscale set --operator $USER'.",
     "taildrop-receive-mode-operator": "Operatör (ingen bekräftelse)",
-    "taildrop-receive-mode-pkexec": "pkexec (bekräftelse varje gång)"
+    "taildrop-receive-mode-pkexec": "pkexec (bekräftelse varje gång)",
+    "authentication": "Autentisering",
+    "login-server": "Inloggningsserver",
+    "login-server-desc": "Anpassad inloggningsserver-URL (t.ex. Headscale). Lämna tomt för standard Tailscale-server."
   },
   "actions": {
     "widget-settings": "Widgetinställningar"
@@ -49,7 +54,8 @@
     "ssh": "SSH till värd",
     "ping": "Pinga värd",
     "use-exit-node": "Använd som utgångsnod",
-    "send-file": "Skicka fil"
+    "send-file": "Skicka fil",
+    "login": "Logga in"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,13 +72,18 @@
     "terminal-not-configured": {
       "title": "Terminal ej konfigurerad",
       "message": "Ange ett terminalkommando i plugin-inställningarna"
-    }
+    },
+    "login-browser-opened": "Autentiseringssida öppnad i webbläsaren",
+    "login-failed": "Inloggning misslyckades"
   },
   "panel": {
     "title": "Tailscale-nätverk",
     "peers": "peers",
     "not-connected": "Ej ansluten",
+    "not-authenticated": "Ej autentiserad",
     "no-peers": "Inga anslutna peers",
+    "search-placeholder": "Sök noder...",
+    "no-search-results": "Inga noder matchar din sökning",
     "admin-console": "Administrationskonsol",
     "terminal-warning": {
       "title": "Terminal ej konfigurerad",

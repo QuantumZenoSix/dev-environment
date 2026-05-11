@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Nur Online Peers im Panel anzeigen",
     "hide-mullvad-exit-nodes": "Mullvad-Ausgangsknoten ausblenden",
     "hide-mullvad-exit-nodes-desc": "Mullvad-VPN-Ausgangsknoten aus der Peer-Liste ausblenden",
+    "show-search-bar": "Suchleiste anzeigen",
+    "show-search-bar-desc": "Zeigt ein Suchfeld über der Knotenliste im Panel an",
     "terminal": "Terminal Konfiguration",
     "terminal-command": "Terminal Befehl",
     "terminal-command-desc": "Befehl zum Starten eines Terminals für SSH/Ping (z.B. 'ghostty', 'alacritty', 'kitty')",
@@ -34,7 +36,10 @@
     "taildrop-receive-mode": "Empfangsmodus",
     "taildrop-receive-mode-desc": "Wie 'tailscale file get' ausgeführt wird. Der Operator-Modus erfordert keine Eingabeaufforderung, wenn 'sudo tailscale set --operator $USER' ausgeführt wurde.",
     "taildrop-receive-mode-operator": "Operator (keine Eingabeaufforderung)",
-    "taildrop-receive-mode-pkexec": "pkexec (jedes Mal Eingabeaufforderung)"
+    "taildrop-receive-mode-pkexec": "pkexec (jedes Mal Eingabeaufforderung)",
+    "authentication": "Authentifizierung",
+    "login-server": "Anmeldeserver",
+    "login-server-desc": "Benutzerdefinierte Anmeldeserver-URL (z. B. Headscale). Leer lassen für den Standard-Tailscale-Server."
   },
   "actions": {
     "widget-settings": "Widget Einstellungen"
@@ -49,7 +54,8 @@
     "ssh": "SSH zum Host",
     "ping": "Host anpingen",
     "use-exit-node": "Als Ausgangsknoten verwenden",
-    "send-file": "Datei senden"
+    "send-file": "Datei senden",
+    "login": "Anmelden"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,13 +72,18 @@
     "terminal-not-configured": {
       "title": "Terminal nicht konfiguriert",
       "message": "Bitte leg einen Terminalbefehl in den Plugin Einstellungen fest"
-    }
+    },
+    "login-browser-opened": "Authentifizierungsseite im Browser geöffnet",
+    "login-failed": "Anmeldung fehlgeschlagen"
   },
   "panel": {
     "title": "Tailscale Netzwerk",
     "peers": "Peers",
     "not-connected": "Nicht verbunden",
+    "not-authenticated": "Nicht authentifiziert",
     "no-peers": "Keine verbundenen Peers",
+    "search-placeholder": "Knoten suchen...",
+    "no-search-results": "Keine Knoten entsprechen deiner Suche",
     "admin-console": "Admin Konsole",
     "terminal-warning": {
       "title": "Terminal nicht konfiguriert",
