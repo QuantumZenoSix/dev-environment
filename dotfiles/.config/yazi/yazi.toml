@@ -38,9 +38,10 @@ rules = [
 
 
     # Edit
+    { url = "*.json", use = "edit" },
+    { url = "*.html", use = "edit" },
 	{ mime = "text/*", use = "edit" },
-    { name = "*.json", use = "edit" },
-    { name = "*.html", use = [ "open", "edit" ] },
+
 
 
     # View image
@@ -48,7 +49,7 @@ rules = [
     { mime = "image/*", use = ["view_image"] },
   
     # Use system default for everything else
-    { name = "*", use = ["system_default_linux"] } # Change to system_default_windows if on Windows
+    #{ name = "*", use = ["system_default_linux"] } # Change to system_default_windows if on Windows
 ]
 
 prepend_previewers = [
