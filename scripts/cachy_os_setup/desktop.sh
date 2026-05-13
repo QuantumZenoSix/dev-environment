@@ -144,6 +144,7 @@ sudo pacman -S --needed --noconfirm ttf-ms-fonts
 sudo pacman -S --needed --noconfirm ufw
 sudo pacman -S --needed --noconfirm vulkan-icd-loader
 sudo pacman -S --needed --noconfirm wl-clipboard    # Clipboard manager
+sudo pacman -S --needed --noconfirm cliphist    # Clipboard manager
 sudo pacman -S --needed --noconfirm wtype           # Used to allow auto-pasting from wl-clipboard
 sudo pacman -S --needed --noconfirm zsh
 
