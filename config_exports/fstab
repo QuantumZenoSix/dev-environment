@@ -5,13 +5,15 @@
 # disks are added and removed. See fstab(5).
 #
 # <file system>             <mount point>  <type>  <options>  <dump>  <pass>
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /              btrfs   subvol=/@,defaults,noatime,compress=zstd:1 0 0
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /home          btrfs   subvol=/@home,defaults,noatime,compress=zstd:1 0 0
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /root          btrfs   subvol=/@root,defaults,noatime,compress=zstd:1 0 0
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /srv           btrfs   subvol=/@srv,defaults,noatime,compress=zstd:1 0 0
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /var/cache     btrfs   subvol=/@cache,defaults,noatime,compress=zstd:1 0 0
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /var/tmp       btrfs   subvol=/@tmp,defaults,noatime,compress=zstd:1 0 0
-UUID=ceafbef4-d484-49e1-8b02-0563407ede53 /var/log       btrfs   subvol=/@log,defaults,noatime,compress=zstd:1 0 0
-UUID=C226-9A50                            /boot          vfat    defaults,umask=0077 0 2
+UUID=E7A7-A7E8                            /boot          vfat    defaults,umask=0077 0 2
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /              btrfs   subvol=/@,defaults,noatime,compress=zstd:1 0 0
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /home          btrfs   subvol=/@home,defaults,noatime,compress=zstd:1 0 0
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /root          btrfs   subvol=/@root,defaults,noatime,compress=zstd:1 0 0
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /srv           btrfs   subvol=/@srv,defaults,noatime,compress=zstd:1 0 0
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /var/cache     btrfs   subvol=/@cache,defaults,noatime,compress=zstd:1 0 0
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /var/tmp       btrfs   subvol=/@tmp,defaults,noatime,compress=zstd:1 0 0
+UUID=4b8fb5b8-0068-477e-936d-4a43f197d4e6 /var/log       btrfs   subvol=/@log,defaults,noatime,compress=zstd:1 0 0
 tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
-//100.77.122.38/myhdd /mnt/myhdd cifs credentials=/home/zeno/.smbcredentials,vers=3.0,iocharset=utf8,noperm,x-systemd.automount 0 0
+//100.77.122.38/myhdd /mnt/myhdd		 cifs  credentials=/home/zeno/.smbcredentials,vers=3.0,iocharset=utf8,noperm,x-systemd.automount 0 0
+#//100.77.122.38/myhdd-backup  /mnt/myhdd-backup  cifs  credentials=/home/zeno/.smbcredentials,vers=3.0,iocharset=utf8,noperm,x-systemd.automount 0 0
+//100.77.122.38/myhdd-backup  /mnt/myhdd-backup  cifs  credentials=/home/zeno/.smbcredentials,vers=3.0,uid=1000,gid=1000,file_mode=0644,dir_mode=0755,soft,nounix,echo_interval=10,actimeo=1,cache=strict,noperm,_netdev,x-systemd.automount,x-systemd.mount-timeout=30  0 0
