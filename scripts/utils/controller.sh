@@ -429,12 +429,13 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
         . ./scripts/cachy_os_setup/housekeeping.sh
 
         # NOTE: PWD MAY BE OFF AT THIS POINT
-
         cd ~/.config/home-manager
 
         # Copy niri/noctalia settings
         cp -r dotfiles/.config/niri/* ~/.config/niri/
         cp -r dotfiles/.config/noctalia/* ~/.config/noctalia/
+        cp -r dotfiles/.config/Kvantum/* ~/.config/Kvantum/
+        cp -r dotfiles/.config/shelly/* ~/.config/shelly/
 
         # Install tailscale
         curl -fsSL https://tailscale.com/install.sh | sh

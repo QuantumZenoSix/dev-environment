@@ -190,6 +190,7 @@ nx_up(){
     cp -r ~/.config/niri/* ~/.config/home-manager/dotfiles/.config/niri/
     cp -r ~/.config/noctalia/* ~/.config/home-manager/dotfiles/.config/noctalia/
     cp -r ~/.config/shelly/* ~/.config/home-manager/dotfiles/.config/shelly/
+    cp -r ~/.config/Kvantum/* ~/.config/home-manager/dotfiles/.config/Kvantum/
 
     # Unstage everything so I can manually choose what to save
     git reset .
