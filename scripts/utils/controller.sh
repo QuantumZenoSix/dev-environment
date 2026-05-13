@@ -402,6 +402,9 @@ fi
 #             DESKTOP-RELATED PACKAAGES
 # ────────────────────────────────────────────────
 
+# Set pwd to root
+cd ~/.config/home-manager
+
 if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
 
     if [ "${OPTION}" = "pop" ]; then
@@ -426,6 +429,20 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
         . ./scripts/cachy_os_setup/housekeeping.sh
 
         # NOTE: PWD MAY BE OFF AT THIS POINT
+
+        cd ~/.config/home-manager
+
+        # Copy niri/noctalia settings
+        cp -r dotfiles/.config/niri/* ~/.config/niri/
+        cp -r dotfiles/.config/noctalia/* ~/.config/noctalia/
+
+        # Install tailscale
+        curl -fsSL https://tailscale.com/install.sh | sh
+
+        # Copy theme
+        $SUDO cp ./config_exports/sddm.conf /etc/sddm.conf
+        $SUDO cp -r ./config_exports/usr_share_sddm_themes/* /usr/share/sddm/themes
+
 
         MSG="
         ### Post-Install Todos
