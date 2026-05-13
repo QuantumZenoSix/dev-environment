@@ -171,11 +171,15 @@ sudo pacman -S --needed --noconfirm signal-desktop
 sudo pacman -S --needed --noconfirm discord
 sudo pacman -S --needed --noconfirm gimp
 sudo pacman -S --needed --noconfirm picard      # Music metadata bulk editor and scanner
-sudo pacman -S --nneeded --noconfirm nemo       # file explorer   
-sudo pacman -S --nneeded --noconfirm gvfs-smb   # Access to SMB shares via nautilus file explorer
+sudo pacman -S --needed --noconfirm nemo       # file explorer   
+sudo pacman -S --needed --noconfirm ark       # file explorer   
+sudo pacman -S --needed --noconfirm gvfs-smb   # Access to SMB shares via nautilus file explorer
 paru --needed --noconfirm -S postman-bin
 paru --needed --noconfirm -S neohtop
 
+# Syncthing
+sudo pacman -S --needed --noconfirm syncthing
+sudo systemctl enable --now syncthing@${CALLING_USER}.service
 
 
 # INSTALL VIA SHELLY CONF IF THESE INSTALLS FAIL
