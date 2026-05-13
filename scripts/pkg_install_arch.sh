@@ -22,6 +22,7 @@ interactive_pkgs=(
     "alsa-lib"
     "ffmpeg"
     "p7zip"
+    "neovim"
 )
 
 
