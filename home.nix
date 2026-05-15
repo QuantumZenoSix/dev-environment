@@ -81,7 +81,7 @@
           shellAliases = {
             ll     = "eza -la --icons --git";
             ls     = "eza --icons";
-            cat    = "bat";
+            cat    = "bat --theme='Catppuccin Mocha'";
             gs     = "git status";
             gc     = "git commit";
             gp     = "git push";
@@ -213,7 +213,7 @@
         EDITOR     = "nvim";
         VISUAL     = "nvim";
         MANPAGER   = "sh -c 'col -bx | bat -l man -p'";
-        BAT_THEME  = "catppuccin-mocha";
+        BAT_THEME  = "Catppuccin Mocha";
 
         # Add any other env vars you need globally
         FOO = "Hello";
@@ -323,6 +323,11 @@
     #  Run ad-hoc shell cpmmands
     # ────────────────────────────────────────────────────────────────
 	home.activation = { 
+        downloadBatTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+           run mkdir -p "$(bat --config-dir)/themes"
+           run wget -P "$(bat --config-dir)/themes" https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
+        '';
+
 		# touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
 		# touch grass.txt # creates ~/grass.txt
 

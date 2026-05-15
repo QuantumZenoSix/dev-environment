@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 
-if [ -d /media/HDD-Seagate-2TB-Backup/restic-repo ]; then
+if [ -d /mnt/myhdd-backup/restic-repo ]; then
 	# System
-	restic \
-		--repository-file /root/.restic/restic_repo_name \
-		--password-file /root/.restic/restic_pass \
-		--host system-ada-pi-server \
+    sudo restic \
+		--repository-file /home/zeno/.restic/restic_repo_name \
+		--password-file /home/zeno/.restic/restic_pass \
+		--host system-monad \
 		--verbose=2 \
 		--compression=max \
 		--exclude-caches \
-		--one-file-system \
 		--exclude=".deleted" \
 		--exclude="/proc" \
 		--exclude="/sys" \
@@ -28,10 +27,10 @@ if [ -d /media/HDD-Seagate-2TB-Backup/restic-repo ]; then
 		--exclude="**/..Trash" \
 		backup /
 
-	 restic \
-		--repository-file /root/.restic/restic_repo_name \
-		--password-file /root/.restic/restic_pass \
-		--host system-ada-pi-server \
+	 sudo restic \
+		--repository-file /home/zeno/.restic/restic_repo_name \
+		--password-file /home/zeno/.restic/restic_pass \
+		--host system-monad \
 		--verbose=2 \
                 forget --keep-daily 7 --prune
 
