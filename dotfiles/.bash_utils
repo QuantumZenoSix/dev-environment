@@ -384,64 +384,96 @@ ut_o_create_systemd_service(){
     #         exit;
     # fi
 
+    COLUMNS=1
+    echo ""
     echo "Select the user the service should run as: "
     PS3="Enter a number: "
     select SERVICE_USER in $(grep -v 'nologin' /etc/passwd | awk -F: '{ print $1 }' )
     do
 
-            echo "How often should this run?"
-            PS3="Enter a number: "
-            select FREQUENCY in "daily" "weekly" "monthly" "daily at 2:30 AM" "Every 6 hours"
-            do
+        echo ""
+        echo "How often should this run?"
+        PS3="Enter a number: "
+        select choice in \
+            "Daily at 2:30 AM" \
+            "Daily (midnight)" \
+            "Weekly" \
+            "Monthly" \
+            "Every 6 hours" \
+            "Every 12 hours" \
+            "Every 3 days" \
+            "Quit"
+        do
+            case "$choice" in
+                "Daily at 2:30 AM")
+                    TIMER_DIRECTIVE="OnCalendar=*-*-* 02:30:00"
+                    ;;
+                "Daily (midnight)")
+                    TIMER_DIRECTIVE="OnCalendar=daily"
+                    ;;
+                "Weekly")
+                    TIMER_DIRECTIVE="OnCalendar=weekly"
+                    ;;
+                "Monthly")
+                    TIMER_DIRECTIVE="OnCalendar=monthly"
+                    ;;
+                "Every 6 hours")
+                    TIMER_DIRECTIVE="OnUnitActiveSec=6h"
+                    ;;
+                "Every 12 hours")
+                    TIMER_DIRECTIVE="OnUnitActiveSec=12h"
+                    ;;
+                "Every 3 days")
+                    TIMER_DIRECTIVE="OnUnitActiveSec=3d"
+                    ;;
+                "Quit")
+                    echo "Exiting."
+                    return 0  # or exit 0 if not in a function
+                    ;;
+                *)
+                    echo "Invalid option. Please try again."
+                    continue
+                    ;;
+            esac
 
-                    #       --* 02:30:00    Daily at 2:30 AM
-                    #       *:0/15          Every 15 minutes
+            printf "\nEnter a brief description (optional): "
+            read DESC
 
-                    # Adjust times
-                    if [[ $FREQUENCY == 'daily at 2:30 AM' ]]; then
-                            $FREQUENCY='*-*-* 02:30:00'
-                    elif [[ $FREQUENCY == 'Every 6 hours' ]]; then
-                            $FREQUENCY='*-*-* 0/6:00:00'
-                    fi
+            # Remove any trailing '.sh'
+            PRGRM=$(basename $1)
+            PRGRM="${PRGRM%.sh}"
 
-                    printf "Enter a brief description (optional): "
-                    read DESC
+            sudo cp $1 /usr/local/bin/$PRGRM
 
-                    # Remove any trailing '.sh'
-                    PRGRM=$(basename $1)
-                    PRGRM="${PRGRM%.sh}"
+            if [[ -e /usr/local/bin/$PRGRM ]]; then
 
-                    sudo cp $1 /usr/local/bin/$PRGRM
+                    echo copied file...
+                    sudo chmod +x /usr/local/bin/$PRGRM
+                    SERVICE_UNITFILE=/etc/systemd/system/
+                    PROGRAM_LOCATION=/usr/local/bin/$PRGRM
+                    sudo chmod +x $PROGRAM_LOCATION
 
-                    if [[ -e /usr/local/bin/$PRGRM ]]; then
+                    # Create service
+                    printf "[Unit]\nDescription=$DESC\n\n[Service]\nType=oneshot\n\nUser=${SERVICE_USER}\nExecStart=$PROGRAM_LOCATION\nTimeoutStartSec=45min\nRemainAfterExit=yes\n" |  sudo tee $SERVICE_UNITFILE$PRGRM.service > /dev/null
 
-                            echo copied file...
-                            sudo chmod +x /usr/local/bin/$PRGRM
-                            SERVICE_UNITFILE=/etc/systemd/system/
-                            PROGRAM_LOCATION=/usr/local/bin/$PRGRM
-                            sudo chmod +x $PROGRAM_LOCATION
+                    # Create timer
+                    printf "[Unit]\nDescription=$DESC (timer)\n\n[Timer]\nOnBootSec=0min\n$TIMER_DIRECTIVE\nPersistent=true\nUnit=$PRGRM.service\n\n[Install]\nWantedBy=timers.target\n" | sudo tee $SERVICE_UNITFILE$PRGRM.timer > /dev/null
 
-                            # Create service
-                            printf "[Unit]\nDescription=$DESC\n\n[Service]\nUser=${SERVICE_USER}\nExecStart=$PROGRAM_LOCATION\n" |  sudo tee $SERVICE_UNITFILE$PRGRM.service > /dev/null
+                    sudo systemctl daemon-reload
+                    sudo systemctl enable --now $PRGRM.service
+                    # sudo systemctl start $PRGRM
+                    sudo systemctl start $PRGRM.timer
+                    sudo systemctl status $PRGRM
 
-                            # Create timer
-                            printf "[Unit]\nDescription=$DESC (timer)\n\n[Timer]\nOnBootSec=0min\nOnCalendar=$FREQUENCY\nUnit=$PRGRM.service\n\n[Install]\nWantedBy=timers.target\n" | sudo tee $SERVICE_UNITFILE$PRGRM.timer > /dev/null
+                    echo "Service installed!"
+                    # exit
+                    return
 
-                            sudo systemctl daemon-reload
-                            sudo systemctl enable --now $PRGRM.service
-                            # sudo systemctl start $PRGRM
-                            sudo systemctl start $PRGRM.timer
-                            sudo systemctl status $PRGRM
+            else
+                    echo "Unable to copy file to /usr/local/bin/ . Exiting."
+            fi
 
-                            echo "Service installed!"
-                            # exit
-                            return
-
-                    else
-                            echo "Unable to copy file to /usr/local/bin/ . Exiting."
-                            fi
-
-                    done
+        done
 
     done
 
