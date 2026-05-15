@@ -1,6 +1,6 @@
 [flavor]
 #dark = "sunset"
-#dark = "dracula"
+dark = "dracula"
 
 #dark = "ayu-dark"
 # https://github.com/kmlupreti/ayu-dark.yazi
@@ -8,5 +8,5 @@
 # dark = "flexoki-dark"
 # https://github.com/gosxrgxx/flexoki-dark.yazi
 
-use = "monokai-vibrant"
+use = "flexoki-dark"
 # https://github.com/sanjinso/monokai-vibrant.yazi
