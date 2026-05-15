@@ -177,6 +177,7 @@ sudo pacman -S --needed --noconfirm ark       # file explorer
 sudo pacman -S --needed --noconfirm gvfs-smb   # Access to SMB shares via nautilus file explorer
 paru --needed --noconfirm -S postman-bin
 paru --needed --noconfirm -S neohtop
+paru --needed --noconfirm -S monique            # Manage monitors
 
 # Syncthing
 sudo pacman -S --needed --noconfirm syncthing
