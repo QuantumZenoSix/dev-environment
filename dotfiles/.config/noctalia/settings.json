@@ -359,6 +359,9 @@
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": false
+                },
+                {
+                    "id": "plugin:monique"
                 }
             ]
         }

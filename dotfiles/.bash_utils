@@ -457,13 +457,16 @@ ut_o_create_systemd_service(){
                     printf "[Unit]\nDescription=$DESC\n\n[Service]\nType=oneshot\n\nUser=${SERVICE_USER}\nExecStart=$PROGRAM_LOCATION\nTimeoutStartSec=45min\nRemainAfterExit=yes\n" |  sudo tee $SERVICE_UNITFILE$PRGRM.service > /dev/null
 
                     # Create timer
-                    printf "[Unit]\nDescription=$DESC (timer)\n\n[Timer]\nOnBootSec=0min\n$TIMER_DIRECTIVE\nPersistent=true\nUnit=$PRGRM.service\n\n[Install]\nWantedBy=timers.target\n" | sudo tee $SERVICE_UNITFILE$PRGRM.timer > /dev/null
+                    printf "[Unit]\nDescription=$DESC (timer)\n\n[Timer]\n$TIMER_DIRECTIVE\nPersistent=true\nUnit=$PRGRM.service\n\n[Install]\nWantedBy=timers.target\n" | sudo tee $SERVICE_UNITFILE$PRGRM.timer > /dev/null
 
                     sudo systemctl daemon-reload
-                    sudo systemctl enable --now $PRGRM.service
+                    sudo systemctl enable $PRGRM.service
                     # sudo systemctl start $PRGRM
                     sudo systemctl start $PRGRM.timer
-                    sudo systemctl status $PRGRM
+                    sudo systemctl enable $PRGRM.timer
+
+                    sudo systemctl status $PRGRM.service
+                    sudo systemctl status $PRGRM.timer
 
                     echo "Service installed!"
                     # exit
