@@ -155,7 +155,17 @@ export PATH="$PATH:${HOME}/.nix-profile/bin"
 
 # Command finder (cf) | find all my custom bash functions
 command_finder(){
-    eval $(compgen -c | grep -E '^(nx_|gt_|nv_|dk_|ut_|ps1_)' | sort | fzf)
+    # eval $(compgen -c | grep -E '^(nx_|gt_|nv_|dk_|ut_|ps1_)' | sort | fzf)
+
+    cmd_list=~/.config/home-manager/pkg_lists/cmd_list.txt
+
+    $(sort -r -t'|' -k 2 $cmd_list | fzf --delimiter=' *\| *' \
+  --with-nth=1,2,3 \
+  --accept-nth=2 \
+  --header="Select command to run (full lines shown)" \
+  --preview='echo {}' \
+  --preview-window=up:3)
+
 }
 alias cf="command_finder "
 

@@ -183,8 +183,7 @@ Fedora, maybe one day.
 | --- |--|  
 | `up`  | Pull down latest nix home manager changes and apply them (`git pull` + `home-manager switch`) |  
 | `nix_remove_home_manager`  | Removes nix home-manager and it's managed files .|  
-| `cf`  | 'command_finder' fuzzy finds all of my custom bash functions .|  
-| `tf`  | 'tui_finder' fuzzy finds my fav tuis.|  
+| `cf`  | 'command_finder' fuzzy finds all of my custom bash functions and go-to install apps.|  
 | `news`  | See latest Arch news pre-update. |  
 
 More keybinds in my workflow: [keybinds](./key_bindings.md)
