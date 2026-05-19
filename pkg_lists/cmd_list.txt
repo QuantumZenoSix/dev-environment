@@ -86,7 +86,7 @@ CMD | npm | Node.js package manager
 CMD | nvidia-smi | View/change NVIDIA driver settings
 CMD | nvtop | GPU Monitoring tool
 CMD | nvm | Node Version Manager
-CMD | oyo | Small utility (niche)
+CMD | oyo | Git diff viewer with step-through capabilitties
 CMD | pandoc-cli | Universal document converter
 CMD | perl | Perl programming language
 CMD | playerctl | Media player controller
