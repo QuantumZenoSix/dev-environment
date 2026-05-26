@@ -23,7 +23,8 @@
             "org.gnome.Nautilus",
             "org.wezfurlong.wezterm",
             "obsidian",
-            "omniget"
+            "omniget",
+            "neohtop"
         ],
         "position": "center",
         "screenshotAnnotationTool": "",

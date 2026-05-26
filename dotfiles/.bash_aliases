@@ -43,7 +43,7 @@ alias .5='cd ../../../../..'
 alias nv='nvim'
 
 # Fuzzy-vim
-alias fv='nvim $(fzf --height 40% --layout reverse --border)'
+alias fv='nvim "$(fzf --height 40% --layout reverse --border)"'
 alias ff='fzf --height 40% --layout reverse --border'
 
 
