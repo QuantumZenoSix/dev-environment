@@ -20,11 +20,6 @@ alias fgrep='fgrep --color=auto'
 alias mkdir='mkdir -pv'
 alias l='eza'
 
-## Colorize the grep command output for ease of use (good for log files)##
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-
 # If we have colorized versions of cat and less use those by default
 # [[ ccless ]] && alias less='cless'
 # [[ ccat ]] && alias cat='ccat'
@@ -40,12 +35,17 @@ alias .4='cd ../../../../'
 alias .5='cd ../../../../..'
 
 
-alias nv='nvim'
+alias r="rg -. "
 
-# Fuzzy-vim
-alias fv='nvim "$(fzf --height 40% --layout reverse --border)"'
+# Finding files with fd (default options)
+alias f="fd --regex --max-depth 10 --min-depth 0 --hidden"      # -e extention | -t type
+
+# Fuzzy-file find
 alias ff='fzf --height 40% --layout reverse --border'
 
+# Fuzzy-vim
+alias nv='nvim'
+alias fv='nvim "$(fzf --height 40% --layout reverse --border)"'
 
 # Lazy
 alias lg="lazygit" 
@@ -75,8 +75,6 @@ alias nvim-custom='NVIM_APPNAME="nvim-custom" nvim'
 alias ds="ollama run deepseek-r1:14b"
 alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
-# Finding files with fd (default options)
-alias f="fd --regex --max-depth 10 --min-depth 0 --hidden"      # -e extention | -t type
 
 
 # Sync home manager
