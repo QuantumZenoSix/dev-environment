@@ -28,6 +28,7 @@ BSH | ps1_starship | Switches shell to Starship prompt.
 BSH | ut_diff | Side-by-side colored diff suppressing common lines.
 BSH | ut_o_clear_log_files | Truncates logs and vacuums journal.
 BSH | ut_o_colorme | Syntax highlights input with pygmentize.
+BSH | ut_o_move_conflicted_files    | Move local conflicted syncthing files to a .conflicts folder.
 BSH | ut_o_create_avante_md | Creates project instructions file for Avante AI.
 BSH | ut_o_create_systemd_service | (Not found in provided files)
 BSH | ut_o_mp3_dl | Downloads YouTube audio as MP3 (yt-dlp or youtube-dl).
