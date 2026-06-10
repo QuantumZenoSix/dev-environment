@@ -270,6 +270,15 @@ ut_wsl_cp(){
 #            other)
 # ────────────────────────────────────────────────
 
+ut_o_move_conflicted_files(){
+    # Move conflicted Syncthing files to local .conflicted folder
+    [[ ! -d ./.conflicts ]] && mkdir ./.conflicts/
+
+    fd sync-conflict -x mv '{}' .conflicts
+
+}
+alias mv_conflicts="ut_o_move_conflicted_files"
+
 ut_o_clear_log_files(){
     sudo truncate -s 0 /var/log/{syslog*,kern*,ufw*}.*
     sudo journalctl --vacuum-size=500M
