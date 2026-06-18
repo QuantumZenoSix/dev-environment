@@ -319,6 +319,7 @@ nv_restore_owner(){
 ut_diff(){
     diff $1 $2 -y --color --suppress-common-lines
 }
+alias diffy="ut_diff"
 
 
 
