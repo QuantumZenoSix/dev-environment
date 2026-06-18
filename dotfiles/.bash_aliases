@@ -72,11 +72,11 @@ alias nvim-custom='NVIM_APPNAME="nvim-custom" nvim'
 # thefuck alias
 # eval $(thefuck --alias redo)
 
-alias ds="ollama run deepseek-r1:14b"
 alias cdev="cd $HOME/Documents/Repos/Dev-Environment/"
 
 
 
+alias ds="ollama run deepseek-r1:14b"
 # Sync home manager
 alias up="nx_up"
 
@@ -100,6 +100,8 @@ tt(){
    cd ~/my_repos/Tomahawk/
    ~/my_repos/Tomahawk/tomahawk
 }
+
+alias serve="python3 -m http.server 8000"
 
 ## Apache
 # alias apachelogerr='tail -n15 -f /var/log/apache2/error.log'
