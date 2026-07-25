@@ -386,7 +386,7 @@ ut_o_uv_init(){
 }
 
 ut_o_taildrop_to_phone(){
-    sudo tailscape file cp "$1"    moto-g-stylus-5g---2024
+    sudo tailscale file cp "$1"    moto-g-stylus-5g---2024
 }
 alias taildrop_to_phone="ut_o_taildrop_to_phone"
 
