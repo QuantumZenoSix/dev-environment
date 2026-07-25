@@ -230,6 +230,17 @@ echo "[+] Installing Spotify Player dependencies..."
 echo "[+] Installing neohtop-cli..."
 $SUDO npm install -g neohtop-cli
 
+
+# Install tailscale
+curl -fsSL https://tailscale.com/install.sh | sh
+# Set taildrop location
+mkdir -p "/home/${CALLING_USER}/Downloads/taildrops" 
+$SUDO tailscale file get "/home/${CALLING_USER}/Downloads/taildrops" 
+sudo tailscale set --operator=$CALLING_USER
+
+
+
+
 # 1. Modern / recommended (PipeWire + official package)
 $PACMAN spotify-player --noconfirm  
 $PACMAN libsixel-player --noconfirm  

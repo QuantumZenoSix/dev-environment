@@ -7,7 +7,7 @@ output "Lenovo Group Limited 0x8C97 Unknown" {
 }
 
 output "Lenovo Group Limited Q27q-10 0x01010101" {
-    mode "2560x1440@74.599"
+    mode "2555x1440@74.599"
     scale 1
     position x=0 y=-1440
 }

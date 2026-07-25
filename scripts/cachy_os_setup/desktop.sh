@@ -121,6 +121,9 @@ echo -e "Installing common packages (codecs, fonts, firmware, tools) ..."
 sudo pacman -S --needed --noconfirm amd-ucode
 sudo pacman -S --needed --noconfirm base-devel
 sudo pacman -S --needed --noconfirm bash-completion
+sudo pacman -S --needed --noconfirm easyeffects     # Audio settings & systen tray
+sudo pacman -S --needed --noconfirm lsp-plugins     # Audio plugins for easyeffects
+sudo pacman -S --needed --noconfirm calf
 sudo pacman -S --needed --noconfirm ffmpeg
 sudo pacman -S --needed --noconfirm ffmpegthumbnailer
 sudo pacman -S --needed --noconfirm ffmpegthumbnaileramd-ucodeamd-ucode

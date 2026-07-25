@@ -437,9 +437,6 @@ if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
         cp -r dotfiles/.config/Kvantum/* ~/.config/Kvantum/
         cp -r dotfiles/.config/shelly/* ~/.config/shelly/
 
-        # Install tailscale
-        curl -fsSL https://tailscale.com/install.sh | sh
-
         # Copy theme
         $SUDO cp ./config_exports/sddm.conf /etc/sddm.conf
         $SUDO cp -r ./config_exports/usr_share_sddm_themes/* /usr/share/sddm/themes

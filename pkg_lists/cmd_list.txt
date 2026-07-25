@@ -42,6 +42,7 @@ BSH | ut_sys_detect_distro_type | Detects distro family (debian/fedora/arch/null
 BSH | ut_sys_restart_audio | Restarts WirePlumber/PipeWire services.
 BSH | ut_sys_update_nvidia_drivers_arch | Updates NVIDIA packages on Arch and shows nvidia-smi.
 BSH | ut_sys_view_incoming_requests | Captures incoming TCP traffic on a port (default 22).
+BSH | ut_o_taildrop_to_phone | Taildropfile to phone.
 BSH | ut_txt_docx_to_md | Converts .docx to Markdown with pandoc (media extraction).
 BSH | ut_txt_list_difference | Shows lines in file2 not present in file1.
 BSH | ut_wsl_cp | Copies files between WSL and Windows host directories.
