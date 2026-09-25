@@ -923,9 +923,9 @@ _Note: `<C-...>` should be taken to mean `Ctrl+`. All other keys are to be enter
 
 | Subcategory               | Command                       | Description                                               | Notes                             |
 | ---                       | ---                           | ---                                                       | ---                               |
-| Harpoon                   | `<leader>m`                   | `harpoon.ui:toggle_quick_menu`                            | Toggle Harpoon quick menu            |
-| Harpoon                   | `<leader>M`                   | Telescope Harpoon menu                                    | Open Harpoon in Telescope            |
-| Harpoon                   | `<leader>a`                   | `harpoon:list():add()`                                    | Add current file to Harpoon          |
+| Harpoon                   | `<leader>h`                   | `harpoon.ui:toggle_quick_menu`                            | Toggle Harpoon quick menu            |
+| Harpoon                   | `<leader>H`                   | Telescope Harpoon menu                                    | Open Harpoon in Telescope            |
+| Harpoon                   | `<leader>0`                   | `harpoon:list():add()`                                    | Add current file to Harpoon          |
 | Harpoon                   | `<leader>N`                   | `harpoon:list():prev()`                                   | Previous Harpoon file                |
 | Harpoon                   | `<leader>n`                   | `harpoon:list():next()`                                   | Next Harpoon file                    |
 | Harpoon                   | `<leader>1` – `<leader>9`     | `select(1..9)`                                            | Jump to Harpoon slot 1–9             |
