@@ -39,6 +39,7 @@ rsync
 sed    			# sed: Text processor, base 
 sudo
 tar    			# tar: Archiver, base system 
+zip             
 unzip  			# unzip: Zip handler, base 
 wget  			# wget: Downloader, core for scripts 
 which 
