@@ -102,6 +102,8 @@ return {
     "stevearc/dressing.nvim", -- for input provider dressing
     "folke/snacks.nvim", -- for input provider snacks
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    -- ⬇️ NEW (required since v0.4.0)
+    { "ColinKennedy/mega.cmdparse", dependencies = { "ColinKennedy/mega.logging" } },
     -- "zbirenbaum/copilot.lua", -- for providers='copilot'
     {
       -- support for image pasting
