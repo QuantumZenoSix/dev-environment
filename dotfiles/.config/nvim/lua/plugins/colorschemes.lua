@@ -9,6 +9,7 @@ return {
     {'shaunsingh/nord.nvim'},
     {'thedenisnikulin/vim-cyberpunk'},
     {'nyoom-engineering/oxocarbon.nvim'},
+    {'dracula/vim'},
     {'QuantumZenoSix/gothic-cyberpunk.vim'},
     {
         'maxmx03/fluoromachine.nvim',
