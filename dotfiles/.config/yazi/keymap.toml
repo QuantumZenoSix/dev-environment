@@ -23,3 +23,13 @@ on = [ "g", "n" ]
 run = "cd /mnt/myhdd"
 desc = "Cd to NAS"
 
+[[mgr.prepend_keymap]]
+on = [ "<C-u>" ]
+run = "seek -5"
+desc = "Seek preview up"
+
+
+[[mgr.prepend_keymap]]
+on = [ "<C-e>" ]
+run = "seek 5"
+desc = "Seek preview down"
