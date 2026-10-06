@@ -86,9 +86,9 @@
             gc     = "git commit";
             gp     = "git push";
             gco    = "git checkout";
-            update = "home-manager switch -b backup --flake ~/nix-config#zeno";
+            update = "home-manager switch -b backup --flake ~/.config/home-manager#$USER";
             rebuild = "update";
-            flake-check = "nix flake check ~/nix-config";
+            flake-check = "nix flake check ~/.config/home-manager";
           };
 
 
