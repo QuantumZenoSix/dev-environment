@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Debian/Ubuntu counterpart of pkg_install_arch.sh + pkg_lists/arch_base.txt.
+# Package names map to the Arch list where possible; anything not in apt is built/installed manually below.
 
 printf "\n\n"
 echo "# ────────────────────────────────────────────────────────────────────────"
@@ -13,126 +15,164 @@ if ! command -v apt >/dev/null || ! grep -qi ubuntu /etc/os-release; then
     exit 1
 fi
 
+# shellcheck disable=SC1091
+. /etc/os-release
+UBUNTU_CODENAME="${UBUNTU_CODENAME:-$VERSION_CODENAME}"   # Mint/Pop report their own VERSION_ID, but the Ubuntu base codename
+
+IS_WSL=0
+grep -qi microsoft /proc/version 2>/dev/null && IS_WSL=1
+
+export DEBIAN_FRONTEND=noninteractive
+FAILED_PKGS=()
+
+# Install the first available candidate of the given package names.
+# Also tries the '<name>t64' variant (Ubuntu 24.04+ renamed many libs during the 64-bit time_t transition).
+# Usage: apt_pkg <pkg> [fallback-pkg ...]
+apt_pkg(){
+    local candidates=() p
+    for p in "$@"; do candidates+=("$p" "${p}t64"); done
+
+    for p in "${candidates[@]}"; do
+        if dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q "install ok installed"; then
+            return 0
+        fi
+    done
+
+    for p in "${candidates[@]}"; do
+        if apt-cache policy "$p" 2>/dev/null | grep -q 'Candidate: [^(]'; then
+            echo "→ Installing $p"
+            $SUDO apt install -y "$p" && return 0
+        fi
+    done
+
+    echo "[!] Could not install: $*"
+    FAILED_PKGS+=("$*")
+    return 1
+}
+
+# Returns 0 if any of the given packages (or their t64 variant) is available from apt
+apt_has(){
+    local p
+    for p in "$@"; do
+        apt-cache policy "$p" "${p}t64" 2>/dev/null | grep -q 'Candidate: [^(]' && return 0
+    done
+    return 1
+}
+
 echo "[+] Updating package lists (Debian/Ubuntu)..."
-# $SUDO apt update || { echo "Failed to update package lists"; exit 1; }
-$SUDO apt update 
+$SUDO apt update
+$SUDO apt install -y software-properties-common   # add-apt-repository
 
 echo "[+] Installing essential core packages..."    # Not essential per se, but essentials for my workflow,enchancements, and customizations
-command -v curl >/dev/null 2>&1 || $SUDO apt install curl -y
-command -v wget >/dev/null 2>&1 || $SUDO apt install wget -y
-command -v tar >/dev/null 2>&1 || $SUDO apt install tar -y
-command -v unzip >/dev/null 2>&1 || $SUDO apt install unzip -y
-command -v xclip >/dev/null 2>&1 || $SUDO apt install xclip -y
-command -v build-essential >/dev/null 2>&1 || $SUDO apt install build-essential -y
-command -v locate >/dev/null 2>&1 || $SUDO apt install locate -y
-command -v sed >/dev/null 2>&1 || $SUDO apt install sed -y
-command -v coreutils >/dev/null 2>&1 || $SUDO apt install coreutils -y
-command -v vim >/dev/null 2>&1 || $SUDO apt install vim-gtk3 -y
-command -v vim-gtk3 >/dev/null 2>&1 || $SUDO apt install vim-gtk3 -y # GUI VIM
-command -v libc6 >/dev/null 2>&1 || $SUDO apt install libc6 -y
-command -v p7zip-full >/dev/null 2>&1 || $SUDO apt install p7zip-full -y
+for pkg in \
+    build-essential binutils bzip2 coreutils curl wget tar zip unzip sed gawk sudo less \
+    man-db rsync openssh-client openssl iproute2 net-tools dnsutils \
+    xclip xsel p7zip-full libc6 restic btop htop tree bc
+do
+    apt_pkg "$pkg"
+done
+apt_pkg 7zip                        # Newer 7zip (24.04+), p7zip-full above covers older releases
+apt_pkg plocate mlocate locate      # mlocate (Arch)
+apt_pkg vim-gtk3 vim                # GUI vim with GTK/X11
+
+# Hardware/networking pkgs are pointless inside WSL
+if [ "$IS_WSL" -eq 0 ]; then
+    apt_pkg network-manager         # NetworkManager (Arch)
+    apt_pkg iw
+    apt_pkg linux-firmware
+fi
 
 # Languages
 echo "[+] Installing dev related packages..."    # Not essential per se, but essentials for my workflow,enchancements, and customizations
-command -v python3 >/dev/null 2>&1 || $SUDO apt install python3 -y
-command -v perl >/dev/null 2>&1 || $SUDO apt install perl -y
-command -v make >/dev/null 2>&1 || $SUDO apt install make -y
-command -v gcc >/dev/null 2>&1 || $SUDO apt install gcc -y
-command -v git-all >/dev/null 2>&1 || $SUDO apt install git-all -y
-command -v cmake >/dev/null 2>&1 || $SUDO apt install cmake -y
-command -v libstdc++6 >/dev/null 2>&1 || $SUDO apt install libstdc++6 -y
-command -v libc6-dev >/dev/null 2>&1 || $SUDO apt install libc6-dev -y
-command -v libc6-dev-i386 >/dev/null 2>&1 || $SUDO apt install libc6-dev-i386 -y
-command -v nasm >/dev/null 2>&1 || $SUDO apt install nasm -y
-command -v binutils >/dev/null 2>&1 || $SUDO apt install binutils -y
-command -v bc >/dev/null 2>&1 || $SUDO apt install bc -y
-command -v cargo >/dev/null 2>&1 || $SUDO apt install cargo -y
-command -v pandoc >/dev/null 2>&1 || $SUDO apt install pandoc -y
-command -v nodejs >/dev/null 2>&1 || $SUDO apt install nodejs -y
-command -v npm >/dev/null 2>&1 || $SUDO apt install npm -y
-command -v ninja-build >/dev/null 2>&1 || $SUDO apt install ninja-build -y
-command -v gettext >/dev/null 2>&1 || $SUDO apt install gettext -y
-command -v lua5.3 >/dev/null 2>&1 || $SUDO apt install lua5.3 -y
-command -v jq >/dev/null 2>&1 || $SUDO apt install jq -y
-command -v python3-pygments >/dev/null 2>&1 || $SUDO apt install python3-pygments -y
-command -v bash >/dev/null 2>&1 || $SUDO apt install bash -y
-command -v gawk >/dev/null 2>&1 || $SUDO apt install gawk -y
-command -v pipx >/dev/null 2>&1 || $SUDO apt install pipx -y
+for pkg in \
+    python3 python3-pip python3-venv python3-pygments perl make gcc clang cmake ninja-build nasm \
+    libstdc++6 libc6-dev libc6-dev-i386 pkg-config gettext jq pandoc bash git-all direnv pipx
+do
+    apt_pkg "$pkg"
+done
+apt_pkg lua5.4 lua5.3
 pipx ensurepath
 
 echo "[+] Installing terminal/workflow extras..."
-command -v zsh >/dev/null 2>&1 || $SUDO apt install zsh -y
-command -v tmux >/dev/null 2>&1 || $SUDO apt install tmux -y
-command -v sshfs >/dev/null 2>&1 || $SUDO apt install sshfs -y
-command -v sshpass >/dev/null 2>&1 || $SUDO apt install sshpass -y
-command -v xsel >/dev/null 2>&1 || $SUDO apt install xsel -y
-command -v tree >/dev/null 2>&1 || $SUDO apt install tree -y
-command -v fonts-powerline >/dev/null 2>&1 || $SUDO apt install fonts-powerline -y
-command -v pkg-config >/dev/null 2>&1 || $SUDO apt install pkg-config -y
-command -v font-manager >/dev/null 2>&1 || $SUDO apt install font-manager -y # GUI
-command -v direnv >/dev/null 2>&1 || $SUDO apt install direnv -y
-command -v clang >/dev/null 2>&1 || $SUDO apt install clang -y
-# command -v mssql-tools --ignore-missing >/dev/null 2>&1 || $SUDO apt install mssql-tools --ignore-missing -y   # Requires MicrSoft repo
+for pkg in \
+    zsh tmux sshfs sshpass fonts-powerline font-manager bat ripgrep fzf chafa \
+    entr nvtop ufw flatpak smbclient cifs-utils tcpdump wlsunset
+do
+    apt_pkg "$pkg"
+done
+apt_pkg libfuse2                    # fuse2 (Arch) - needed for AppImages (t64 variant tried automatically)
+apt_pkg nsxiv sxiv                  # Terminal image viewer (sxiv was replaced by nsxiv in newer releases)
+apt_has doxx && apt_pkg doxx       # .docx viewer (falls back to cargo below if missing)
 
-echo "[+] Installing misc tools..."
-# Fastfetch
-$SUDO add-apt-repository ppa:zhangsongcui3371/fastfetch
-$SUDO apt update
-command -v fastfetch >/dev/null 2>&1 || $SUDO apt install fastfetch -y
+# qView isn't packaged for Ubuntu - use flathub
+if apt_has qview; then
+    apt_pkg qview
+elif command -v flatpak >/dev/null 2>&1; then
+    $SUDO flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    $SUDO flatpak install -y --noninteractive flathub com.interversehq.qView
+fi
 
-command -v htop >/dev/null 2>&1 || $SUDO apt install htop -y
+# Ubuntu ships 'bat' as 'batcat' - expose it as 'bat' like on Arch
+if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
+fi
+
+# Fastfetch only lands in the official repos on newer releases
+if ! apt_has fastfetch; then
+    $SUDO add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+    $SUDO apt update
+fi
+apt_pkg fastfetch
 
 echo "[+] Installing various dependencies..."
-command -v pkg-config >/dev/null 2>&1 || $SUDO apt install pkg-config -y
-command -v libssl-dev >/dev/null 2>&1 || $SUDO apt install libssl-dev -y
-command -v libxcb1-dev >/dev/null 2>&1 || $SUDO apt install libxcb1-dev -y
-command -v libxcb-render0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-render0-dev -y
-command -v libxcb-shape0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-shape0-dev -y
-command -v libxcb-xfixes0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-xfixes0-dev -y
-# command -v crossbuild-essential-arm64 >/dev/null 2>&1 || $SUDO apt install crossbuild-essential-arm64 -y
+for pkg in libssl-dev libxcb1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev unixodbc unixodbc-dev; do
+    apt_pkg "$pkg"
+done
+# apt_pkg crossbuild-essential-arm64
 
-echo "[+] Installing various dependencies (fragile)..." # Packages which may not be found in older package repos
-command -v fzf >/dev/null 2>&1 || $SUDO apt install fzf -y
-command -v ripgrep >/dev/null 2>&1 || $SUDO apt install ripgrep -y
-command -v unixodbc-dev >/dev/null 2>&1 || $SUDO apt install unixodbc-dev -y
-command -v docker.io >/dev/null 2>&1 || $SUDO apt install docker.io -y
-command -v docker-compose-plugin >/dev/null 2>&1 || $SUDO apt install docker-compose-plugin -y
+echo "[+] Installing docker..."
+apt_pkg docker.io
+apt_pkg docker-compose-v2 docker-compose-plugin docker-compose
 
-echo "[+] Installing various sound-related dependencies..."
-$SUDO add-apt-repository ppa:ubuntuhandbook1/ffmpeg6
-command -v playerctl >/dev/null 2>&1 || $SUDO apt install playerctl -y
-command -v libasound2-dev >/dev/null 2>&1 || $SUDO apt install libasound2-dev -y
-command -v ffmpeg >/dev/null 2>&1 || $SUDO apt install ffmpeg -y
-command -v libass9 >/dev/null 2>&1 || $SUDO apt install libass9 -y
-command -v libbluray2 >/dev/null 2>&1 || $SUDO apt install libbluray2 -y
-command -v libcaca0 >/dev/null 2>&1 || $SUDO apt install libcaca0 -y
-command -v libcdio-cdda2 >/dev/null 2>&1 || $SUDO apt install libcdio-cdda2 -y
-command -v libcdio-paranoia2 >/dev/null 2>&1 || $SUDO apt install libcdio-paranoia2 -y
-command -v libcdio19 >/dev/null 2>&1 || $SUDO apt install libcdio19 -y
-command -v librubberband2 >/dev/null 2>&1 || $SUDO apt install librubberband2 -y
-command -v libzimg2 >/dev/null 2>&1 || $SUDO apt install libzimg2 -y
-command -v libdbus-1-dev >/dev/null 2>&1 || $SUDO apt install libdbus-1-dev -y
-command -v libncursesw5-dev >/dev/null 2>&1 || $SUDO apt install libncursesw5-dev -y
-command -v libpulse-dev >/dev/null 2>&1 || $SUDO apt install libpulse-dev -y
-command -v libssl-dev >/dev/null 2>&1 || $SUDO apt install libssl-dev -y
-command -v libxcb1-dev >/dev/null 2>&1 || $SUDO apt install libxcb1-dev -y
-command -v libxcb-render0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-render0-dev -y
-command -v libxcb-shape0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-shape0-dev -y
-command -v libxcb-xfixes0-dev >/dev/null 2>&1 || $SUDO apt install libxcb-xfixes0-dev -y
+echo "[+] Installing various sound/media-related dependencies..."
+# Older releases ship ffmpeg 4.x - the PPA only supports pre-24.04 releases
+if [[ "$UBUNTU_CODENAME" =~ ^(focal|jammy)$ ]]; then
+    $SUDO add-apt-repository -y ppa:ubuntuhandbook1/ffmpeg6
+    $SUDO apt update
+fi
+for pkg in \
+    ffmpeg imagemagick poppler-utils playerctl libasound2-dev libass9 libbluray2 libcaca0 \
+    libcdio-cdda2 libcdio-paranoia2 libcdio19 librubberband2 libzimg2 libdbus-1-dev libpulse-dev
+do
+    apt_pkg "$pkg"
+done
+apt_pkg libncurses-dev libncursesw5-dev
 
-if systemctl --user is-active pipewire >/dev/null; then
+if systemctl --user is-active pipewire >/dev/null 2>&1; then
     echo "Using PipeWire, installing specific dependencies..."
-    command -v libpipewire-0.3-0  >/dev/null 2>&1 || $SUDO apt install libpipewire-0.3-0  -y
+    apt_pkg libpipewire-0.3-0
 fi
 
 echo "[+] (optional) installing vulkan graphics drivers..."
-command -v vulkan-tools >/dev/null 2>&1 || $SUDO apt install vulkan-tools -y
-command -v mesa-utils >/dev/null 2>&1 || $SUDO apt install mesa-utils -y
+apt_pkg vulkan-tools
+apt_pkg mesa-utils
 
 echo "[+] Installing Tufw (UFW GUI)..."
-$SUDO  wget https://github.com/peltho/tufw/releases/download/v0.2.4/tufw_0.2.4_linux_amd64.deb -O ./tufw_0.2.4_linux_amd64.deb
-$SUDO  apt install ./tufw_0.2.4_linux_amd64.deb -y
-$SUDO  rm ./tufw_0.2.4_linux_amd64.deb
+if ! command -v tufw >/dev/null 2>&1; then
+    wget https://github.com/peltho/tufw/releases/download/v0.2.4/tufw_0.2.4_linux_amd64.deb -O ./tufw_0.2.4_linux_amd64.deb
+    $SUDO apt install ./tufw_0.2.4_linux_amd64.deb -y
+    rm -f ./tufw_0.2.4_linux_amd64.deb
+fi
+
+echo "[+] Installing Nerd Font symbols..."    # ttf-nerd-fonts-symbols(-mono) (Arch). JetBrainsMono Nerd is installed by controller.sh
+if ! fc-list | grep -qi "Symbols Nerd Font"; then
+    mkdir -p "$HOME/.local/share/fonts/NerdFontsSymbolsOnly"
+    curl -fLo /tmp/NerdFontsSymbolsOnly.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/NerdFontsSymbolsOnly.zip \
+        && unzip -o /tmp/NerdFontsSymbolsOnly.zip -d "$HOME/.local/share/fonts/NerdFontsSymbolsOnly" \
+        && fc-cache -f
+    rm -f /tmp/NerdFontsSymbolsOnly.zip
+fi
 
 # Keep at end
 printf "[+] Removing stale lockfiles...\n\n"
@@ -142,7 +182,7 @@ $SUDO rm -f /var/lib/dpkg/lock
 
 # ────────────────────────────────────────────────
 #         Distro-agnostic tool installs
-# ──────────────────────────────────────────────── 
+# ────────────────────────────────────────────────
 
 echo "# ────────────────────────────────────────────────"
 echo "#        PACKAGE INSTALLATION (Part II: Distro-agnostic Tools not via package manager)"
@@ -155,43 +195,28 @@ echo "[+] Enabling docker service..."
 $SUDO  systemctl enable docker
 $SUDO  systemctl start docker
 
-echo "[+] Installing Rust (rustup)..."
+echo "[+] Installing Rust (rustup)..."    # apt's cargo is too old for most of the crates below
 if ! command -v rustup >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    # shellcheck disable=SC1091
-    . "$HOME/.cargo/env"
 fi
+# shellcheck disable=SC1091
+[ -s "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+rustup default stable
 rustup update
 
 echo "[+] Installing uv python package manager..."
-curl -LsSf https://astral.sh/uv/install.sh | sh
-  
-echo "[+] Installing Go (if needed)..."
-if ! command -v go >/dev/null 2>&1 || ! go version | grep -qE 'go1.2[2-9]'; then
+command -v uv >/dev/null 2>&1 || curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
+
+echo "[+] Installing Go (if needed)..."    # apt's golang lags behind what the go tools below require
+GO_LATEST=$(curl -fsSL 'https://go.dev/VERSION?m=text' | head -n1)
+if [ -n "$GO_LATEST" ] && { ! command -v go >/dev/null 2>&1 || [ "$(go env GOVERSION)" != "$GO_LATEST" ]; }; then
+    wget "https://go.dev/dl/${GO_LATEST}.linux-amd64.tar.gz"
     $SUDO rm -rf /usr/local/go
-    wget https://go.dev/dl/go1.24.4.linux-amd64.tar.gz
-    tar -xvf go1.24.4.linux-amd64.tar.gz
-    $SUDO mv go /usr/local/
-    rm -f go*.tar.gz
-    export PATH="$PATH:$HOME/go/bin"
+    $SUDO tar -C /usr/local -xzf "${GO_LATEST}.linux-amd64.tar.gz"
+    rm -f "${GO_LATEST}.linux-amd64.tar.gz"
 fi
-
-
-echo "[+] Installing jless (json viewer)"
-if ! command -v jless --verion >/dev/null 2>&1 ; then
-    cargo install jless
-fi
-
-echo "[+] Installing entr (if needed for tmux auto-reload)..."
-if ! command -v entr >/dev/null 2>&1; then
-    git clone https://github.com/eradman/entr.git
-    cd entr
-    ./configure
-    sudo make test
-    sudo make install
-    cd ../
-    rm -rf entr
-fi
+export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"
 
 echo "[+] Installing nvm..."
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash # Install nvm version 0.40.3
@@ -199,14 +224,13 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 if command -v nvm >/dev/null; then
     echo "nvm installation suceeded. installing version."
-    echo -e "\t[!] Available nvm versions:"
-    nvm list-remote       # avaiable versions
     echo -e "\t[+] Installing node v22..."
     nvm install v22.17.0  # install a version
     echo -e "\t[+] Installed versions:"
     nvm list              # View installed versions
     echo -e "\t[+] Selecting v22.17"
-    nvm use v22.17.0 
+    nvm use v22.17.0
+    nvm alias default v22.17.0
 fi
 
 echo "[+] Done installing prerequisites!"
@@ -222,8 +246,8 @@ cargo install csvlens
 echo "[+] Installing Dust..."
 cargo install du-dust
 
-echo "[+] Installing TPM (tmux plugin manager)..."
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+echo "[+] Installing jless (json viewer)"
+command -v jless >/dev/null 2>&1 || cargo install jless
 
 echo "[+] Installing fd..."
 cargo install fd-find
@@ -231,14 +255,35 @@ cargo install fd-find
 echo "[+] Installing tree-sitter-cli..."
 cargo install --locked tree-sitter-cli
 
-echo "[+] Installing Yazi..."
-git clone https://github.com/sxyazi/yazi.git
-cd yazi
-cargo build --release --locked
-$SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
-cd ..
-rm -rf yazi    
+echo "[+] Installing dysk (df alternative)..."
+cargo install --locked dysk
 
+echo "[+] Installing treemd (markdown tree viewer)..."
+cargo install treemd
+
+echo "[+] Installing oyo (git diff viewer)..."
+cargo install oyo --locked
+
+echo "[+] Installing basalt (obsidian reader)..."
+cargo install basalt-tui
+
+if ! command -v doxx >/dev/null 2>&1; then
+    echo "[+] Installing doxx (.docx viewer)..."
+    cargo install doxx
+fi
+
+echo "[+] Installing wiremix (pipewire mixer)..."
+apt_pkg libpipewire-0.3-dev && cargo install wiremix
+
+echo "[+] Installing Yazi..."
+if ! command -v yazi >/dev/null 2>&1; then
+    git clone https://github.com/sxyazi/yazi.git
+    cd yazi
+    cargo build --release --locked
+    $SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
+    cd ..
+    rm -rf yazi
+fi
 
 
 # Go _______________________________________
@@ -254,14 +299,59 @@ go install github.com/jesseduffield/lazygit@latest
 echo "[+] Installing glow..."
 go install github.com/charmbracelet/glow/v2@latest
 
+echo "[+] Installing gum..."
+go install github.com/charmbracelet/gum@latest
+
+echo "[+] Installing snitch (network connection viewer)..."
+go install github.com/karol-broda/snitch@latest
+
+echo "[+] Installing Docker Compose Viewer (dcv)..."
+if ! command -v dcv >/dev/null 2>&1; then
+    git clone https://github.com/tokuhirom/dcv.git
+    cd dcv
+    make build-helpers
+    go build -o dcv
+    $SUDO mv dcv /usr/local/bin/
+    cd ..
+    rm -rf dcv
+fi
+
+
+# npm ______________________________________
+echo "[+] Installing pnpm..."
+command -v pnpm >/dev/null 2>&1 || npm install -g pnpm
+
+echo "[+] Installing neohtop-cli..."
+npm install -g neohtop-cli
 
 
 # Other ___________________________________
+echo "[+] Installing TPM (tmux plugin manager)..."
+[ -d ~/.tmux/plugins/tpm ] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 echo "[+] Installing ggh ssh manager..."
 curl https://raw.githubusercontent.com/byawitz/ggh/master/install/unix.sh | sh
 
 echo "[+] Installing lazydocker..."
 curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+echo "[+] Installing lazyssh..."
+LATEST_TAG=$(curl -fsSL https://api.github.com/repos/Adembc/lazyssh/releases/latest | jq -r .tag_name)
+curl -LJO "https://github.com/Adembc/lazyssh/releases/download/${LATEST_TAG}/lazyssh_$(uname)_$(uname -m).tar.gz" \
+    && tar -xzf "lazyssh_$(uname)_$(uname -m).tar.gz" lazyssh \
+    && $SUDO mv lazyssh /usr/local/bin/
+rm -f "lazyssh_$(uname)_$(uname -m).tar.gz"
+
+echo "[+] Installing darya..."          # cli alternative to gui-based baobab (https://github.com/GNOME/baobab)
+curl -fsSL https://mr.katebzadeh.xyz/tools/darya/install | bash
+
+echo "[+] Installing GitTop (GitHub notifications client)..."
+if ! command -v gittop >/dev/null 2>&1; then
+    GITTOP_TAG=$(curl -fsSL https://api.github.com/repos/AmarBego/GitTop/releases/latest | jq -r .tag_name)
+    curl -fLo /tmp/gittop.deb "https://github.com/AmarBego/GitTop/releases/download/${GITTOP_TAG}/gittop-${GITTOP_TAG#v}-linux-gnu-x86_64.deb" \
+        && $SUDO apt install -y /tmp/gittop.deb
+    rm -f /tmp/gittop.deb
+fi
 
 echo "[+] Installing Posting via uv..."
 uv tool install --python 3.13 posting
@@ -269,39 +359,45 @@ uv tool install --python 3.13 posting
 echo "[+] Installing YouTube-downloader..."
 $SUDO  wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O /usr/local/bin/yt-dlp; $SUDO chmod +x /usr/local/bin/yt-dlp
 
-# echo "[+] Installing zioxide..."
-# curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-
+echo "[+] Installing x-cmd..."
+eval "$(curl https://get.x-cmd.com)"
 
 echo "[+] Installing llvm and related tools (clangd, cmake, etc)..."
 wget https://apt.llvm.org/llvm.sh
 chmod +x llvm.sh
 $SUDO  ./llvm.sh 20 all
+rm -f llvm.sh
 # or for latest stable release...
 # sudo ./llvm.sh all
 
-echo "[+] Installing Spotify Player..."    
-$SUDO apt-get install autotools-dev -y
-command -v pulseaudio >/dev/null 2>&1 || $SUDO apt install pulseaudio -y
-command -v pulseaudio-module-bluetooth >/dev/null 2>&1 || $SUDO apt install pulseaudio-module-bluetooth -y
-command -v pulseaudio-utils >/dev/null 2>&1 || $SUDO apt install pulseaudio-utils -y
-command -v pavucontrol >/dev/null 2>&1 || $SUDO apt install pavucontrol -y
-command -v libsixel-bin >/dev/null 2>&1 || $SUDO apt install libsixel-bin -y  # sixel encoder/decoder
-cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel
+echo "[+] Installing tailscale..."
+curl -fsSL https://tailscale.com/install.sh | sh
+# Set taildrop location
+mkdir -p "/home/${CALLING_USER}/Downloads/taildrops"
+$SUDO tailscale file get "/home/${CALLING_USER}/Downloads/taildrops"
+$SUDO tailscale set --operator="$CALLING_USER"
 
+echo "[+] Installing Spotify Player..."
+# libpulse-dev (above) is enough to build the pulseaudio backend - it talks to pipewire-pulse fine.
+# Only pull in the PulseAudio daemon when PipeWire isn't running, otherwise it would replace pipewire-pulse.
+if ! systemctl --user is-active pipewire >/dev/null 2>&1; then
+    apt_pkg pulseaudio
+    apt_pkg pulseaudio-module-bluetooth
+    apt_pkg pulseaudio-utils
+fi
+apt_pkg pavucontrol
+apt_pkg libsixel-bin  # sixel encoder/decoder
+command -v spotify_player >/dev/null 2>&1 || cargo install spotify_player --no-default-features --features pulseaudio-backend,media-control,sixel
 
-echo "[+] Installing various tools..."
-command -v 7zip  >/dev/null 2>&1 || $SUDO apt install 7zip  -y
-command -v poppler-utils  >/dev/null 2>&1 || $SUDO apt install poppler-utils  -y
-command -v imagemagick >/dev/null 2>&1 || $SUDO apt install imagemagick -y
-# command -v zoxide  >/dev/null 2>&1 || $SUDO apt install zoxide  -y
-# command -v fd-find  >/dev/null 2>&1 || $SUDO apt install fd-find  -y  # Installed with cargo above
-# echo "[+] Installing Latest Tmux..."    
+# echo "[+] Installing zioxide..."
+# curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+# echo "[+] Installing Latest Tmux..."
 # $SUDO apt-get install autotools-dev -y
 # $SUDO apt-get install automake -y
 # command -v libevent-dev >/dev/null 2>&1 || $SUDO apt install libevent-dev -y
 # command -v bison >/dev/null 2>&1 || $SUDO apt install bison -y
-# $SUDO apt install libncurses5-dev 
+# $SUDO apt install libncurses5-dev
 # command -v libncursesw5-dev >/dev/null 2>&1 || $SUDO apt install libncursesw5-dev -y
 #
 # git clone https://github.com/tmux/tmux.git
@@ -332,23 +428,28 @@ echo "[+] Manually Installing any missing packages..."
 if ! command -v nvim >/dev/null 2>&1; then
     printf "[+] Installing latest neovim stable release...\n\n"
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-    $SUDO rm -rf /opt/nvim
+    $SUDO rm -rf /opt/nvim-linux-x86_64
     $SUDO tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-    # echo "→ Consider adding /opt/nvim-linux-x86_64/bin to your PATH"
-    # echo 'export PATH="/opt/nvim-linux-x86_64/bin:$PATH"' >> $HOME/.zshrc
-    # rm nvim-linux-x86_64.tar.gz
-    # Already aadded to PTH in .zshrc - just export for now so we can use it now
+    rm -f nvim-linux-x86_64.tar.gz
+    # Already added to PATH in .zshrc - just export for now so we can use it now
     export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
 fi
 
-# Download and install lazygit
+# Download and install lazygit (fallback if 'go install' above failed)
 if ! command -v lazygit >/dev/null 2>&1; then
     printf "[+] Installing lazygit...\n\n"
-    LAZYGIT_VERSION='0.40.2'
+    LAZYGIT_VERSION=$(curl -fsSL https://api.github.com/repos/jesseduffield/lazygit/releases/latest | jq -r .tag_name | sed 's/^v//')
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
     && tar xf lazygit.tar.gz lazygit \
     && $SUDO mv -f lazygit /usr/local/bin/ \
     && rm lazygit.tar.gz
 fi
 
+if (( ${#FAILED_PKGS[@]} > 0 )); then
+    echo "[!] The following apt packages could not be installed (not available on this release?):"
+    printf '    - %s\n' "${FAILED_PKGS[@]}"
+fi
 
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
+echo "#        PACKAGE INSTALLATION COMPLETE!"
+echo "# ──────────────────────────────────────────────────────────────────────────────────────────"
