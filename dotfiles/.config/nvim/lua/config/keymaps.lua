@@ -177,45 +177,63 @@ vim.keymap.set('n', '<leader>lr', ':LspRestart<CR>', { noremap = true, silent = 
 vim.keymap.set('n', '<leader>li', ':LspInfo<CR>', { noremap = true, silent = true, desc = 'Show LSP info' })
 -- Format code: Auto-format the current buffer per language server rules
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, { noremap = true, silent = true, desc = 'Format buffer' })
--- ===> GO N' SHOW
--- [⚡] Go to definition: Jump to where a symbol (function, variable, etc.) is defined
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true, silent = true, desc = 'Go to definition' })
--- [⚡] Go to declaration: Navigate to the declaration of a symbol (useful in C/C++ or similar)
-vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { noremap = true, silent = true, desc = 'Go to declaration' })
--- [⚡] Find references: List all places a symbol is used in the project
-vim.keymap.set('n', 'gr', vim.lsp.buf.references, { noremap = true, silent = true, desc = 'Find references' })
--- Implementation: Go to the implementation of a symbol (e.g., for interfaces or abstract methods)
-vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = 'Go to implementation' })
--- [⚡] Hover documentation: Show docs or type info for the symbol under the cursor
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, { noremap = true, silent = true, desc = 'Hover documentation' })
+-- ===> GO N' SHOW + ACTIONS (buffer-local, only set once a language server attaches)
+-- Drop Neovim's built-in gr* LSP maps (grn/gra/grr/gri/grt/grx) - they'd make `gr` below wait for timeoutlen
+for _, lhs in ipairs({ 'grn', 'gra', 'grr', 'gri', 'grt', 'grx' }) do
+  pcall(vim.keymap.del, 'n', lhs)
+end
+pcall(vim.keymap.del, 'x', 'gra')
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('lsp_keymaps', { clear = true }),
+  callback = function(args)
+    local tb = require('telescope.builtin')
+    local map = function(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, noremap = true, silent = true, desc = desc })
+    end
+    -- Telescope jumps straight there on a single result, or opens a picker w/ preview on several
+    -- [⚡] Go to definition: Jump to where a symbol (function, variable, etc.) is defined
+    map('n', 'gd', tb.lsp_definitions, 'Go to definition')
+    -- [⚡] Go to declaration: Navigate to the declaration of a symbol (useful in C/C++ or similar)
+    map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
+    -- [⚡] Find references: List all places a symbol is used in the project
+    map('n', 'gr', function() tb.lsp_references({ include_declaration = false }) end, 'Find references')
+    -- Implementation: Go to the implementation of a symbol (e.g., for interfaces or abstract methods)
+    map('n', 'gi', tb.lsp_implementations, 'Go to implementation')
+    -- Type definition: Go to the definition of the symbol's type
+    map('n', 'gy', tb.lsp_type_definitions, 'Go to type definition')
+    -- [⚡] Hover documentation: Show docs or type info for the symbol under the cursor
+    map('n', 'K', vim.lsp.buf.hover, 'Hover documentation')
+    -- Signature help: Display function signature and parameters (insert mode: blink's <C-k>)
+    map('n', '<C-k>', vim.lsp.buf.signature_help, 'Signature help')
+    -- Rename symbol: Refactor a symbol's name across the project
+    map('n', '<leader>rn', vim.lsp.buf.rename, 'Rename symbol')
+    -- Code actions: Apply fixes or refactorings (e.g., fix imports, extract code)
+    map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, 'Code action')
+    -- Workspace symbols: Search for symbols (functions, classes, etc.) across the project
+    map('n', '<leader>ws', tb.lsp_dynamic_workspace_symbols, 'Workspace symbols')
+  end,
+})
 -- ===> DIAGNOSTICS
 -- [Touble-Superceded] List diagnostics: Show all diagnostics for the project in the quickfix list
 vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { noremap = true, silent = true, desc = 'Diagnostics → quickfix list' })
 -- Disable diagnostics for current buffer: Turn off LSP diagnostics for the current file
-vim.keymap.set('n', '<leader>dd', function() vim.diagnostic.disable(0) end, { noremap = true, silent = true, desc = 'Disable diagnostics (buffer)' })
+vim.keymap.set('n', '<leader>dd', function() vim.diagnostic.enable(false, { bufnr = 0 }) end, { noremap = true, silent = true, desc = 'Disable diagnostics (buffer)' })
 -- Enable diagnostics for current buffer: Re-enable LSP diagnostics for the current file
-vim.keymap.set('n', '<leader>de', function() vim.diagnostic.enable(0) end, { noremap = true, silent = true, desc = 'Enable diagnostics (buffer)' })
--- Disable diagnostics for current line: Suppress diagnostics for the line under the cursor
-vim.keymap.set('n', '<leader>dld', function() vim.diagnostic.disable(0, vim.api.nvim_win_get_cursor(0)[1] - 1) end, { noremap = true, silent = true, desc = 'Disable diagnostics (current line)' })
--- Enable diagnostics for current line: Re-enable diagnostics for the line under the cursor
-vim.keymap.set('n', '<leader>dle', function() vim.diagnostic.enable(0, vim.api.nvim_win_get_cursor(0)[1] - 1) end, { noremap = true, silent = true, desc = 'Enable diagnostics (current line)' })
+vim.keymap.set('n', '<leader>de', function() vim.diagnostic.enable(true, { bufnr = 0 }) end, { noremap = true, silent = true, desc = 'Enable diagnostics (buffer)' })
 -- [⚡] Open diagnostic float: Show detailed diagnostics for the current line
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.open_float, { noremap = true, silent = true, desc = 'Diagnostics float (current line)' })
 -- [⚡] Next diagnostic: Jump to the next error, warning, or hint in the file
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { noremap = true, silent = true, desc = 'Next diagnostic' })
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, { noremap = true, silent = true, desc = 'Next diagnostic' })
 -- [⚡] Previous diagnostic: Jump to the previous error, warning, or hint in the file
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { noremap = true, silent = true, desc = 'Previous diagnostic' })
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, { noremap = true, silent = true, desc = 'Previous diagnostic' })
 -- ===> OTHER
--- Signature help: Display function signature and parameters while typing
-vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { noremap = true, silent = true, desc = 'Signature help' })
--- Rename symbol: Refactor a symbol's name across the project
-vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { noremap = true, silent = true, desc = 'Rename symbol' })
--- Code actions: Apply fixes or refactorings (e.g., fix imports, extract code)
-vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { noremap = true, silent = true, desc = 'Code action' })
--- Workspace symbols: Search for symbols (functions, classes, etc.) across the project
-vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, { noremap = true, silent = true, desc = 'Workspace symbols' })
+-- Inlay hints: Toggle inline type/parameter hints for the current buffer
+vim.keymap.set('n', '<leader>lh', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+end, { noremap = true, silent = true, desc = 'Toggle inlay hints' })
 vim.keymap.set("n", "<leader>l", function()
-  lint.try_lint()
+  require("lint").try_lint()
 end, { desc = "Trigger linting for current file" })
 
 -- _______________________ Trouble __________________________

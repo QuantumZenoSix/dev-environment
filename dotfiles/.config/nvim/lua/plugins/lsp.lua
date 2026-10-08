@@ -1,6 +1,26 @@
 
  -- ~/.config/nvim/lua/plugins/lsp.lua
  -- Configure Mason and Mason-LSPConfig for managing LSP servers
+
+ -- Language servers to install (Mason) and enable (vim.lsp.enable)
+ local servers = {
+     "clangd",         -- C/C++
+     "perlnavigator",  -- Perl
+     "basedpyright",   -- Python (pyright fork that adds inlay hints)
+     "gopls",          -- Go
+     "sqls",           -- SQL
+     "ts_ls",          -- JavaScript/TypeScript
+     "rust_analyzer",  -- Rust
+     "bashls",         -- Bash
+     "lua_ls",         -- Lua
+     "html",           -- HTML
+     "cssls",          -- CSS
+     "zls",            -- Zig
+ }
+ -- These need their runtime on PATH to install/run, so only add them when it's there
+ if vim.fn.executable("ruby") == 1 then table.insert(servers, "ruby_lsp") end      -- Ruby
+ if vim.fn.executable("pwsh") == 1 then table.insert(servers, "powershell_es") end -- PowerShell
+
  return {
 
 
@@ -37,27 +57,16 @@
      -- B. Bridge between Mason and nvim-lspconfig
    {
      'mason-org/mason-lspconfig.nvim',
-      version = "1.29.0", -- last version that supports Neovim 0.10
      dependencies = {
          'williamboman/mason.nvim',
          'neovim/nvim-lspconfig',                    -- Ensure nvim-lspconfig is a dependency
      },
      config = function()
 
-       -- INSTALL LSPs
+       -- INSTALL LSPs (list is at the top of this file)
        require('mason-lspconfig').setup {
-         ensure_installed = {
-             "pyright",        -- Python
-             "tsserver",       -- JavaScript/TypeScript
-             "bashls",         -- Bash
-             "clangd",         -- C/C++
-             "perlnavigator",  -- Perl
-             "lua_ls",         -- Lua
-             "html",           -- HTML
-             "cssls",          -- CSS
-             "rust_analyzer",  -- Rust
-             "zls"             -- Zig
-         },
+         ensure_installed = servers,
+         automatic_enable = false, -- servers are enabled explicitly in section D
        }
 
      end,
@@ -167,6 +176,9 @@
 
          -- Default list of enabled providers defined so that you can extend it
          -- elsewhere in your config, without redefining it, due to `opts_extend`
+         -- Show function signature/params while typing inside a call (C-k toggles)
+         signature = { enabled = true },
+
          sources = {
            default = { 'lsp', 'path', 'snippets', 'buffer' },
          },
@@ -187,71 +199,65 @@
    {
      'neovim/nvim-lspconfig',
      dependencies = { 
-       'williamboman/mason-lspconfig.nvim',
+       'mason-org/mason-lspconfig.nvim',
        -- 'hrsh7th/cmp-nvim-lsp', -- Ensure cmp-nvim-lsp is available
        'saghen/blink.cmp'
      },
      config = function()
-       -- Keep your original configuration
        -- vim.diagnostic.enable(false) -- Uncomment to disable diagnostics on startup
 
-       -- Add nvim-cmp capabilities to LSP
-       -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-       -- Add blink-cmp capabilities to LSP
-       local capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
-
-       -- Define common keybindings for LSP
-       local on_attach = function(client, bufnr)
-         local bufopts = { noremap=true, silent=true, buffer=bufnr }
-         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-         vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-         vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
-         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-       end
-
-       -- Configure LSP servers
-       -- local lspconfig = require('nvim-lspconfig')
-       -- Module itself is actually called 'lspconfig' (see docs: https://github.com/neovim/nvim-lspconfig)
-       local lspconfig = require('lspconfig')
+       -- Defaults for every server: blink-cmp completion capabilities
+       -- (LSP keymaps live in config/keymaps.lua)
+       vim.lsp.config("*", {
+         capabilities = require('blink.cmp').get_lsp_capabilities(),
+       })
 
        -- Lua LSP
        vim.lsp.config("lua_ls", {
-       -- [DEPRECATED] lspconfig.lua_ls.setup {
-         on_attach = on_attach,
-         capabilities = capabilities,
          settings = {
            Lua = {
              diagnostics = {
                globals = { 'vim' }, -- Recognize 'vim' global
              },
+             hint = { enable = true }, -- inlay hints
            },
          },
        })
 
-       -- Python LSP (pyright)
-       vim.lsp.config("pyright", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- Python LSP (basedpyright) - inlay hints (variable/return types, argument names) are on by default
+       vim.lsp.config("basedpyright", {
          settings = {
-            python = {
+            basedpyright = {
               analysis = {
-                -- already have these — good
+                typeCheckingMode = "standard", -- same strictness as pyright (basedpyright defaults to the much noisier "recommended")
                 diagnosticMode = "openFilesOnly",
                 useLibraryCodeForTypes = true,
                 autoSearchPaths = true,
-
-                -- Add these to reduce log spam / analysis chatter
-                logLevel = "Warning",   -- or "Error"
+                logLevel = "Warning",   -- reduce log spam / analysis chatter
               }
             }
           }
        })
 
-       -- TypeScript LSP (ts_ls)
+       -- TypeScript/JavaScript LSP (ts_ls) - inlay hints are off unless requested here
+       local ts_inlay_hints = {
+         includeInlayParameterNameHints = "all",
+         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+         includeInlayFunctionParameterTypeHints = true,
+         includeInlayVariableTypeHints = true,
+         includeInlayPropertyDeclarationTypeHints = true,
+         includeInlayFunctionLikeReturnTypeHints = true,
+         includeInlayEnumMemberValueHints = true,
+       }
        vim.lsp.config("ts_ls", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+         settings = {
+           typescript = { inlayHints = ts_inlay_hints },
+           javascript = { inlayHints = ts_inlay_hints },
+         },
+       })
+
+       -- Perl LSP (perlnavigator)
+       vim.lsp.config("perlnavigator", {
          settings = {
              perlnavigator = {
                  -- Path to your perl executable (usually auto-detected, but explicit helps)
@@ -277,6 +283,8 @@
                      -- vim.fn.expand("./lib"),                       -- project-local lib/
                      -- "/path/to/shared/perl/modules",
                      "$workspaceFolder",          -- ← this adds the folder you opened Neovim in
+                     -- NOTE: <project>/lib is added automatically. A *relative* `use lib "lib"` in your code
+                     -- breaks go-to-definition into your own modules; use `use lib "$FindBin::Bin/lib"` instead
                  },
 
                  -- Optional: disable if Perl::Critic is too noisy/slow on large codebases
@@ -293,47 +301,51 @@
          },
        })
 
-       -- Bash LSP (blashls)
-       vim.lsp.config("bashls", {
-       -- lspconfig.bashls.setup {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- Go LSP (gopls) - inlay hints are off unless requested here
+       vim.lsp.config("gopls", {
+         settings = {
+           gopls = {
+             hints = {
+               assignVariableTypes = true,
+               compositeLiteralFields = true,
+               constantValues = true,
+               functionTypeParameters = true,
+               parameterNames = true,
+               rangeVariableTypes = true,
+             },
+           },
+         },
        })
 
-       -- C LSP (clangd)
-       vim.lsp.config("clangd", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- Ruby LSP (ruby_lsp) - turn on its inlay hints
+       vim.lsp.config("ruby_lsp", {
+         init_options = {
+           featuresConfiguration = {
+             inlayHint = { implicitHashValue = true, implicitRescue = true },
+           },
+         },
        })
 
-       -- Perl LSP (perlnavigator)
-       vim.lsp.config("perlnavigator", {
-         on_attach = on_attach,
-         capabilities = capabilities,
-       })
-       vim.lsp.config("html", {
-         on_attach = on_attach,
-         capabilities = capabilities,
-       })
-       vim.lsp.config("cssls", {
-         on_attach = on_attach,
-         capabilities = capabilities,
-       })
-       -- Rust LSP (rust_analyzer)
-       vim.lsp.config("rust_analyzer", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- PowerShell LSP (powershell_es) - point it at Mason's install
+       vim.lsp.config("powershell_es", {
+         bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services",
        })
 
-       -- Zig
-       vim.lsp.config("zls", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- clangd, rust_analyzer, zls: inlay hints on by default; bashls, html, cssls, sqls, perlnavigator: no inlay hint support
+
+       -- Inlay hints: turn on for any server that supports them (toggle with <leader>lh)
+       vim.api.nvim_create_autocmd("LspAttach", {
+         group = vim.api.nvim_create_augroup("lsp_inlay_hints", { clear = true }),
+         callback = function(args)
+           local client = vim.lsp.get_client_by_id(args.data.client_id)
+           if client and client:supports_method("textDocument/inlayHint") then
+             vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+           end
+         end,
        })
 
-
-     -- Now that LSPs have been configured, they need to be enabled 
-     vim.lsp.enable({'lua_ls', 'pyright','ts_ls','bashls','clangd','perlnavigator','html','cssls','rust_analyzer','zls'})
+       -- Now that LSPs have been configured, they need to be enabled
+       vim.lsp.enable(servers)
 
      end,
    },
@@ -395,7 +407,7 @@
      -- SERVER NAME => :Mason or :lua print(vim.inspect(require('mason-lspconfig').get_available_servers()))
 
  -- 2: [LSPCONFIG] (Section D) Configure new language server
-     -- In this file, add new setup entry to lspconfig.xxx - actually vim.lsp.config("SERVERNAME")
+     -- Add the server name to `servers` at the top of this file, plus a vim.lsp.config("SERVERNAME") entry if it needs settings
      -- SERVER NAME => :help lspconfig-all or https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
  -- 3: Run Lazy Sync or restart neovim
