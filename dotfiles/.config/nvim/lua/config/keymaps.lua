@@ -332,8 +332,8 @@ vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = t
 vim.keymap.set('n', '<leader>dp', function() vim.diagnostic.jump({ count = -1, float = true }) end, { noremap = true, silent = true, desc = 'Previous diagnostic' })
 
 -- _______________________ Trouble __________________________
-vim.keymap.set("n", "<leader>dte", "<cmd>Enable Trouble diagnostics toggle<CR>", { desc = "Open Trouble diagnostics" })
-vim.keymap.set("n", "<leader>dtd", "<cmd>Disable Trouble diagnostics<CR>", { desc = "Close Trouble" })
+vim.keymap.set("n", "<leader>dte", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Open Trouble diagnostics" })
+vim.keymap.set("n", "<leader>dtd", "<cmd>Trouble close<CR>", { desc = "Close Trouble" })
 vim.keymap.set("n", "<leader>dtt", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "Toggle Trouble diagnostics (current buffer)" })
 vim.keymap.set("n", "<leader>dtr", "<cmd>Trouble lsp_references toggle<CR>", { desc = "Toggle Trouble LSP references" })
 vim.keymap.set("n", "<leader>dtD", "<cmd>Trouble lsp_definitions toggle<CR>", { desc = "Toggle Trouble LSP definitions" })
