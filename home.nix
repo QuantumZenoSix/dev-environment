@@ -323,10 +323,14 @@
     #  Run ad-hoc shell cpmmands
     # ────────────────────────────────────────────────────────────────
 	home.activation = { 
+
         downloadBatTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-           run mkdir -p "$(bat --config-dir)/themes"
-           run wget -P "$(bat --config-dir)/themes" https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
+        run mkdir -p "$(${pkgs.bat}/bin/bat --config-dir)/themes"
+        run ${pkgs.wget}/bin/wget \
+        -P "$(${pkgs.bat}/bin/bat --config-dir)/themes" \
+        https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
         '';
+
 
 		# touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
 		# touch grass.txt # creates ~/grass.txt
