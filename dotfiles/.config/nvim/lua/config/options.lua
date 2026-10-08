@@ -89,7 +89,6 @@ vim.api.nvim_create_user_command('Diff', "w !git diff --no-index % -", {})
 
 
 -- Filetype and Syntax Setup
-vim.opt.filetype = "on"                                        -- Enable filetype detection
 vim.cmd("filetype plugin on")                                  -- Load filetype-specific plugins
 vim.cmd("filetype indent on")                                  -- Load filetype-specific indentation
 vim.cmd("syntax enable")                                       -- Enable syntax highlighting

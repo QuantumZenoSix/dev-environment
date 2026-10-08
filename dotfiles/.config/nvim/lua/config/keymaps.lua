@@ -1,3 +1,6 @@
+-- Keymaps that a plugin has to receive in its setup (blink.cmp completion) are returned in this table - see the bottom of the file
+local M = {}
+
 -- NON-LEADER CUSTOM MOTIONS
 -- Smaller movements up/down buffer
 vim.keymap.set('n', '<C-d>', '22<C-e>', { noremap = true, silent = true, desc = 'Smaller scroll down (22 lines)' })
@@ -172,9 +175,10 @@ vim.keymap.set('n', '<leader>idd', ':IBLDisable<CR>', { desc = 'Disable indent b
 local opts = { noremap = true, silent = true }
 -- ===> LSP ACTIONS
 -- Restart LSP: Restart the language server for the current buffer (useful for troubleshooting)
-vim.keymap.set('n', '<leader>lr', ':LspRestart<CR>', { noremap = true, silent = true, desc = 'Restart LSP' })
+-- (Nvim 0.12+: nvim-lspconfig no longer defines :LspRestart/:LspInfo - use the built-in :lsp command / checkhealth)
+vim.keymap.set('n', '<leader>lr', ':lsp restart<CR>', { noremap = true, silent = true, desc = 'Restart LSP' })
 -- Show LSP info: Display details about active language servers for the current buffer
-vim.keymap.set('n', '<leader>li', ':LspInfo<CR>', { noremap = true, silent = true, desc = 'Show LSP info' })
+vim.keymap.set('n', '<leader>li', ':checkhealth vim.lsp<CR>', { noremap = true, silent = true, desc = 'Show LSP info' })
 -- Format code: Auto-format the current buffer per language server rules
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, { noremap = true, silent = true, desc = 'Format buffer' })
 -- ===> GO N' SHOW + ACTIONS (buffer-local, only set once a language server attaches)
@@ -183,6 +187,25 @@ for _, lhs in ipairs({ 'grn', 'gra', 'grr', 'gri', 'grt', 'grx' }) do
   pcall(vim.keymap.del, 'n', lhs)
 end
 pcall(vim.keymap.del, 'x', 'gra')
+
+-- ===> NEOVIM'S BUILT-IN LSP/DIAGNOSTIC DEFAULTS (reference only - set by Neovim itself, see :h lsp-defaults, :h default-mappings)
+--   grn          n     vim.lsp.buf.rename()             -> deleted above, use <leader>rn
+--   gra          n,x   vim.lsp.buf.code_action()        -> deleted above, use <leader>ca
+--   grr          n     vim.lsp.buf.references()         -> deleted above, use gr
+--   gri          n     vim.lsp.buf.implementation()     -> deleted above, use gi
+--   grt          n     vim.lsp.buf.type_definition()    -> deleted above, use gy
+--   grx          n     vim.lsp.codelens.run()           -> deleted above, use <leader>cl
+--   K            n     vim.lsp.buf.hover()              -> overridden below (same function)
+--   ]d / [d      n     Next / previous diagnostic       -> overridden below (also opens the float)
+--   gO           n     vim.lsp.buf.document_symbol()    (location list)
+--   <C-s>        i,s   vim.lsp.buf.signature_help()
+--   an / in      x,o   Expand / shrink selection by syntax node (LSP selection range if no treesitter)
+--   ]D / [D      n     Last / first diagnostic in the buffer
+--   <C-w>d       n     Diagnostics under the cursor in a float (also <C-w><C-d>)
+--   gx           n     Open link under cursor - also follows LSP document links
+--   <C-]>        n     Go to definition (LSP sets 'tagfunc')
+--   gq           n,x   Format with LSP (LSP sets 'formatexpr')
+--   <C-x><C-o>   i     LSP completion (LSP sets 'omnifunc' - blink.cmp normally handles completion)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp_keymaps', { clear = true }),
@@ -210,6 +233,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', '<leader>rn', vim.lsp.buf.rename, 'Rename symbol')
     -- Code actions: Apply fixes or refactorings (e.g., fix imports, extract code)
     map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, 'Code action')
+    -- Code lens: Run the code lens on the current line (e.g., "run test", "N references") - replaces built-in grx
+    map('n', '<leader>cl', vim.lsp.codelens.run, 'Run code lens')
     -- Workspace symbols: Search for symbols (functions, classes, etc.) across the project
     map('n', '<leader>ws', tb.lsp_dynamic_workspace_symbols, 'Workspace symbols')
   end,
@@ -232,9 +257,50 @@ vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = t
 vim.keymap.set('n', '<leader>lh', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
 end, { noremap = true, silent = true, desc = 'Toggle inlay hints' })
-vim.keymap.set("n", "<leader>l", function()
+-- Lint: Run nvim-lint's linters for this filetype (not <leader>l - that's a prefix, so it'd wait for timeoutlen)
+vim.keymap.set("n", "<leader>lc", function()
   require("lint").try_lint()
 end, { desc = "Trigger linting for current file" })
+
+-- _______________________ Completion (blink.cmp) __________________________
+-- blink.cmp builds its mappings once during setup, so these can't be vim.keymap.set calls - plugins/lsp.lua passes
+-- M.completion / M.cmdline_completion to blink's setup. preset = 'none' means only the keys listed here exist.
+-- Each key runs its commands in order until one succeeds; 'fallback' = do the key's normal (non-blink) action.
+-- Commands: :h blink-cmp-config-keymap
+-- Insert mode
+M.completion = {
+  preset = 'none',
+  ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' }, -- Open menu / toggle docs for the selected item
+  ['<C-e>'] = { 'cancel', 'fallback' },                                    -- Close menu and undo the preview
+  ['<CR>'] = { 'accept', 'fallback' },                                     -- Accept the selected item
+  ['<C-y>'] = { 'select_and_accept', 'fallback' },                         -- Accept (picks the first item if none selected)
+  ['<Up>'] = { 'select_prev', 'fallback' },                                -- Previous item
+  ['<Down>'] = { 'select_next', 'fallback' },                              -- Next item
+  ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },                   -- Previous item
+  ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },                   -- Next item
+  ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },                   -- Scroll docs up
+  ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },                 -- Scroll docs down
+  ['<Tab>'] = { 'snippet_forward', 'fallback' },                           -- Next snippet placeholder
+  ['<S-Tab>'] = { 'snippet_backward', 'fallback' },                        -- Previous snippet placeholder
+  ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },          -- Toggle signature help
+}
+-- Command line (: / ? search)
+M.cmdline_completion = {
+  preset = 'none',
+  ['<Tab>'] = { 'show_and_insert_or_accept_single', 'select_next' },       -- Open menu and insert first item / next item
+  ['<S-Tab>'] = {                                                          -- Open menu and insert last item / previous item
+    function(cmp) return cmp.show_and_insert_or_accept_single({ initial_selected_item_idx = -1 }) end,
+    'select_prev',
+  },
+  ['<C-space>'] = { 'show', 'fallback' },                                  -- Open menu
+  ['<C-n>'] = { 'select_next', 'fallback' },                               -- Next item
+  ['<C-p>'] = { 'select_prev', 'fallback' },                               -- Previous item
+  ['<Right>'] = { 'select_next', 'fallback' },                             -- Next item
+  ['<Left>'] = { 'select_prev', 'fallback' },                              -- Previous item
+  ['<C-y>'] = { 'select_and_accept', 'fallback' },                         -- Accept
+  ['<C-e>'] = { 'cancel', 'fallback' },                                    -- Close menu and undo the preview
+  ['<End>'] = { 'hide', 'fallback' },                                      -- Close menu, keep what's typed
+}
 
 -- _______________________ Trouble __________________________
 vim.keymap.set("n", "<leader>tT", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Toggle Trouble diagnostics" })
@@ -249,3 +315,5 @@ vim.keymap.set("n", "<leader>tp", ":Trouble diagnostics prev<CR>", { desc = "Pre
 
 -- _______________________ Undotree __________________________
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { noremap = true, silent = true, desc = 'Toggle undotree' })
+
+return M
