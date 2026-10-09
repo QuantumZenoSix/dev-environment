@@ -325,10 +325,15 @@
 	home.activation = { 
 
         downloadBatTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        run mkdir -p "$(${pkgs.bat}/bin/bat --config-dir)/themes"
-        run ${pkgs.wget}/bin/wget \
-        -P "$(${pkgs.bat}/bin/bat --config-dir)/themes" \
-        https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
+        batThemeDir="$(${pkgs.bat}/bin/bat --config-dir)/themes"
+        if [ ! -f "$batThemeDir/Catppuccin Mocha.tmTheme" ]; then
+            run mkdir -p "$batThemeDir"
+            run ${pkgs.wget}/bin/wget \
+            -P "$batThemeDir" \
+            https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
+        else
+            verboseEcho "Bat theme Catppuccin Mocha already present, skipping download"
+        fi
         '';
 
 
