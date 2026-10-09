@@ -184,7 +184,14 @@ nx_up(){
     git stash apply
     git add -A
 
+    # Remove lazy-lock.json (and stale .backup copies) so HM's backup step can't collide
+    nv_clear_lockfile
+
     home-manager switch -b backup --flake .#${USER}
+
+    # Nix store files all have mtime 1, so Neovim's Lua bytecode cache can't detect
+    # same-size edits and serves stale code. Clear it so the new config is picked up.
+    rm -rf ~/.cache/nvim/luac
 
     # While I'm here, backup any niri/noctalia changes
     [[ -d ~/.config/niri/ ]] && cp -r ~/.config/niri/* ~/.config/home-manager/dotfiles/.config/niri/
@@ -296,7 +303,7 @@ nv_edit_conf(){
     nvim ~/.config/home-manager/dotfiles/.config/nvim/lua/
 }
 
-nv_restore_owner(){
+nv_clear_lockfile(){
     # Perms get set to root if I accidentally sudo nvim
 
     # Fix ownership of the entire Neovim config (safest and most common fix)
