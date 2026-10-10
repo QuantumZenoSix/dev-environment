@@ -351,7 +351,26 @@
        })
 
        -- Code lens: show actionable lenses above lines for every server that supports them (run with <leader>cl)
-       vim.lsp.codelens.enable(true)
+       -- (vim.lsp.codelens.enable is Nvim 0.12+; on 0.11 lenses must be refreshed manually per buffer)
+       if vim.lsp.codelens.enable then
+         vim.lsp.codelens.enable(true)
+       else
+         vim.api.nvim_create_autocmd("LspAttach", {
+           group = vim.api.nvim_create_augroup("lsp_codelens", { clear = true }),
+           callback = function(args)
+             local client = vim.lsp.get_client_by_id(args.data.client_id)
+             if not (client and client:supports_method("textDocument/codeLens")) then
+               return
+             end
+             vim.lsp.codelens.refresh({ bufnr = args.buf })
+             vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+               group = vim.api.nvim_create_augroup("lsp_codelens_" .. args.buf, { clear = true }),
+               buffer = args.buf,
+               callback = function() vim.lsp.codelens.refresh({ bufnr = args.buf }) end,
+             })
+           end,
+         })
+       end
 
        -- Now that LSPs have been configured, they need to be enabled
        vim.lsp.enable(servers)

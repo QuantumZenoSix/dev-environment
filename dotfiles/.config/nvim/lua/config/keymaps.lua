@@ -211,7 +211,9 @@ local opts = { noremap = true, silent = true }
 -- ===> LSP ACTIONS
 -- Restart LSP: Restart the language server for the current buffer (useful for troubleshooting)
 -- (Nvim 0.12+: nvim-lspconfig no longer defines :LspRestart/:LspInfo - use the built-in :lsp command / checkhealth)
-vim.keymap.set('n', '<leader>lr', ':lsp restart<CR>', { noremap = true, silent = true, desc = 'Restart LSP' })
+vim.keymap.set('n', '<leader>lr', function()
+  vim.cmd(vim.fn.has('nvim-0.12') == 1 and 'lsp restart' or 'LspRestart')
+end, { noremap = true, silent = true, desc = 'Restart LSP' })
 -- Show LSP info: Display details about active language servers for the current buffer
 vim.keymap.set('n', '<leader>li', ':checkhealth vim.lsp<CR>', { noremap = true, silent = true, desc = 'Show LSP info' })
 -- Format code: Auto-format the current buffer per language server rules
