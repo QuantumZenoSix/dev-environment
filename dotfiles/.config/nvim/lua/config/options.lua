@@ -6,7 +6,7 @@ vim.opt.encoding       = 'utf-8'                               -- Set default en
 vim.opt.expandtab      = true                                  -- Use spaces instead of tabs
 vim.opt.foldlevel      = 99                                    -- Everything unfolded by default
 vim.opt.foldmethod     = "expr"
-vim.opt.foldexpr       = "nvim_treesitter#foldexpr()"          -- Use Treesitter-based folding
+vim.opt.foldexpr       = "v:lua.vim.treesitter.foldexpr()"     -- Use Treesitter-based folding (built-in; nvim-treesitter main branch dropped nvim_treesitter#foldexpr)
 vim.opt.history        = 1000                                  -- Increase command history size
 vim.opt.hlsearch       = true                                  -- Highlight search matches
 vim.opt.ignorecase     = true                                  -- Ignore case in search patterns
@@ -143,17 +143,24 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
     "*.rs",                -- Rust
     "*.vim",               -- Vimscript
   },
-  callback = function()
+  callback = function(args)
+    -- Treesitter turns regex syntax off when it attaches - don't turn it back on (double highlighting + slow on big files).
+    -- Only buffers without a treesitter parser (e.g. php, java) still use regex syntax, so sync those from the start.
+    if vim.b[args.buf].ts_highlight then return end
     vim.cmd("syntax sync fromstart")
-    -- Set syntax based on filetype
-    local ft = vim.opt.filetype:get()
-    vim.opt.syntax = ft
   end,
 })
 
 
--- Override colors for Diffs
-vim.api.nvim_set_hl(0, "DiffAdd",    { bg = "#004d00", fg = "#d7ffaf" })
-vim.api.nvim_set_hl(0, "DiffChange", { bg = "#4d3d00" })
-vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#4d0000", fg = "#ff5f5f", bold = true })
-vim.api.nvim_set_hl(0, "DiffText",   { bg = "#870000", fg = "#ffffff", bold = true })
+-- Override colors for Diffs (re-applied on every :colorscheme, which would otherwise reset them)
+local function set_diff_highlights()
+  vim.api.nvim_set_hl(0, "DiffAdd",    { bg = "#004d00", fg = "#d7ffaf" })
+  vim.api.nvim_set_hl(0, "DiffChange", { bg = "#4d3d00" })
+  vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#4d0000", fg = "#ff5f5f", bold = true })
+  vim.api.nvim_set_hl(0, "DiffText",   { bg = "#870000", fg = "#ffffff", bold = true })
+end
+set_diff_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup("diff_highlights", { clear = true }),
+  callback = set_diff_highlights,
+})
