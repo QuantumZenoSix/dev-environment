@@ -386,7 +386,7 @@ ut_o_uv_init(){
 }
 
 ut_o_taildrop_to_phone(){
-    sudo tailscale file cp "$1"    moto-g-stylus-5g---2024
+    sudo tailscale file cp "$1"    moto-g-stylus-5g---2024:
 }
 alias taildrop_to_phone="ut_o_taildrop_to_phone"
 
@@ -497,7 +497,12 @@ ut_o_create_systemd_service(){
 
 }
 
+ut_o_run_ollama_webui(){
+    sudo docker pull ghcr.io/open-webui/open-webui:main
+    sudo docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+}
 
+alias ollama_webui="ut_o_run_ollama_webui"
 
 # == FD
 # replace img
