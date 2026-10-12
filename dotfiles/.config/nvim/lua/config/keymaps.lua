@@ -1,3 +1,6 @@
+-- Keymaps that a plugin has to receive in its setup (blink.cmp completion) are returned in this table - see the bottom of the file
+local M = {}
+
 -- NON-LEADER CUSTOM MOTIONS
 -- Smaller movements up/down buffer
 vim.keymap.set('n', '<C-d>', '22<C-e>', { noremap = true, silent = true, desc = 'Smaller scroll down (22 lines)' })
@@ -134,6 +137,19 @@ vim.keymap.set("n", "<leader>7", function() harpoon:list():select(7) end, { desc
 vim.keymap.set("n", "<leader>8", function() harpoon:list():select(8) end, { desc = "Harpoon: Go to file 8" })
 vim.keymap.set("n", "<leader>9", function() harpoon:list():select(9) end, { desc = "Harpoon: Go to file 9" })
 
+-- _______________________ Indent __________________________
+vim.keymap.set('n', '<leader>ie', ':lua Snacks.indent.enable()<CR>', { desc = 'Enable Snacks indent' })
+vim.keymap.set('n', '<leader>id', ':lua Snacks.indent.disable()<CR>', { desc = 'Disable Snacks indent' })
+vim.keymap.set('n', '<leader>iee', ':IBLEnable<CR>', { desc = 'Enable indent blankline (rainbow)' })
+vim.keymap.set('n', '<leader>idd', ':IBLDisable<CR>', { desc = 'Disable indent blankline (rainbow)' })
+
+
+-- ***************************************************************************
+-- *                                                                         *
+-- *                               GIT                                       *
+-- *                                                                         *
+-- ***************************************************************************
+
 -- _______________________ Git (General) __________________________
 -- 'Git Undo' | Undo last commit and set changes as staged and unsaved
 vim.keymap.set('n', '<leader>gu', '<cmd>git reset --hard HEAD~1<CR>',
@@ -160,11 +176,33 @@ vim.keymap.set("n", "<leader>go", ":GBrowse<CR>", { desc = "Open file in remote"
 -- Log current file history
 vim.keymap.set("n", "<leader>gl", ":Gclog<CR>", { desc = "Git commit log" })
 
--- _______________________ Indent __________________________
-vim.keymap.set('n', '<leader>ie', ':lua Snacks.indent.enable()<CR>', { desc = 'Enable Snacks indent' })
-vim.keymap.set('n', '<leader>id', ':lua Snacks.indent.disable()<CR>', { desc = 'Disable Snacks indent' })
-vim.keymap.set('n', '<leader>iee', ':IBLEnable<CR>', { desc = 'Enable indent blankline (rainbow)' })
-vim.keymap.set('n', '<leader>idd', ':IBLDisable<CR>', { desc = 'Disable indent blankline (rainbow)' })
+
+
+-- ***************************************************************************
+-- *                                                                         *
+-- *                               LSP/IDE                                   *
+-- *                                                                         *
+-- ***************************************************************************
+
+-- ===> NEOVIM'S BUILT-IN LSP/DIAGNOSTIC DEFAULTS (reference only - set by Neovim itself, see :h lsp-defaults, :h default-mappings)
+--   grn          n     vim.lsp.buf.rename()             -> deleted above, use <leader>rn
+--   gra          n,x   vim.lsp.buf.code_action()        -> deleted above, use <leader>ca
+--   grr          n     vim.lsp.buf.references()         -> deleted above, use gr
+--   gri          n     vim.lsp.buf.implementation()     -> deleted above, use gi
+--   grt          n     vim.lsp.buf.type_definition()    -> deleted above, use gy
+--   grx          n     vim.lsp.codelens.run()           -> deleted above, use <leader>cl
+--   K            n     vim.lsp.buf.hover()              -> overridden below (same function)
+--   ]d / [d      n     Next / previous diagnostic       -> overridden below (also opens the float)
+--   gO           n     vim.lsp.buf.document_symbol()    (location list)
+--   <C-s>        i,s   vim.lsp.buf.signature_help()
+--   an / in      x,o   Expand / shrink selection by syntax node (LSP selection range if no treesitter)
+--   ]D / [D      n     Last / first diagnostic in the buffer
+--   <C-w>d       n     Diagnostics under the cursor in a float (also <C-w><C-d>)
+--   gx           n     Open link under cursor - also follows LSP document links
+--   <C-]>        n     Go to definition (LSP sets 'tagfunc')
+--   gq           n,x   Format with LSP (LSP sets 'formatexpr')
+--   <C-x><C-o>   i     LSP completion (LSP sets 'omnifunc' - blink.cmp normally handles completion)
+
 
 -- _______________________ LSP __________________________
 -- Set up keybindings for LSP functionality in Neovim
@@ -172,62 +210,141 @@ vim.keymap.set('n', '<leader>idd', ':IBLDisable<CR>', { desc = 'Disable indent b
 local opts = { noremap = true, silent = true }
 -- ===> LSP ACTIONS
 -- Restart LSP: Restart the language server for the current buffer (useful for troubleshooting)
-vim.keymap.set('n', '<leader>lr', ':LspRestart<CR>', { noremap = true, silent = true, desc = 'Restart LSP' })
+-- (Nvim 0.12+: nvim-lspconfig no longer defines :LspRestart/:LspInfo - use the built-in :lsp command / checkhealth)
+vim.keymap.set('n', '<leader>lr', function()
+  vim.cmd(vim.fn.has('nvim-0.12') == 1 and 'lsp restart' or 'LspRestart')
+end, { noremap = true, silent = true, desc = 'Restart LSP' })
 -- Show LSP info: Display details about active language servers for the current buffer
-vim.keymap.set('n', '<leader>li', ':LspInfo<CR>', { noremap = true, silent = true, desc = 'Show LSP info' })
+vim.keymap.set('n', '<leader>li', ':checkhealth vim.lsp<CR>', { noremap = true, silent = true, desc = 'Show LSP info' })
 -- Format code: Auto-format the current buffer per language server rules
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, { noremap = true, silent = true, desc = 'Format buffer' })
--- ===> GO N' SHOW
--- [⚡] Go to definition: Jump to where a symbol (function, variable, etc.) is defined
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true, silent = true, desc = 'Go to definition' })
--- [⚡] Go to declaration: Navigate to the declaration of a symbol (useful in C/C++ or similar)
-vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { noremap = true, silent = true, desc = 'Go to declaration' })
--- [⚡] Find references: List all places a symbol is used in the project
-vim.keymap.set('n', 'gr', vim.lsp.buf.references, { noremap = true, silent = true, desc = 'Find references' })
--- Implementation: Go to the implementation of a symbol (e.g., for interfaces or abstract methods)
-vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = 'Go to implementation' })
--- [⚡] Hover documentation: Show docs or type info for the symbol under the cursor
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, { noremap = true, silent = true, desc = 'Hover documentation' })
+
+-- Lint: Run nvim-lint's linters for this filetype (not <leader>l - that's a prefix, so it'd wait for timeoutlen)
+vim.keymap.set("n", "<leader>lc", function()
+  require("lint").try_lint()
+end, { desc = "Trigger linting for current file" })
+
+-- Inlay hints: Toggle inline type/parameter hints for the current buffer
+vim.keymap.set('n', '<leader>lh', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+end, { noremap = true, silent = true, desc = 'Toggle inlay hints' })
+
+
+-- ===> GO N' SHOW + ACTIONS (buffer-local, only set once a language server attaches)
+-- Drop Neovim's built-in gr* LSP maps (grn/gra/grr/gri/grt/grx) - they'd make `gr` below wait for timeoutlen
+for _, lhs in ipairs({ 'grn', 'gra', 'grr', 'gri', 'grt', 'grx' }) do
+  pcall(vim.keymap.del, 'n', lhs)
+end
+pcall(vim.keymap.del, 'x', 'gra')
+
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('lsp_keymaps', { clear = true }),
+  callback = function(args)
+    local tb = require('telescope.builtin')
+    local map = function(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, noremap = true, silent = true, desc = desc })
+    end
+    -- Telescope jumps straight there on a single result, or opens a picker w/ preview on several
+    -- [⚡] Go to definition: Jump to where a symbol (function, variable, etc.) is defined
+    map('n', 'gd', tb.lsp_definitions, 'Go to definition')
+    -- [⚡] Go to declaration: Navigate to the declaration of a symbol (useful in C/C++ or similar)
+    map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
+    -- [⚡] Find references: List all places a symbol is used in the project
+    map('n', 'gr', function() tb.lsp_references({ include_declaration = false }) end, 'Find references')
+    -- Implementation: Go to the implementation of a symbol (e.g., for interfaces or abstract methods)
+    map('n', 'gi', tb.lsp_implementations, 'Go to implementation')
+    -- Type definition: Go to the definition of the symbol's type
+    map('n', 'gt', tb.lsp_type_definitions, 'Go to type definition')
+    -- [⚡] Hover documentation: Show docs or type info for the symbol under the cursor
+    map('n', 'gh', vim.lsp.buf.hover, 'Hover documentation')
+    map('n', 'K', vim.lsp.buf.hover, 'Hover documentation')
+    -- Signature help: Display function signature and parameters (insert mode: blink's <C-k>)
+    map('n', 'gs', vim.lsp.buf.signature_help, 'Signature help')
+    map('n', '<C-k>', vim.lsp.buf.signature_help, 'Signature help')
+    -- Rename symbol: Refactor a symbol's name across the project
+    map('n', '<leader>rn', vim.lsp.buf.rename, 'Rename symbol')
+
+    -- Code meybinds
+    -- Code actions: Apply fixes or refactorings (e.g., fix imports, extract code)
+    map({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, 'Code action')
+    -- Code lens: Run the code lens on the current line (e.g., "run test", "N references") - replaces built-in grx
+    map('n', '<leader>cl', vim.lsp.codelens.run, 'Run code lens')
+    -- Workspace symbols: Search for symbols (functions, classes, etc.) across the project
+    map('n', '<leader>cs', tb.lsp_dynamic_workspace_symbols, 'Workspace symbols')
+  end,
+})
+
+
+-- _______________________ Completion (blink.cmp) __________________________
+-- blink.cmp builds its mappings once during setup, so these can't be vim.keymap.set calls - plugins/lsp.lua passes
+-- M.completion / M.cmdline_completion to blink's setup. preset = 'none' means only the keys listed here exist.
+-- Each key runs its commands in order until one succeeds; 'fallback' = do the key's normal (non-blink) action.
+-- Commands: :h blink-cmp-config-keymap
+-- Insert mode
+M.completion = {
+  preset = 'none',
+  ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' }, -- Open menu / toggle docs for the selected item
+  ['<C-e>'] = { 'cancel', 'fallback' },                                    -- Close menu and undo the preview
+  ['<CR>'] = { 'accept', 'fallback' },                                     -- Accept the selected item
+  ['<C-y>'] = { 'select_and_accept', 'fallback' },                         -- Accept (picks the first item if none selected)
+  ['<Up>'] = { 'select_prev', 'fallback' },                                -- Previous item
+  ['<Down>'] = { 'select_next', 'fallback' },                              -- Next item
+  ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },                   -- Previous item
+  ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },                   -- Next item
+  ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },                   -- Scroll docs up
+  ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },                 -- Scroll docs down
+  ['<Tab>'] = { 'snippet_forward', 'fallback' },                           -- Next snippet placeholder
+  ['<S-Tab>'] = { 'snippet_backward', 'fallback' },                        -- Previous snippet placeholder
+  ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },          -- Toggle signature help
+}
+-- Command line (: / ? search)
+M.cmdline_completion = {
+  preset = 'none',
+  ['<Tab>'] = { 'show_and_insert_or_accept_single', 'select_next' },       -- Open menu and insert first item / next item
+  ['<S-Tab>'] = {                                                          -- Open menu and insert last item / previous item
+    function(cmp) return cmp.show_and_insert_or_accept_single({ initial_selected_item_idx = -1 }) end,
+    'select_prev',
+  },
+  ['<C-space>'] = { 'show', 'fallback' },                                  -- Open menu
+  ['<C-n>'] = { 'select_next', 'fallback' },                               -- Next item
+  ['<C-p>'] = { 'select_prev', 'fallback' },                               -- Previous item
+  ['<Right>'] = { 'select_next', 'fallback' },                             -- Next item
+  ['<Left>'] = { 'select_prev', 'fallback' },                              -- Previous item
+  ['<C-y>'] = { 'select_and_accept', 'fallback' },                         -- Accept
+  ['<C-e>'] = { 'cancel', 'fallback' },                                    -- Close menu and undo the preview
+  ['<End>'] = { 'hide', 'fallback' },                                      -- Close menu, keep what's typed
+}
+
+
 -- ===> DIAGNOSTICS
 -- [Touble-Superceded] List diagnostics: Show all diagnostics for the project in the quickfix list
 vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { noremap = true, silent = true, desc = 'Diagnostics → quickfix list' })
 -- Disable diagnostics for current buffer: Turn off LSP diagnostics for the current file
-vim.keymap.set('n', '<leader>dd', function() vim.diagnostic.disable(0) end, { noremap = true, silent = true, desc = 'Disable diagnostics (buffer)' })
--- Enable diagnostics for current buffer: Re-enable LSP diagnostics for the current file
-vim.keymap.set('n', '<leader>de', function() vim.diagnostic.enable(0) end, { noremap = true, silent = true, desc = 'Enable diagnostics (buffer)' })
--- Disable diagnostics for current line: Suppress diagnostics for the line under the cursor
-vim.keymap.set('n', '<leader>dld', function() vim.diagnostic.disable(0, vim.api.nvim_win_get_cursor(0)[1] - 1) end, { noremap = true, silent = true, desc = 'Disable diagnostics (current line)' })
--- Enable diagnostics for current line: Re-enable diagnostics for the line under the cursor
-vim.keymap.set('n', '<leader>dle', function() vim.diagnostic.enable(0, vim.api.nvim_win_get_cursor(0)[1] - 1) end, { noremap = true, silent = true, desc = 'Enable diagnostics (current line)' })
+vim.keymap.set('n', '<leader>de', function() vim.diagnostic.enable(true, { bufnr = 0 }) end, { noremap = true, silent = true, desc = 'Enable diagnostics (buffer)' })
 -- [⚡] Open diagnostic float: Show detailed diagnostics for the current line
+vim.keymap.set('n', '<leader>dd', function() vim.diagnostic.enable(false, { bufnr = 0 }) end, { noremap = true, silent = true, desc = 'Disable diagnostics (buffer)' })
+-- Enable diagnostics for current buffer: Re-enable LSP diagnostics for the current file
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.open_float, { noremap = true, silent = true, desc = 'Diagnostics float (current line)' })
 -- [⚡] Next diagnostic: Jump to the next error, warning, or hint in the file
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { noremap = true, silent = true, desc = 'Next diagnostic' })
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, { noremap = true, silent = true, desc = 'Next diagnostic' })
+vim.keymap.set('n', '<leader>dn', function() vim.diagnostic.jump({ count = 1, float = true }) end, { noremap = true, silent = true, desc = 'Next diagnostic' })
 -- [⚡] Previous diagnostic: Jump to the previous error, warning, or hint in the file
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { noremap = true, silent = true, desc = 'Previous diagnostic' })
--- ===> OTHER
--- Signature help: Display function signature and parameters while typing
-vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { noremap = true, silent = true, desc = 'Signature help' })
--- Rename symbol: Refactor a symbol's name across the project
-vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { noremap = true, silent = true, desc = 'Rename symbol' })
--- Code actions: Apply fixes or refactorings (e.g., fix imports, extract code)
-vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { noremap = true, silent = true, desc = 'Code action' })
--- Workspace symbols: Search for symbols (functions, classes, etc.) across the project
-vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, { noremap = true, silent = true, desc = 'Workspace symbols' })
-vim.keymap.set("n", "<leader>l", function()
-  lint.try_lint()
-end, { desc = "Trigger linting for current file" })
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, { noremap = true, silent = true, desc = 'Previous diagnostic' })
+vim.keymap.set('n', '<leader>dp', function() vim.diagnostic.jump({ count = -1, float = true }) end, { noremap = true, silent = true, desc = 'Previous diagnostic' })
 
 -- _______________________ Trouble __________________________
-vim.keymap.set("n", "<leader>tT", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Toggle Trouble diagnostics" })
-vim.keymap.set("n", "<leader>tt", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "Toggle Trouble diagnostics (current buffer)" })
-vim.keymap.set("n", "<leader>tr", "<cmd>Trouble lsp_references toggle<CR>", { desc = "Toggle Trouble LSP references" })
-vim.keymap.set("n", "<leader>td", "<cmd>Trouble lsp_definitions toggle<CR>", { desc = "Toggle Trouble LSP definitions" })
-vim.keymap.set("n", "<leader>tq", "<cmd>Trouble quickfix toggle<CR>", { desc = "Toggle Trouble quickfix" })
-vim.keymap.set("n", "<leader>ts", "<cmd>Trouble symbols toggle focus=false<CR>", { desc = "Toggle Trouble symbols" })
-vim.keymap.set("n", "<leader>tc", "<cmd>Trouble close<CR>", { desc = "Close Trouble" })
-vim.keymap.set("n", "<leader>tn", ":Trouble diagnostics next<CR>", { desc = "Next Trouble item" })
-vim.keymap.set("n", "<leader>tp", ":Trouble diagnostics prev<CR>", { desc = "Previous Trouble item" })
+vim.keymap.set("n", "<leader>dte", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Open Trouble diagnostics" })
+vim.keymap.set("n", "<leader>dtd", "<cmd>Trouble close<CR>", { desc = "Close Trouble" })
+vim.keymap.set("n", "<leader>dtt", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "Toggle Trouble diagnostics (current buffer)" })
+vim.keymap.set("n", "<leader>dtr", "<cmd>Trouble lsp_references toggle<CR>", { desc = "Toggle Trouble LSP references" })
+vim.keymap.set("n", "<leader>dtD", "<cmd>Trouble lsp_definitions toggle<CR>", { desc = "Toggle Trouble LSP definitions" })
+vim.keymap.set("n", "<leader>dtq", "<cmd>Trouble quickfix toggle<CR>", { desc = "Toggle Trouble quickfix" })
+vim.keymap.set("n", "<leader>dts", "<cmd>Trouble symbols toggle focus=false<CR>", { desc = "Toggle Trouble symbols" })
+vim.keymap.set("n", "<leader>dtn", ":Trouble diagnostics next<CR>", { desc = "Next Trouble item" })
+vim.keymap.set("n", "<leader>dtp", ":Trouble diagnostics prev<CR>", { desc = "Previous Trouble item" })
 
 -- _______________________ Undotree __________________________
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { noremap = true, silent = true, desc = 'Toggle undotree' })
+
+return M

@@ -1,35 +1,70 @@
 
  -- ~/.config/nvim/lua/plugins/lsp.lua
  -- Configure Mason and Mason-LSPConfig for managing LSP servers
+
+ -- Language servers to install (Mason) and enable (vim.lsp.enable)
+ local servers = {
+     "clangd",         -- C/C++
+     "perlnavigator",  -- Perl
+     "basedpyright",   -- Python (pyright fork that adds inlay hints)
+     "gopls",          -- Go
+     "sqls",           -- SQL
+     "ts_ls",          -- JavaScript/TypeScript
+     "rust_analyzer",  -- Rust
+     "bashls",         -- Bash
+     "lua_ls",         -- Lua
+     "html",           -- HTML
+     "cssls",          -- CSS
+     "zls",            -- Zig
+ }
+ -- These need their runtime on PATH to install/run, so only add them when it's there
+ if vim.fn.executable("ruby") == 1 then table.insert(servers, "ruby_lsp") end      -- Ruby
+ if vim.fn.executable("pwsh") == 1 then table.insert(servers, "powershell_es") end -- PowerShell
+
+ -- Linters to install (Mason package names) for nvim-lint (section E) - run with <leader>lc
+ -- Not here because they don't come from Mason: perlcritic (Perl, Arch pkg perl-perl-critic in pkg_lists/arch_base.txt),
+ --   clippy (Rust, via cargo), zsh -n (Zsh)
+ -- PowerShell has no nvim-lint linter - powershell_es already runs PSScriptAnalyzer as LSP diagnostics
+ local linters = {
+     "ruff",           -- Python
+     "pylint",         -- Python
+     "eslint_d",       -- JavaScript/TypeScript (only reports in projects with an eslint config)
+     "cpplint",        -- C/C++
+     "shellcheck",     -- Bash/sh
+     "selene",         -- Lua
+     "golangci-lint",  -- Go
+     "sqlfluff",       -- SQL
+     "htmlhint",       -- HTML
+     "biome",          -- CSS (works without a project config, unlike stylelint)
+     "zlint",          -- Zig
+     "statix",         -- Nix
+ }
+ if vim.fn.executable("ruby") == 1 then table.insert(linters, "rubocop") end       -- Ruby
+
  return {
 
 
-     -- A. Mason for managing LSP servers
+     -- A. Mason for managing LSP servers and linters
    {
      'williamboman/mason.nvim',
-     -- dependencies = {
-     --     "WhoIsSethDaniel/mason-tool-installer.nvim",
-     --     "neovim/nvim-lspconfig", -- Add lspconfig to ensure compatibility
-     --  },
      config = function()
          require('mason').setup()
-     --     -- INSTALL LINTERs
-     --     require("mason-tool-installer").setup({
-     --       ensure_installed = {
-     --         -- Linters for nvim-lint
-     --         "pylint",        -- Python
-     --         "ruff",          -- Python
-     --         "eslint_d",      -- JavaScript/TypeScript
-     --         "vale",          -- Markdown
-     --         "cppcheck",      -- C
-     --         "perlcritic",    -- Perl
-     --         "shellcheck",    -- Bash/Zsh
-     --         "luacheck",      -- Lua
-     --       },
-     --       auto_update = true,
-     --       run_on_start = true,
-     --     })
-     --
+     end,
+   },
+
+     -- A2. Install the linters (list is at the top of this file) - LSPs are installed by section B
+   {
+     'WhoIsSethDaniel/mason-tool-installer.nvim',
+     dependencies = { 'williamboman/mason.nvim' },
+     config = function()
+         require('mason-tool-installer').setup({
+           ensure_installed = linters,
+           auto_update = true,
+           run_on_start = true,
+           -- Names above are already Mason package names, so skip the lspconfig-name lookup
+           -- (it also crashes against current mason-lspconfig, which renamed its mapping table)
+           integrations = { ['mason-lspconfig'] = false },
+         })
      end,
    },
 
@@ -37,27 +72,16 @@
      -- B. Bridge between Mason and nvim-lspconfig
    {
      'mason-org/mason-lspconfig.nvim',
-      version = "1.29.0", -- last version that supports Neovim 0.10
      dependencies = {
          'williamboman/mason.nvim',
          'neovim/nvim-lspconfig',                    -- Ensure nvim-lspconfig is a dependency
      },
      config = function()
 
-       -- INSTALL LSPs
+       -- INSTALL LSPs (list is at the top of this file)
        require('mason-lspconfig').setup {
-         ensure_installed = {
-             "pyright",        -- Python
-             "tsserver",       -- JavaScript/TypeScript
-             "bashls",         -- Bash
-             "clangd",         -- C/C++
-             "perlnavigator",  -- Perl
-             "lua_ls",         -- Lua
-             "html",           -- HTML
-             "cssls",          -- CSS
-             "rust_analyzer",  -- Rust
-             "zls"             -- Zig
-         },
+         ensure_installed = servers,
+         automatic_enable = false, -- servers are enabled explicitly in section D
        }
 
      end,
@@ -116,24 +140,7 @@
        ---@module 'blink.cmp'
        ---@type blink.cmp.Config
        opts = {
-         -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-         -- 'super-tab' for mappings similar to vscode (tab to accept)
-         -- 'enter' for enter to accept
-         -- 'none' for no mappings
-         --
-         -- All presets have the following mappings:
-         -- C-space: Open menu or open docs if already open
-         -- C-n/C-p or Up/Down: Select next/previous item
-         -- C-e: Hide menu
-         -- C-k: Toggle signature help (if signature.enabled = true)
-         --
-         -- See :h blink-cmp-config-keymap for defining your own keymap
-         keymap = { 
-                 preset = 'default', 
-                 ['<CR>'] = { 'accept', 'fallback' },
-                 ['<Tab>'] = { 'snippet_forward', 'fallback' },
-                 ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
-          },
+         -- Completion keymaps (insert + command line) live in config/keymaps.lua - added in `config` below
 
          appearance = {
            -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -167,6 +174,9 @@
 
          -- Default list of enabled providers defined so that you can extend it
          -- elsewhere in your config, without redefining it, due to `opts_extend`
+         -- Show function signature/params while typing inside a call (C-k toggles)
+         signature = { enabled = true },
+
          sources = {
            default = { 'lsp', 'path', 'snippets', 'buffer' },
          },
@@ -179,7 +189,15 @@
          fuzzy = { implementation = "prefer_rust_with_warning" },
 
        },
-       opts_extend = { "sources.default" }
+       opts_extend = { "sources.default" },
+       config = function(_, opts)
+         -- blink only reads its keymap during setup, so pull it from config/keymaps.lua here
+         -- (this runs keymaps.lua a little earlier than init.lua would; init.lua's require then reuses it)
+         local keymaps = require('config.keymaps')
+         opts.keymap = keymaps.completion
+         opts.cmdline = vim.tbl_deep_extend('force', opts.cmdline or {}, { keymap = keymaps.cmdline_completion })
+         require('blink.cmp').setup(opts)
+       end,
  },
 
  -- D. nvim-lspconfig for configuring LSP servers
@@ -187,71 +205,65 @@
    {
      'neovim/nvim-lspconfig',
      dependencies = { 
-       'williamboman/mason-lspconfig.nvim',
+       'mason-org/mason-lspconfig.nvim',
        -- 'hrsh7th/cmp-nvim-lsp', -- Ensure cmp-nvim-lsp is available
        'saghen/blink.cmp'
      },
      config = function()
-       -- Keep your original configuration
        -- vim.diagnostic.enable(false) -- Uncomment to disable diagnostics on startup
 
-       -- Add nvim-cmp capabilities to LSP
-       -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-       -- Add blink-cmp capabilities to LSP
-       local capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
-
-       -- Define common keybindings for LSP
-       local on_attach = function(client, bufnr)
-         local bufopts = { noremap=true, silent=true, buffer=bufnr }
-         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-         vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-         vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
-         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-       end
-
-       -- Configure LSP servers
-       -- local lspconfig = require('nvim-lspconfig')
-       -- Module itself is actually called 'lspconfig' (see docs: https://github.com/neovim/nvim-lspconfig)
-       local lspconfig = require('lspconfig')
+       -- Defaults for every server: blink-cmp completion capabilities
+       -- (LSP keymaps live in config/keymaps.lua)
+       vim.lsp.config("*", {
+         capabilities = require('blink.cmp').get_lsp_capabilities(),
+       })
 
        -- Lua LSP
        vim.lsp.config("lua_ls", {
-       -- [DEPRECATED] lspconfig.lua_ls.setup {
-         on_attach = on_attach,
-         capabilities = capabilities,
          settings = {
            Lua = {
              diagnostics = {
                globals = { 'vim' }, -- Recognize 'vim' global
              },
+             hint = { enable = true }, -- inlay hints
            },
          },
        })
 
-       -- Python LSP (pyright)
-       vim.lsp.config("pyright", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- Python LSP (basedpyright) - inlay hints (variable/return types, argument names) are on by default
+       vim.lsp.config("basedpyright", {
          settings = {
-            python = {
+            basedpyright = {
               analysis = {
-                -- already have these — good
+                typeCheckingMode = "standard", -- same strictness as pyright (basedpyright defaults to the much noisier "recommended")
                 diagnosticMode = "openFilesOnly",
                 useLibraryCodeForTypes = true,
                 autoSearchPaths = true,
-
-                -- Add these to reduce log spam / analysis chatter
-                logLevel = "Warning",   -- or "Error"
+                logLevel = "Warning",   -- reduce log spam / analysis chatter
               }
             }
           }
        })
 
-       -- TypeScript LSP (ts_ls)
+       -- TypeScript/JavaScript LSP (ts_ls) - inlay hints are off unless requested here
+       local ts_inlay_hints = {
+         includeInlayParameterNameHints = "all",
+         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+         includeInlayFunctionParameterTypeHints = true,
+         includeInlayVariableTypeHints = true,
+         includeInlayPropertyDeclarationTypeHints = true,
+         includeInlayFunctionLikeReturnTypeHints = true,
+         includeInlayEnumMemberValueHints = true,
+       }
        vim.lsp.config("ts_ls", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+         settings = {
+           typescript = { inlayHints = ts_inlay_hints },
+           javascript = { inlayHints = ts_inlay_hints },
+         },
+       })
+
+       -- Perl LSP (perlnavigator)
+       vim.lsp.config("perlnavigator", {
          settings = {
              perlnavigator = {
                  -- Path to your perl executable (usually auto-detected, but explicit helps)
@@ -277,6 +289,8 @@
                      -- vim.fn.expand("./lib"),                       -- project-local lib/
                      -- "/path/to/shared/perl/modules",
                      "$workspaceFolder",          -- ← this adds the folder you opened Neovim in
+                     -- NOTE: <project>/lib is added automatically. A *relative* `use lib "lib"` in your code
+                     -- breaks go-to-definition into your own modules; use `use lib "$FindBin::Bin/lib"` instead
                  },
 
                  -- Optional: disable if Perl::Critic is too noisy/slow on large codebases
@@ -293,47 +307,73 @@
          },
        })
 
-       -- Bash LSP (blashls)
-       vim.lsp.config("bashls", {
-       -- lspconfig.bashls.setup {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- Go LSP (gopls) - inlay hints are off unless requested here
+       vim.lsp.config("gopls", {
+         settings = {
+           gopls = {
+             hints = {
+               assignVariableTypes = true,
+               compositeLiteralFields = true,
+               constantValues = true,
+               functionTypeParameters = true,
+               parameterNames = true,
+               rangeVariableTypes = true,
+             },
+           },
+         },
        })
 
-       -- C LSP (clangd)
-       vim.lsp.config("clangd", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- Ruby LSP (ruby_lsp) - turn on its inlay hints
+       vim.lsp.config("ruby_lsp", {
+         init_options = {
+           featuresConfiguration = {
+             inlayHint = { implicitHashValue = true, implicitRescue = true },
+           },
+         },
        })
 
-       -- Perl LSP (perlnavigator)
-       vim.lsp.config("perlnavigator", {
-         on_attach = on_attach,
-         capabilities = capabilities,
-       })
-       vim.lsp.config("html", {
-         on_attach = on_attach,
-         capabilities = capabilities,
-       })
-       vim.lsp.config("cssls", {
-         on_attach = on_attach,
-         capabilities = capabilities,
-       })
-       -- Rust LSP (rust_analyzer)
-       vim.lsp.config("rust_analyzer", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- PowerShell LSP (powershell_es) - point it at Mason's install
+       vim.lsp.config("powershell_es", {
+         bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services",
        })
 
-       -- Zig
-       vim.lsp.config("zls", {
-         on_attach = on_attach,
-         capabilities = capabilities,
+       -- clangd, rust_analyzer, zls: inlay hints on by default; bashls, html, cssls, sqls, perlnavigator: no inlay hint support
+
+       -- Inlay hints: turn on for any server that supports them (toggle with <leader>lh)
+       vim.api.nvim_create_autocmd("LspAttach", {
+         group = vim.api.nvim_create_augroup("lsp_inlay_hints", { clear = true }),
+         callback = function(args)
+           local client = vim.lsp.get_client_by_id(args.data.client_id)
+           if client and client:supports_method("textDocument/inlayHint") then
+             vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+           end
+         end,
        })
 
+       -- Code lens: show actionable lenses above lines for every server that supports them (run with <leader>cl)
+       -- (vim.lsp.codelens.enable is Nvim 0.12+; on 0.11 lenses must be refreshed manually per buffer)
+       if vim.lsp.codelens.enable then
+         vim.lsp.codelens.enable(true)
+       else
+         vim.api.nvim_create_autocmd("LspAttach", {
+           group = vim.api.nvim_create_augroup("lsp_codelens", { clear = true }),
+           callback = function(args)
+             local client = vim.lsp.get_client_by_id(args.data.client_id)
+             if not (client and client:supports_method("textDocument/codeLens")) then
+               return
+             end
+             vim.lsp.codelens.refresh({ bufnr = args.buf })
+             vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+               group = vim.api.nvim_create_augroup("lsp_codelens_" .. args.buf, { clear = true }),
+               buffer = args.buf,
+               callback = function() vim.lsp.codelens.refresh({ bufnr = args.buf }) end,
+             })
+           end,
+         })
+       end
 
-     -- Now that LSPs have been configured, they need to be enabled 
-     vim.lsp.enable({'lua_ls', 'pyright','ts_ls','bashls','clangd','perlnavigator','html','cssls','rust_analyzer','zls'})
+       -- Now that LSPs have been configured, they need to be enabled
+       vim.lsp.enable(servers)
 
      end,
    },
@@ -348,19 +388,65 @@
              local lint = require("lint")
 
              -- Configure linters by filetype
+             -- (linters are installed by mason-tool-installer - list at the top of this file)
              lint.linters_by_ft = {
                python = { "pylint", "ruff" },
                javascript = { "eslint_d" },
+               javascriptreact = { "eslint_d" },
                typescript = { "eslint_d" },
+               typescriptreact = { "eslint_d" },
                -- markdown = { "vale" },
                c = { "cpplint" },
+               cpp = { "cpplint" },
                perl = { "perlcritic" },
                sh = { "shellcheck" },
-               zsh = { "shellcheck" },
-               lua = { "luacheck" },
+               bash = { "shellcheck" },
+               zsh = { "zsh" },              -- shellcheck refuses zsh scripts, so just syntax-check with zsh -n
+               lua = { "selene" },
+               go = { "golangcilint" },
+               sql = { "sqlfluff" },
+               rust = { "clippy" },
+               html = { "htmlhint" },
+               css = { "biomejs" },
+               zig = { "zlint" },
+               ruby = { "rubocop" },
+               nix = { "statix" },
              }
 
-             -- :MasonInstall pylint ruff eslint_d vale cpplint  shellcheck luacheck
+             -- sqlfluff refuses to run without a dialect - default to ansi (a project .sqlfluff can't override
+             -- a CLI --dialect, so change it here if you mostly write mysql/postgres/sqlite/tsql/...)
+             lint.linters.sqlfluff.args = { "lint", "--format=json", "--dialect=ansi", "-" }
+
+             -- zsh: nvim-lint pipes the buffer to /dev/stdin, which zsh can't open from Neovim's pipe - check the file instead
+             lint.linters.zsh.stdin = false
+             lint.linters.zsh.args = { "--no-exec", "--no-rcs", "--no-globalrcs" }
+
+             -- clippy: cargo exits 101 on deny-level lints/compile errors, which nvim-lint would report as a failure
+             -- (it matches diagnostics by path relative to Neovim's cwd, so open Neovim from the crate root)
+             lint.linters.clippy.ignore_exitcode = true
+
+             -- biome: the stock parser only picks up errors ("×") and drops warnings - use its GitHub reporter instead
+             lint.linters.biomejs.args = { "lint", "--reporter=github" }
+             lint.linters.biomejs.parser = require("lint.parser").from_pattern(
+               "^::(%w+) title=([^,]+),file=([^,]+),line=(%d+),endLine=(%d+),col=(%d+),endColumn=(%d+)::(.+)$",
+               { "severity", "code", "file", "lnum", "end_lnum", "col", "end_col", "message" },
+               { error = vim.diagnostic.severity.ERROR, warning = vim.diagnostic.severity.WARN, notice = vim.diagnostic.severity.INFO },
+               { source = "biomejs" }
+             )
+
+             -- selene: without a config it flags `vim` as undefined - projects with a selene.toml use theirs, everything
+             -- else runs from selene/ in this config (selene resolves its `std` file relative to the working dir)
+             local selene = lint.linters.selene
+             lint.linters.selene = function()
+               local cwd = vim.fs.root(0, "selene.toml") or (vim.fn.stdpath("config") .. "/selene")
+               return vim.tbl_extend("force", selene, { cwd = cwd })
+             end
+
+             -- perlcritic: use Arch's perl-perl-critic directly - on WSL a Windows perlcritic can come first on PATH and won't run
+             if vim.fn.executable("/usr/bin/vendor_perl/perlcritic") == 1 then
+               lint.linters.perlcritic.cmd = "/usr/bin/vendor_perl/perlcritic"
+             end
+
              -- Autocommand group for linting
              -- local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
              -- vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
@@ -370,10 +456,7 @@
              --   end,
              -- })
 
-             -- Keymap for manual linting
-             vim.keymap.set("n", "<leader>l", function()
-               lint.try_lint()
-             end, { desc = "Trigger linting for current file" })
+             -- Manual lint keymap (<leader>lc) lives in config/keymaps.lua
 
        end,
      }
@@ -395,7 +478,7 @@
      -- SERVER NAME => :Mason or :lua print(vim.inspect(require('mason-lspconfig').get_available_servers()))
 
  -- 2: [LSPCONFIG] (Section D) Configure new language server
-     -- In this file, add new setup entry to lspconfig.xxx - actually vim.lsp.config("SERVERNAME")
+     -- Add the server name to `servers` at the top of this file, plus a vim.lsp.config("SERVERNAME") entry if it needs settings
      -- SERVER NAME => :help lspconfig-all or https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
  -- 3: Run Lazy Sync or restart neovim
@@ -403,8 +486,8 @@
 
 
  -- Installing Linters
- -- Can be done through this config file, but tricky, easier just to run this
- -- :MasonInstall pylint ruff eslint_d vale cpplint  shellcheck luacheck
+ -- Add the Mason package name to `linters` at the top of this file, and the nvim-lint linter name to
+ -- linters_by_ft in section E (names can differ, e.g. Mason "golangci-lint" = nvim-lint "golangcilint")
 
 
 

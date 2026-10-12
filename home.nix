@@ -86,9 +86,9 @@
             gc     = "git commit";
             gp     = "git push";
             gco    = "git checkout";
-            update = "home-manager switch -b backup --flake ~/nix-config#zeno";
+            update = "home-manager switch -b backup --flake ~/.config/home-manager#$USER";
             rebuild = "update";
-            flake-check = "nix flake check ~/nix-config";
+            flake-check = "nix flake check ~/.config/home-manager";
           };
 
 
@@ -323,10 +323,19 @@
     #  Run ad-hoc shell cpmmands
     # ────────────────────────────────────────────────────────────────
 	home.activation = { 
+
         downloadBatTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-           run mkdir -p "$(bat --config-dir)/themes"
-           run wget -P "$(bat --config-dir)/themes" https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
+        batThemeDir="$(${pkgs.bat}/bin/bat --config-dir)/themes"
+        if [ ! -f "$batThemeDir/Catppuccin Mocha.tmTheme" ]; then
+            run mkdir -p "$batThemeDir"
+            run ${pkgs.wget}/bin/wget \
+            -P "$batThemeDir" \
+            https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme
+        else
+            verboseEcho "Bat theme Catppuccin Mocha already present, skipping download"
+        fi
         '';
+
 
 		# touchGrass = lib.hm.dag.entryAfter ["writeBoundary"] '' 
 		# touch grass.txt # creates ~/grass.txt

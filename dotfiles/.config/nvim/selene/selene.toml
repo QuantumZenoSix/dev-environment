@@ -1,0 +1,6 @@
+# Default selene config for Lua files in projects without their own selene.toml (see nvim-lint in lua/plugins/lsp.lua).
+# selene looks up `std` relative to its working directory, so nvim-lint runs selene from this folder.
+std = "vim"
+
+[rules]
+mixed_table = "allow"   # lazy.nvim specs mix { "plugin/name", opts = ... } by design

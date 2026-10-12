@@ -17,7 +17,7 @@ BSH | gt_show_merges | Shows recent merges with DEV- ticket pattern.
 BSH | gt_stage_and_commit | Stages all changes and commits with a message.
 BSH | nv_clear_swaps | Removes Neovim swap files.
 BSH | nv_edit_conf | Opens Neovim config directory in nvim.
-BSH | nv_restore_owner | Cleans up Neovim lazy-lock files (ownership fix helper).
+BSH | nv_clear_lockfile | Removes deployed Neovim lazy-lock.json (and .backup copies) before a HM switch.
 BSH | nv_update_lazy | Builds and installs latest stable Neovim from source.
 BSH | nx_make_dev_flake | Creates a basic Nix devShell flake + direnv.
 BSH | nx_remove_home_manager | Uninstalls and cleans up Home Manager.

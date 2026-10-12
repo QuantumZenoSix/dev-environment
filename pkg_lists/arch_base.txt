@@ -34,11 +34,13 @@ openssh
 openssl           # libssl-dev: Crypto
 p7zip  			# p7zip-full: 7zip compression 
 perl 
+perl-perl-critic   # perlcritic: Perl linter (nvim-lint)
 pkgconf  		# pkg-config: Build helper
 rsync
 sed    			# sed: Text processor, base 
 sudo
 tar    			# tar: Archiver, base system 
+zip             
 unzip  			# unzip: Zip handler, base 
 wget  			# wget: Downloader, core for scripts 
 which 
