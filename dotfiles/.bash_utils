@@ -497,7 +497,12 @@ ut_o_create_systemd_service(){
 
 }
 
+ut_o_run_ollama_webui(){
+    sudo docker pull ghcr.io/open-webui/open-webui:main
+    sudo docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+}
 
+alias ollama_webui="ut_o_run_ollama_webui"
 
 # == FD
 # replace img
