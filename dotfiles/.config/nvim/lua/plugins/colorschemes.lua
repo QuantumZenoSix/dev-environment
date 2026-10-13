@@ -8,7 +8,7 @@ return {
     {"ntk148v/komau.vim"},
     {'shaunsingh/nord.nvim'},
     {'thedenisnikulin/vim-cyberpunk'},
-    {'nyoom-engineering/oxocarbon.nvim'},
+    -- {'nyoom-engineering/oxocarbon.nvim'},
     {'dracula/vim'},
     {'QuantumZenoSix/gothic-cyberpunk.vim'},
     {
