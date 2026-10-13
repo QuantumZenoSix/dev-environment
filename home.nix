@@ -23,6 +23,8 @@
         # direnv nix-direnv  # auto-load .envrc / dev shells
         # gitui lazygit      # TUIs for git
 
+        eza
+        bat
     ];
 
 
@@ -76,8 +78,20 @@
 
 
 
+          #bat.enable = true;
+          # eza.enable = true;
+          # eza.enableZshIntegration = true;
+          # eza.icons = "auto";
+          # eza.git = true;
 
-
+         # eza = {
+         #      enable = true;
+         #      enableZshIntegration = true;
+         #      icons = "auto";
+         #      git = true;
+         #  };
+         #
+         #
           shellAliases = {
             ll     = "eza -la --icons --git";
             ls     = "eza --icons";
@@ -102,18 +116,6 @@
           #If you prefer pure zsh without oh-my-zsh → comment oh-my-zsh and use zsh plugins instead zplug or zinit can also be used via programs.zsh.plugins
         };
 
-
-        direnv = {
-            enable = true;
-            enableZshIntegration = true;
-            nix-direnv.enable = true;   # much faster than vanilla direnv + nix
-        };
-
-        bat.enable = true;
-        eza.enable = true;
-        eza.enableZshIntegration = true;
-        eza.icons = "auto";
-        eza.git = true;
 
         # Think this may require zsh to be installed via nix
         # bash.enable = true;
@@ -201,6 +203,12 @@
          #   '';
          # };
 
+        direnv = {
+            enable = true;
+            enableZshIntegration = true;
+            nix-direnv.enable = true;   # much faster than vanilla direnv + nix
+        };
+
 
     # END Programs
     };
@@ -247,7 +255,6 @@
         # ───────────────────────────────────────────────
         # single files in $HOME
         ".bashrc".source               = ./dotfiles/.bashrc;
-        ".zshrc".source                = ./dotfiles/.zshrc;
         ".zsh_customizations".source   = ./dotfiles/.zsh_customizations;
         ".p10k.zsh".source             = ./dotfiles/.p10k.zsh;
         ".bash_aliases".source         = ./dotfiles/.bash_aliases;
