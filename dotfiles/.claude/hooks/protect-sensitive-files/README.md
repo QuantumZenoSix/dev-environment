@@ -15,7 +15,8 @@ other protected files.
 
 | Rule | Action | Patterns |
 |---|---|---|
-| `env-file` | deny | `.env`, `.env.*`, `*.env`, `.envrc` |
+| `env-file` | deny | `.env`, `.env.*`, `*.env` |
+| `direnv-file` | **ask** | `.envrc`. Usually just `use flake`, but it can export secrets. |
 | `ssh-private-key` | deny | `id_rsa`, `id_dsa`, `id_ecdsa`, `id_ed25519`, `id_*_sk`, `*.ppk` |
 | `private-key-or-cert` | deny | `*.pem`, `*.key`, `*.p12`, `*.pfx`, `*.p8`, `*.jks`, `*.keystore`, `*.kdbx` |
 | `credential-file` | deny | `.netrc`, `_netrc`, `.pgpass`, `.my.cnf`, `.git-credentials`, `.htpasswd`, `.vault-token`, `credentials.json`, `client_secret*.json`, `service-account*.json`, `secrets.yml`/`.yaml`, `*.tfstate`, `*.tfstate.backup` |

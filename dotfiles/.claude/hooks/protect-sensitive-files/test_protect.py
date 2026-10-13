@@ -49,7 +49,7 @@ class Sandbox(unittest.TestCase):
 class BuiltInRules(Sandbox):
     def test_exact_names_and_globs_are_denied(self):
         self.assertProtected([
-            ".env", ".env.local", ".env.production", "config/prod.env", ".envrc",
+            ".env", ".env.local", ".env.production", "config/prod.env",
             "id_rsa", "deploy/id_ed25519", "server.pem", "tls/server.key", "cert.p12",
             "keystore.jks", "vault.kdbx", ".netrc", ".pgpass", ".git-credentials",
             "credentials.json", "client_secret_123.json", "service-account-prod.json",
@@ -59,6 +59,9 @@ class BuiltInRules(Sandbox):
             "~/.config/gcloud/application_default_credentials.json", "~/.claude/.credentials.json",
             ".ENV", "ID_RSA",  # name rules are case-insensitive
         ])
+
+    def test_direnv_file_requires_approval(self):
+        self.assertProtected([".envrc", "sub/dir/.envrc", ".ENVRC"], "ask")
 
     def test_guard_configuration_requires_approval(self):
         self.assertProtected(["~/.claude/settings.json", "~/.claude/hooks/guard/guard.py"], "ask")

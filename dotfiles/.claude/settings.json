@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -I /home/zeno/.claude/hooks/guard-dangerous-commands/guard.py",
+            "command": "python3 -I \"$HOME/.claude/hooks/guard-dangerous-commands/guard.py\"",
             "timeout": 10,
             "onFailure": "block"
           }
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -I /home/zeno/.claude/hooks/protect-sensitive-files/protect.py",
+            "command": "python3 -I \"$HOME/.claude/hooks/protect-sensitive-files/protect.py\"",
             "timeout": 10,
             "onFailure": "block"
           }

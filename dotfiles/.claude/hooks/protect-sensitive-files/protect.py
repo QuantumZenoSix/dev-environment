@@ -31,7 +31,8 @@ PATH_FIELDS = ("file_path", "notebook_path", "path")
 
 # Built-in rules. Each pattern is documented in README.md.
 DEFAULT_RULES = [
-    ("env-file", "deny", [".env", ".env.*", "*.env", ".envrc"]),
+    ("env-file", "deny", [".env", ".env.*", "*.env"]),
+    ("direnv-file", "ask", [".envrc"]),  # often just `use flake`, but can export secrets
     ("ssh-private-key", "deny", ["id_rsa", "id_dsa", "id_ecdsa", "id_ed25519",
                                  "id_ecdsa_sk", "id_ed25519_sk", "*.ppk"]),
     ("private-key-or-cert", "deny", ["*.pem", "*.key", "*.p12", "*.pfx", "*.p8",
