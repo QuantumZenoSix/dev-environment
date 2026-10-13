@@ -381,7 +381,11 @@ function auto_nvm() {
 }
 
 function auto_list(){
-    ls -hal --color=always
+    if (( $+commands[eza] )); then
+        eza -la --icons --git --color=always
+    else
+        ls -hal --color=always
+    fi
 }
 
 # Register them all
