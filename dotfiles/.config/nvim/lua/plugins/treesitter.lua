@@ -5,7 +5,10 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    lazy = false,                  -- main branch does not support lazy-loading
+    lazy = false,                 -- main branch does not support lazy-loading
+    -- Pinned: last commit supporting Nvim 0.11 (c82bf96f "drop support for Nvim 0.11" uses
+    -- the 0.12-only vim.list.unique, which silently breaks install()). Unpin after upgrading to 0.12+.
+    -- commit = "90cd6580e720caedacb91fdd587b747a6e77d61f",
     build = ":TSUpdate",
     config = function()
         -- Installs missing parsers in the background (no-op for ones already installed)
