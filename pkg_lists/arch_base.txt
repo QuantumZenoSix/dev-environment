@@ -48,6 +48,7 @@ xclip  			# xclip: Clipboard, X11 integration
 xsel  			# xsel: Clipboard, X11 
 restic
 pnpm            # package manager
+git-filter-repo
 
 
 NOTE: Installing programming languages and tools...
