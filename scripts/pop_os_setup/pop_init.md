@@ -3,7 +3,7 @@
 
 ## Install Core Packages and cli/shell tools
 ```bash
-sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/init.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/init.sh -O -)"
 ```
 
 <br />

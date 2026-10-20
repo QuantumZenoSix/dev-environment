@@ -89,32 +89,32 @@ get_icon_path() {
 
     case "$app_name" in
         "wezterm")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/wezterm.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/wezterm.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
         "brave-browser")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/brave.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/brave.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
         "obsidian")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/obsidian.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/obsidian.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
         "steam")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/steam.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/steam.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
 
         "signal-assets")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/signal.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/signal.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
         "audacity")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/audacity.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/audacity.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
         "postman")
-            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/Dev-Environment/refs/heads/main/assets/icons/postman.png" \
+            wget -q "https://raw.githubusercontent.com/QuantumZenoSix/dev-environment/refs/heads/main/assets/icons/postman.png" \
                 -O "$icon_path" 2>/dev/null && downloaded=true
             ;;
         *)
