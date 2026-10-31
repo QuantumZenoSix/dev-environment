@@ -263,6 +263,7 @@
         ".tmux.conf".source            = ./dotfiles/.tmux.conf;
         ".vimrc".source                = ./dotfiles/.vimrc;
         ".wezterm.lua".source          = ./dotfiles/.wezterm.lua;
+        ".config/starship.toml".source = ./dotfiles/starship.toml;
         ".tmux_init.sh" = {
             source = ./dotfiles/.tmux_init.sh;
             executable = true;   # only this one probably needs +x
