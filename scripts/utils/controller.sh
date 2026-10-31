@@ -140,7 +140,9 @@ install_oh_my_zsh_and_powerline(){
         # Install fonts
         printf "[+] Installing fonts..."
         unzip -o ./fonts/JetBrainsMonoNerdFont-REGULARFONTSONLY.zip  -d ./fonts/
-        sudo cp ./fonts/*.ttf /usr/share/fonts/truetype/
+        # Not guaranteed to exist (minimal Debian, Arch uses /usr/share/fonts/TTF)
+        $SUDO mkdir -p /usr/share/fonts/truetype
+        $SUDO cp ./fonts/*.ttf /usr/share/fonts/truetype/
 
         if command -v zsh &> /dev/null
         then

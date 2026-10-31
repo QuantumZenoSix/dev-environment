@@ -10,14 +10,19 @@ printf "\n\n"
 
 cd ~/.config/home-manager
 
-if ! command -v apt >/dev/null || ! grep -qi ubuntu /etc/os-release; then
-    echo "This script requires an Ubuntu-based system"
+# shellcheck disable=SC1091
+. /etc/os-release
+
+if ! command -v apt >/dev/null || ! echo "$ID $ID_LIKE" | grep -qiE 'debian|ubuntu'; then
+    echo "This script requires a Debian/Ubuntu-based system"
     exit 1
 fi
 
-# shellcheck disable=SC1091
-. /etc/os-release
 UBUNTU_CODENAME="${UBUNTU_CODENAME:-$VERSION_CODENAME}"   # Mint/Pop report their own VERSION_ID, but the Ubuntu base codename
+
+# PPAs (and add-apt-repository/software-properties-common, which Debian 13 no longer ships) are Ubuntu-only
+IS_UBUNTU=0
+echo "$ID $ID_LIKE" | grep -qi ubuntu && IS_UBUNTU=1
 
 IS_WSL=0
 grep -qi microsoft /proc/version 2>/dev/null && IS_WSL=1
@@ -61,32 +66,42 @@ apt_has(){
 
 echo "[+] Updating package lists (Debian/Ubuntu)..."
 $SUDO apt update
-$SUDO apt install -y software-properties-common   # add-apt-repository
+[ "$IS_UBUNTU" -eq 1 ] && $SUDO apt install -y software-properties-common   # add-apt-repository
 
 echo "[+] Installing essential core packages..."    # Not essential per se, but essentials for my workflow,enchancements, and customizations
+# xz-utils: Nix installer tarball | lsb-release/gnupg: llvm.sh | fontconfig: fc-list/fc-cache (minimal Debian lacks all of these, Arch base has them)
 for pkg in \
     build-essential binutils bzip2 coreutils curl wget tar zip unzip sed gawk sudo less \
-    man-db rsync openssh-client openssl iproute2 net-tools dnsutils \
-    xclip xsel p7zip-full libc6 restic btop htop tree bc
+    man-db rsync openssh-client openssl iproute2 net-tools \
+    xclip xsel p7zip-full libc6 restic btop htop tree bc \
+    xz-utils lsb-release gnupg fontconfig git-filter-repo
 do
     apt_pkg "$pkg"
 done
+apt_pkg dnsutils bind9-dnsutils     # dnsutils is only a virtual package on Debian 13
 apt_pkg 7zip                        # Newer 7zip (24.04+), p7zip-full above covers older releases
 apt_pkg plocate mlocate locate      # mlocate (Arch)
-apt_pkg vim-gtk3 vim                # GUI vim with GTK/X11
+
+# Arch installs plain 'vim' - only pull in the GTK/X11 build (system clipboard) on desktop installs
+if [ "${INSTALL_SUBTYPE}" = "desktop" ]; then
+    apt_pkg vim-gtk3 vim
+else
+    apt_pkg vim
+fi
 
 # Hardware/networking pkgs are pointless inside WSL
 if [ "$IS_WSL" -eq 0 ]; then
     apt_pkg network-manager         # NetworkManager (Arch)
     apt_pkg iw
-    apt_pkg linux-firmware
+    apt_pkg linux-firmware firmware-linux firmware-linux-free   # Debian splits firmware by repo component
 fi
 
 # Languages
 echo "[+] Installing dev related packages..."    # Not essential per se, but essentials for my workflow,enchancements, and customizations
 for pkg in \
     python3 python3-pip python3-venv python3-pygments perl make gcc clang cmake ninja-build nasm \
-    libstdc++6 libc6-dev libc6-dev-i386 pkg-config gettext jq pandoc bash git-all direnv pipx
+    libstdc++6 libc6-dev libc6-dev-i386 pkg-config gettext jq pandoc bash git-all direnv pipx \
+    libperl-critic-perl
 do
     apt_pkg "$pkg"
 done
@@ -118,8 +133,8 @@ if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
     ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
 fi
 
-# Fastfetch only lands in the official repos on newer releases
-if ! apt_has fastfetch; then
+# Fastfetch only lands in the official repos on newer releases (Debian 13+ ships it; the PPA is Ubuntu-only)
+if ! apt_has fastfetch && [ "$IS_UBUNTU" -eq 1 ]; then
     $SUDO add-apt-repository -y ppa:zhangsongcui3371/fastfetch
     $SUDO apt update
 fi
@@ -277,13 +292,18 @@ apt_pkg libpipewire-0.3-dev && cargo install wiremix
 
 echo "[+] Installing Yazi..."
 if ! command -v yazi >/dev/null 2>&1; then
-    git clone https://github.com/sxyazi/yazi.git
+    # Build the latest release (what Arch's package ships), not whatever is on main
+    YAZI_TAG=$(curl -fsSL https://api.github.com/repos/sxyazi/yazi/releases/latest | jq -r .tag_name)
+    git clone --depth 1 --branch "$YAZI_TAG" https://github.com/sxyazi/yazi.git
     cd yazi
     cargo build --release --locked
     $SUDO  mv target/release/yazi target/release/ya /usr/local/bin/
     cd ..
     rm -rf yazi
 fi
+
+echo "[+] Installing Yazi bookmarks plugin..."
+ya pkg add dedukun/bookmarks
 
 
 # Go _______________________________________
@@ -380,7 +400,8 @@ $SUDO tailscale set --operator="$CALLING_USER"
 echo "[+] Installing Spotify Player..."
 # libpulse-dev (above) is enough to build the pulseaudio backend - it talks to pipewire-pulse fine.
 # Only pull in the PulseAudio daemon when PipeWire isn't running, otherwise it would replace pipewire-pulse.
-if ! systemctl --user is-active pipewire >/dev/null 2>&1; then
+# Skip it on headless installs entirely (Arch never installs a sound server there either).
+if [ "${INSTALL_SUBTYPE}" = "desktop" ] && ! systemctl --user is-active pipewire >/dev/null 2>&1; then
     apt_pkg pulseaudio
     apt_pkg pulseaudio-module-bluetooth
     apt_pkg pulseaudio-utils
