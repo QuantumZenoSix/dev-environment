@@ -197,17 +197,25 @@ copy_config_files(){
     cp -v -r ./dotfiles/.config/spotify-player  $HOME/.config/
 
     cp -v -f -r ./dotfiles/.config/lazygit  $HOME/.config/
+    cp -v -f -r ./dotfiles/.config/oyo  $HOME/.config/
+
+    # Same dirs home.nix deploys
+    cp -v -f -r ./dotfiles/.claude  $HOME/
+    cp -v -f -r ./dotfiles/.tmux  $HOME/
+    cp -v -f -r ./dotfiles/.vim  $HOME/
 
 
     # ---------------------------------------------------------------------
     # Copy starship profile
-    cp -v -f -r ./dotfiles/.config/starship.toml  $HOME/.config/
+    cp -v -f ./dotfiles/starship.toml  $HOME/.config/
 
     # Copy Yazi config
     cp -v -f -r ./dotfiles/.config/yazi  $HOME/.config/
 
-    # Install custom shell scripts and exes
-    sudo cp -v -f -r ./usr_local_bin/* /usr/local/bin/
+    # Install custom shell scripts and exes (if any are checked in)
+    if [ -d ./usr_local_bin ]; then
+        $SUDO cp -v -f -r ./usr_local_bin/* /usr/local/bin/
+    fi
 
     install_oh_my_zsh_and_powerline
 

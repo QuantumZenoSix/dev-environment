@@ -393,8 +393,8 @@ rm -f llvm.sh
 echo "[+] Installing tailscale..."
 curl -fsSL https://tailscale.com/install.sh | sh
 # Set taildrop location
-mkdir -p "/home/${CALLING_USER}/Downloads/taildrops"
-$SUDO tailscale file get "/home/${CALLING_USER}/Downloads/taildrops"
+mkdir -p "${HOME}/Downloads/taildrops"
+$SUDO tailscale file get "${HOME}/Downloads/taildrops"
 $SUDO tailscale set --operator="$CALLING_USER"
 
 echo "[+] Installing Spotify Player..."

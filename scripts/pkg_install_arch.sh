@@ -223,7 +223,7 @@ go build -o dcv
 sudo mv dcv /usr/local/bin/
 
 echo "[+] Installing Yazi bookmarks plugin..."
-sudo ya pkg add dedukun/bookmarks
+ya pkg add dedukun/bookmarks   # no sudo: it installs into the invoking user's ~/.config/yazi
 
 echo "[+] Installing Spotify Player dependencies..."
 
@@ -234,8 +234,8 @@ $SUDO npm install -g neohtop-cli
 # Install tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
 # Set taildrop location
-mkdir -p "/home/${CALLING_USER}/Downloads/taildrops" 
-$SUDO tailscale file get "/home/${CALLING_USER}/Downloads/taildrops" 
+mkdir -p "${HOME}/Downloads/taildrops" 
+$SUDO tailscale file get "${HOME}/Downloads/taildrops" 
 sudo tailscale set --operator=$CALLING_USER
 
 
