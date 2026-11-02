@@ -1,5 +1,5 @@
 -- Debugger: nvim-dap + UI, inline variable values, and Mason-installed adapters
--- Keymaps live in config/keymaps.lua under <leader>D (plus F5/F9/F10); the first one used loads everything here.
+-- Keymaps live in config/keymaps.lua under <leader>D (plus F5-F10); the first one used loads everything here.
 -- Adapters are INSTALLED by mason-tool-installer (the `debuggers` list in plugins/lsp.lua);
 -- mason-nvim-dap only WIRES them into nvim-dap (adapter definitions + default launch configurations).
 --
@@ -13,8 +13,10 @@
 --   nvim-nio              Async library required by nvim-dap-ui - nothing to configure.
 --   nvim-dap-virtual-text Shows variable values at the end of each line while stopped (e.g. `x = 41`).
 --   mason-nvim-dap        Wires the Mason-installed adapters into nvim-dap with its default configs:
---                         codelldb (C/C++/Rust/Zig), bash, delve (Go). It does NOT install anything.
+--                         codelldb (C/C++/Rust/Zig), bash. It does NOT install anything.
+--                         C/C++ also get "Build & debug current file" configs added below (compiles with -g first).
 --   nvim-dap-python       Python via Mason's debugpy; also provides <leader>Dm / <leader>DM (debug test method/class).
+--   nvim-dap-go           Go via delve; also provides <leader>Dm / <leader>DM (debug test under cursor / last test).
 --   Set up by hand below: JavaScript/TypeScript (js-debug-adapter), Perl (perl-debug-adapter),
 --                         Ruby (rdbg, only if installed) - mason-nvim-dap doesn't cover these well.
 --
@@ -29,6 +31,7 @@ return {
       'nvim-neotest/nvim-nio',              -- required by nvim-dap-ui
       'theHamsta/nvim-dap-virtual-text',
       'mfussenegger/nvim-dap-python',
+      'leoluz/nvim-dap-go',
       'williamboman/mason.nvim',
       'jay-babu/mason-nvim-dap.nvim',
     },
@@ -68,7 +71,48 @@ return {
           function(config) require('mason-nvim-dap').default_setup(config) end,
           python = function() end,       -- handled by nvim-dap-python below (adds test_method/test_class)
           js = function() end,           -- configured manually below
+          delve = function() end,        -- handled by nvim-dap-go below (adds debug test under cursor)
         },
+      })
+
+      -- ── C / C++: compile the current file with debug info, then launch it ──
+      -- mason-nvim-dap's "LLDB: Launch" configs (prompt for an executable) stay below these for Makefile/CMake
+      -- projects - build those with -g -O0 yourself. Binaries go to Neovim's cache dir so they don't clutter the repo.
+      local function build_current_file()
+        vim.cmd('silent update')
+        local compiler = vim.bo.filetype == 'cpp' and 'g++' or 'gcc'
+        local out_dir = vim.fn.stdpath('cache') .. '/dap-build'
+        vim.fn.mkdir(out_dir, 'p')
+        local binary = out_dir .. '/' .. vim.fn.expand('%:t:r')
+        local cmd = { compiler, '-g', '-O0', '-Wall', '-o', binary, vim.fn.expand('%:p'), '-lm' }
+        local result = vim.system(cmd, { text = true }):wait()
+        if result.code ~= 0 then
+          vim.notify('Build failed: ' .. table.concat(cmd, ' ') .. '\n' .. result.stderr, vim.log.levels.ERROR)
+          return dap.ABORT
+        end
+        return binary
+      end
+      for _, ft in ipairs({ 'c', 'cpp' }) do
+        dap.configurations[ft] = dap.configurations[ft] or {}
+        table.insert(dap.configurations[ft], 1, {
+          name = 'Build & debug current file', type = 'codelldb', request = 'launch',
+          program = build_current_file, cwd = '${workspaceFolder}', console = 'integratedTerminal',
+        })
+        table.insert(dap.configurations[ft], 2, {
+          name = 'Build & debug current file (args)', type = 'codelldb', request = 'launch',
+          program = build_current_file, cwd = '${workspaceFolder}', console = 'integratedTerminal',
+          args = function() return vim.split(vim.fn.input('Args: '), ' +', { trimempty = true }) end,
+        })
+      end
+
+      -- ── Go (delve, installed by Mason and on PATH) ───────────────────────
+      require('dap-go').setup()
+      -- For programs that need stdin/a real terminal: start `dlv debug --headless -l 127.0.0.1:38697` yourself.
+      -- Own adapter instead of dap-go's `port = ...` option: that one still spawns a second dlv on the same port
+      -- (fails with a warning) and leaves the port stuck in its adapter for later launches.
+      dap.adapters['go-remote'] = { type = 'server', host = '127.0.0.1', port = 38697 }
+      table.insert(dap.configurations.go, {
+        type = 'go-remote', name = 'Attach remote (dlv on :38697)', mode = 'remote', request = 'attach',
       })
 
       -- ── Python (debugpy from Mason's venv) ──────────────────────────────
@@ -119,6 +163,7 @@ return {
   { 'nvim-neotest/nvim-nio', lazy = true },
   { 'theHamsta/nvim-dap-virtual-text', lazy = true },
   { 'mfussenegger/nvim-dap-python', lazy = true },
+  { 'leoluz/nvim-dap-go', lazy = true },
   { 'jay-babu/mason-nvim-dap.nvim', lazy = true },
 }
 
@@ -172,3 +217,18 @@ return {
 --      breakpoints stop working.
 --
 --    Not covered: front-end JavaScript running in the browser (React etc.) - that needs pwa-chrome, not set up here.
+--
+-- 4. C / C++
+--    - Single-file programs: set a breakpoint, F6 -> "Build & debug current file". It compiles with
+--      gcc/g++ -g -O0 -Wall (into ~/.cache/nvim/dap-build/) and runs in the dapui console, so scanf() works there
+--      (<C-w>j into the console, i, type). Compile errors show as a notification and nothing is launched.
+--    - Multi-file projects: build with your Makefile/CMake using -g -O0 (CFLAGS="-g -O0"), then pick "LLDB: Launch"
+--      and enter the binary's path. <leader>Dl re-runs the last config without the picker.
+--
+-- 5. Go
+--    - F6 -> "Debug" runs the current file, "Debug Package" the whole package in its directory (use this when main
+--      is split across files), "Debug test" the file's tests. <leader>Dm debugs the test function under the cursor,
+--      <leader>DM re-runs the last one. No -g step needed - delve builds with debug info itself.
+--    - Program output appears in the REPL (<leader>Dr), not the dapui console, so programs that read stdin can't
+--      be typed into. For those, run `dlv debug --headless -l 127.0.0.1:38697 . -- <args>` in a terminal (you type
+--      input there), then F6 -> "Attach remote (dlv on :38697)".

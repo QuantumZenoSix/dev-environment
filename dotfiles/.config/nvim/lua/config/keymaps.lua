@@ -347,7 +347,7 @@ vim.keymap.set("n", "<leader>dtp", ":Trouble diagnostics prev<CR>", { desc = "Pr
 -- _______________________ Debugger (nvim-dap) __________________________
 -- <leader>d is diagnostics, so debugging lives under <leader>D. The first one used loads nvim-dap (plugins/dap.lua).
 -- dapui/dap-python maps require('dap') first so nvim-dap's config (which sets those plugins up) runs before them.
--- F11/F12 are taken by quickfix nav, so only the common F5/F9/F10 are mapped - step in/out are <leader>Di / <leader>Do
+-- F11/F12 are taken by quickfix nav, so debugging uses F5-F10
 vim.keymap.set('n', '<F5>', function() require('dap').toggle_breakpoint() end, { noremap = true, silent = true, desc = 'Debug: toggle breakpoint' })
 vim.keymap.set('n', '<F6>', function() require('dap').continue() end, { noremap = true, silent = true, desc = 'Debug: start / continue' })
 vim.keymap.set('n', '<F7>', function() require('dap').step_over() end, { noremap = true, silent = true, desc = 'Debug: step over' })
@@ -383,6 +383,15 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     vim.keymap.set('n', '<leader>Dm', function() require('dap'); require('dap-python').test_method() end, { buffer = args.buf, desc = 'Debug test method (Python)' })
     vim.keymap.set('n', '<leader>DM', function() require('dap'); require('dap-python').test_class() end, { buffer = args.buf, desc = 'Debug test class (Python)' })
+  end,
+})
+-- Go-only (nvim-dap-go): debug the test function under the cursor / re-run the last one
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('dap_go_keymaps', { clear = true }),
+  pattern = 'go',
+  callback = function(args)
+    vim.keymap.set('n', '<leader>Dm', function() require('dap'); require('dap-go').debug_test() end, { buffer = args.buf, desc = 'Debug test under cursor (Go)' })
+    vim.keymap.set('n', '<leader>DM', function() require('dap'); require('dap-go').debug_last_test() end, { buffer = args.buf, desc = 'Debug last test (Go)' })
   end,
 })
 
