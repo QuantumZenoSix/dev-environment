@@ -189,6 +189,8 @@ nx_up(){
 
     home-manager switch -b backup --flake .#${USER}
 
+    nv_clear_lockfile
+
     # Nix store files all have mtime 1, so Neovim's Lua bytecode cache can't detect
     # same-size edits and serves stale code. Clear it so the new config is picked up.
     rm -rf ~/.cache/nvim/luac
