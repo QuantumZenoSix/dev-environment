@@ -10,7 +10,7 @@ return {
     {'thedenisnikulin/vim-cyberpunk'},
     -- {'nyoom-engineering/oxocarbon.nvim'},
     {'dracula/vim'},
-    {'QuantumZenoSix/gothic-cyberpunk.vim'},
+    -- {'QuantumZenoSix/terminal-tools/tree/main/customization-tools/gothic-cyberpunk.vim'},
     {
         'maxmx03/fluoromachine.nvim',
         lazy = false,
