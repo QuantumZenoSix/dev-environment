@@ -344,6 +344,48 @@ vim.keymap.set("n", "<leader>dts", "<cmd>Trouble symbols toggle focus=false<CR>"
 vim.keymap.set("n", "<leader>dtn", ":Trouble diagnostics next<CR>", { desc = "Next Trouble item" })
 vim.keymap.set("n", "<leader>dtp", ":Trouble diagnostics prev<CR>", { desc = "Previous Trouble item" })
 
+-- _______________________ Debugger (nvim-dap) __________________________
+-- <leader>d is diagnostics, so debugging lives under <leader>D. The first one used loads nvim-dap (plugins/dap.lua).
+-- dapui/dap-python maps require('dap') first so nvim-dap's config (which sets those plugins up) runs before them.
+-- F11/F12 are taken by quickfix nav, so only the common F5/F9/F10 are mapped - step in/out are <leader>Di / <leader>Do
+vim.keymap.set('n', '<F5>', function() require('dap').toggle_breakpoint() end, { noremap = true, silent = true, desc = 'Debug: toggle breakpoint' })
+vim.keymap.set('n', '<F6>', function() require('dap').continue() end, { noremap = true, silent = true, desc = 'Debug: start / continue' })
+vim.keymap.set('n', '<F7>', function() require('dap').step_over() end, { noremap = true, silent = true, desc = 'Debug: step over' })
+vim.keymap.set('n', '<F8>', function() require('dap').step_into() end, { noremap = true, silent = true, desc = 'Step into' })
+vim.keymap.set('n', '<F9>', function() require('dap').step_out() end, { noremap = true, silent = true, desc = 'Step out' })
+vim.keymap.set('n', '<F10>', function() require('dap').clear_breakpoints() end, { noremap = true, silent = true, desc = 'Clear all breakpoints' })
+
+
+vim.keymap.set('n', '<leader>Db', function() require('dap').toggle_breakpoint() end, { noremap = true, silent = true, desc = 'Toggle breakpoint' })
+vim.keymap.set('n', '<leader>Dc', function() require('dap').continue() end, { noremap = true, silent = true, desc = 'Start / continue' })
+vim.keymap.set('n', '<leader>Do', function() require('dap').step_over() end, { noremap = true, silent = true, desc = 'Step over (next)' })
+vim.keymap.set('n', '<leader>Di', function() require('dap').step_into() end, { noremap = true, silent = true, desc = 'Step into' })
+vim.keymap.set('n', '<leader>DO', function() require('dap').step_out() end, { noremap = true, silent = true, desc = 'Step out' })
+vim.keymap.set('n', '<leader>Dx', function() require('dap').clear_breakpoints() end, { noremap = true, silent = true, desc = 'Clear all breakpoints' })
+
+
+vim.keymap.set('n', '<leader>Dt', function() require('dap').terminate() end, { noremap = true, silent = true, desc = 'Terminate session' })
+vim.keymap.set('n', '<leader>DB', function()
+  require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))
+end, { noremap = true, silent = true, desc = 'Conditional breakpoint' })
+vim.keymap.set('n', '<leader>DL', function()
+  require('dap').set_breakpoint(nil, nil, vim.fn.input('Log message ({expr} interpolates): '))
+end, { noremap = true, silent = true, desc = 'Log point' })
+vim.keymap.set('n', '<leader>DC', function() require('dap').run_to_cursor() end, { noremap = true, silent = true, desc = 'Run to cursor' })
+vim.keymap.set('n', '<leader>Dl', function() require('dap').run_last() end, { noremap = true, silent = true, desc = 'Re-run last session' })
+vim.keymap.set('n', '<leader>Du', function() require('dap'); require('dapui').toggle() end, { noremap = true, silent = true, desc = 'Toggle debug UI' })
+vim.keymap.set('n', '<leader>Dr', function() require('dap').repl.toggle() end, { noremap = true, silent = true, desc = 'Toggle REPL' })
+vim.keymap.set({ 'n', 'v' }, '<leader>De', function() require('dap'); require('dapui').eval() end, { noremap = true, silent = true, desc = 'Evaluate expression / selection' })
+-- Python-only (nvim-dap-python): debug the test function/class under the cursor (pytest or unittest)
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('dap_python_keymaps', { clear = true }),
+  pattern = 'python',
+  callback = function(args)
+    vim.keymap.set('n', '<leader>Dm', function() require('dap'); require('dap-python').test_method() end, { buffer = args.buf, desc = 'Debug test method (Python)' })
+    vim.keymap.set('n', '<leader>DM', function() require('dap'); require('dap-python').test_class() end, { buffer = args.buf, desc = 'Debug test class (Python)' })
+  end,
+})
+
 -- _______________________ Undotree __________________________
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { noremap = true, silent = true, desc = 'Toggle undotree' })
 

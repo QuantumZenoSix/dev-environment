@@ -19,5 +19,9 @@ return {
     -- Smear cursor in insert mode.
     -- See also `vertical_bar_cursor_insert_mode` and `distance_stop_animating_vertical_bar`.
     smear_insert_mode = true,
+
+    -- nvim-dap-ui's console autoscrolls inside a text-locked callback; smearing there raises E565 and
+    -- hangs debug sessions that run in a terminal (Python, C, Bash)
+    filetypes_disabled = { "dapui_console" },
   },
 }

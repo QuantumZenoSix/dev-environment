@@ -41,6 +41,17 @@
  }
  if vim.fn.executable("ruby") == 1 then table.insert(linters, "rubocop") end       -- Ruby
 
+ -- Debug adapters to install (Mason package names) for nvim-dap - configured in plugins/dap.lua
+ local debuggers = {
+     "debugpy",             -- Python
+     "codelldb",            -- C/C++/Rust/Zig
+     "perl-debug-adapter",  -- Perl (also needs the PadWalker module, Arch pkg perl-padwalker)
+     "js-debug-adapter",    -- JavaScript/TypeScript
+     "bash-debug-adapter",  -- Bash
+ }
+ if vim.fn.executable("go") == 1 then table.insert(debuggers, "delve") end          -- Go (Mason builds it with `go install`)
+ if vim.fn.executable("ruby") == 1 then table.insert(debuggers, "rdbg") end         -- Ruby
+
  return {
 
 
@@ -52,13 +63,13 @@
      end,
    },
 
-     -- A2. Install the linters (list is at the top of this file) - LSPs are installed by section B
+     -- A2. Install the linters and debug adapters (lists are at the top of this file) - LSPs are installed by section B
    {
      'WhoIsSethDaniel/mason-tool-installer.nvim',
      dependencies = { 'williamboman/mason.nvim' },
      config = function()
          require('mason-tool-installer').setup({
-           ensure_installed = linters,
+           ensure_installed = vim.list_extend(vim.list_extend({}, linters), debuggers),
            auto_update = true,
            run_on_start = true,
            -- Names above are already Mason package names, so skip the lspconfig-name lookup

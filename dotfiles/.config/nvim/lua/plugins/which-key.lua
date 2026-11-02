@@ -15,6 +15,7 @@ return {
       { "<leader>b", group = "Buffers" },
       { "<leader>c", group = "Change / Code action" },
       { "<leader>d", group = "Diagnostics" },
+      { "<leader>D", group = "Debug (DAP)" },
       { "<leader>f", group = "Find (Telescope)" },
       { "<leader>F", group = "Files" },
       { "<leader>g", group = "Git" },

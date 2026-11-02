@@ -35,6 +35,7 @@ openssl           # libssl-dev: Crypto
 p7zip  			# p7zip-full: 7zip compression 
 perl 
 perl-perl-critic   # perlcritic: Perl linter (nvim-lint)
+perl-padwalker     # PadWalker: Perl module needed by perl-debug-adapter (nvim-dap) for variable inspection
 pkgconf  		# pkg-config: Build helper
 rsync
 sed    			# sed: Text processor, base 
