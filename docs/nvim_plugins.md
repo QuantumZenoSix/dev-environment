@@ -21,7 +21,7 @@ What each plugin in this Neovim config does, how to call it, and which features 
 5. [Editing](#5-editing)
    - [mini.move](#minimove) · [Commenting (built-in + ts-comments)](#commenting-built-in--ts-comments) · [Undotree](#undotree) · [Completion (blink.cmp)](#completion-blinkcmp)
 6. [Code Intelligence](#6-code-intelligence)
-   - [LSP](#lsp-nvim-lspconfig--mason) · [Diagnostics](#diagnostics) · [Linting (nvim-lint)](#linting-nvim-lint) · [Trouble](#trouble) · [Treesitter](#treesitter)
+   - [LSP](#lsp-nvim-lspconfig--mason) · [Diagnostics](#diagnostics) · [Linting (nvim-lint)](#linting-nvim-lint) · [Trouble](#trouble) · [Aerial (code outline)](#aerial-code-outline) · [Treesitter](#treesitter)
 7. [Debugging (nvim-dap)](#7-debugging-nvim-dap)
 8. [Git](#8-git)
    - [Gitsigns](#gitsigns) · [Fugitive](#fugitive) · [LazyGit](#lazygit)
@@ -52,6 +52,7 @@ What each plugin in this Neovim config does, how to call it, and which features 
 | `<leader>gh` | Git hunks | Gitsigns |
 | `<leader>i` | Indent guides | Snacks indent, indent-blankline |
 | `<leader>l` | LSP / Lint / Line numbers | LSP, nvim-lint, core |
+| `<leader>o` | Toggle code outline (single key, no group) | Aerial |
 | `<leader>r` | Rename / Remove | LSP rename, core remove marks |
 | `<leader>t` | Trouble / Toggle | core transparent background (Trouble actually lives under `<leader>dt`) |
 | `<leader>u` | Undotree | Undotree |
@@ -70,6 +71,7 @@ Load trigger: **startup** = loaded at launch · **event** = on an autocmd · **k
 | Navigation | `ThePrimeagen/harpoon` (harpoon2) | `harpoon.lua` | startup | Pin a few files and jump between them |
 | Navigation | `folke/flash.nvim` | `flash.lua` | event: VeryLazy | Label-based jump motions |
 | Navigation | `nvim-neo-tree/neo-tree.nvim` (v3) | `neo-tree.lua` | startup | File explorer sidebar; replaces netrw |
+| Navigation | `stevearc/aerial.nvim` | `aerial.lua` | event: BufReadPost, BufNewFile | Code outline sidebar; jump between symbols |
 | Editing | `echasnovski/mini.nvim` (move, cursorword) | `mini.lua` | startup | Move lines/selections; highlight the word under the cursor |
 | Editing | `folke/ts-comments.nvim` | `ts-comments.lua` | event: VeryLazy | Language-aware comment strings for built-in `gc` |
 | Editing | `mbbill/undotree` | `undotree.lua` | event: VeryLazy | Visual undo-history tree |
@@ -390,6 +392,21 @@ Language servers are listed in `servers`, linters in `linters`, and debug adapte
 **Inside a Trouble window (defaults):** `<CR>` jump · `o` jump and close · `<C-s>` / `<C-v>` jump in split / vsplit · `]]` / `[[` or `}` / `{` next / previous item · `p` preview · `P` toggle auto-preview · `gb` filter to current buffer · `s` cycle severity filter · `dd` delete item · `zo` / `zc` / `za` / `zR` / `zM` folds · `r` refresh · `i` inspect · `?` help · `q` close
 
 **Commands:** `:Trouble <mode> [toggle] [filter.buf=0]`. Modes: `diagnostics`, `symbols`, `lsp`, `lsp_references`, `lsp_definitions`, `lsp_implementations`, `lsp_type_definitions`, `quickfix`, `loclist`, `todo`
+
+---
+
+### Aerial (code outline)
+
+> `stevearc/aerial.nvim` · `lua/plugins/aerial.lua` · Sidebar listing the functions, classes, and other symbols in the current file, taken from Treesitter or LSP. Loads when a file is opened, so the `{` / `}` jumps work before the outline is first shown.
+
+| Keys | Mode | Action | Tag |
+| --- | --- | --- | --- |
+| `<leader>o` | n | Toggle the outline sidebar (`:AerialToggle!`, cursor stays in the code) | custom |
+| `{` / `}` | n | Previous / next symbol. Buffer-local, set in every buffer aerial attaches to. **Shadows the built-in paragraph motions** there | custom |
+
+**Inside the outline window (defaults):** `<CR>` jump · `<C-v>` / `<C-s>` jump in vsplit / split · `p` scroll code to symbol · `<C-j>` / `<C-k>` move and scroll · `{` / `}` previous / next symbol · `[[` / `]]` up a level, previous / next · `o` / `za` toggle node · `O` / `zA` toggle recursively · `l` / `zo` open · `L` / `zO` open recursively · `h` / `zc` close · `H` / `zC` close recursively · `zr` / `zm` fold level up / down · `zR` / `zM` open / close all · `zx` / `zX` sync folds · `?` / `g?` help · `q` close
+
+**Commands:** `:AerialToggle[!] [left\|right\|float]` · `:AerialOpen` · `:AerialClose` · `:AerialOpenAll` · `:AerialCloseAll` · `:AerialNext` / `:AerialPrev` · `:AerialGo` · `:AerialNavToggle` / `:AerialNavOpen` / `:AerialNavClose` (floating navigator) · `:AerialInfo` (debug info for the current buffer)
 
 ---
 
